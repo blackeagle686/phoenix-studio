@@ -549,14 +549,14 @@ function WorkspaceEditor() {
         <div className="d-flex justify-content-between align-items-center px-4 py-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
           <span className="fw-semibold text-white d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', fontSize: '0.95rem' }}>
             {drawerTab === 'code' ? (
-              <><i className="bi bi-file-earmark-code text-info glow-cyan"></i> generated_project / main.py</>
+              <><i className="bi bi-file-earmark-code text-mint"></i> generated_project / main.py</>
             ) : (
-              <><i className="bi bi-terminal-fill text-success glow-green"></i> Live Execution Console</>
+              <><i className="bi bi-terminal-fill text-mint"></i> Live Execution Console</>
             )}
           </span>
           {drawerTab === 'code' && (
             <button 
-              className="btn btn-sm btn-outline-info"
+              className="btn btn-sm btn-outline-mint"
               style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '6px' }}
               onClick={() => {
                 navigator.clipboard.writeText(globalCode);
@@ -569,42 +569,59 @@ function WorkspaceEditor() {
         </div>
         
         {/* Drawer Content */}
-        <div className="flex-grow-1 p-0 overflow-hidden d-flex" style={{ background: '#07070e' }}>
+        <div className="flex-grow-1 p-0 overflow-hidden d-flex" style={{ background: drawerTab === 'run' ? 'linear-gradient(135deg, rgba(8,8,16,1) 0%, rgba(105,48,195,0.15) 50%, rgba(114,239,221,0.1) 100%)' : '#07070e' }}>
           {drawerTab === 'code' ? (
             <div className="p-3 w-100 h-100 overflow-auto">
-              <pre className="m-0 font-monospace text-info" style={{ fontSize: '0.8rem', lineHeight: '1.4' }}>
+              <pre className="m-0 font-monospace text-mint" style={{ fontSize: '0.85rem', lineHeight: '1.5' }}>
                 {globalCode || '# Assemble the graph to generate code preview'}
               </pre>
             </div>
           ) : (
-            <div className="d-flex w-100 h-100">
+            <div className="d-flex w-100 h-100 p-4 gap-4">
                {/* Left: Chat input & Response */}
-               <div className="d-flex flex-column border-end border-secondary w-50 p-3 h-100">
-                  <div className="d-flex gap-2 mb-3">
+               <div className="d-flex flex-column w-50 h-100">
+                  <div className="glass-panel p-3 mb-3 d-flex gap-3 align-items-center" style={{ borderRadius: '12px' }}>
                      <input 
                        type="text" 
-                       className="form-control bg-dark border-secondary text-white" 
+                       className="form-control bg-transparent border-0 text-white shadow-none" 
                        placeholder="Enter message for agent..."
                        value={runMessage}
                        onChange={e => setRunMessage(e.target.value)}
                        onKeyDown={e => { if(e.key === 'Enter') handleRun(); }}
+                       style={{ fontSize: '1.1rem' }}
                      />
-                     <button className="btn btn-success d-flex align-items-center" onClick={handleRun} disabled={isExecuting}>
-                       {isExecuting ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-send-fill"></i>}
+                     <button className="btn btn-mint d-flex align-items-center justify-content-center rounded-circle p-0" style={{ width: '45px', height: '45px' }} onClick={handleRun} disabled={isExecuting}>
+                       {isExecuting ? <span className="spinner-border spinner-border-sm text-dark"></span> : <i className="bi bi-send-fill fs-5"></i>}
                      </button>
                   </div>
-                  <div className="flex-grow-1 overflow-auto bg-dark p-2 rounded border border-secondary text-white text-start" style={{fontSize: '0.85rem'}}>
+                  <div className="flex-grow-1 overflow-auto glass-panel p-4 text-start d-flex flex-column" style={{ borderRadius: '16px', fontSize: '0.95rem' }}>
                      {runResponse ? (
-                       <div><strong className="text-info">Agent:</strong><br/><pre style={{whiteSpace: 'pre-wrap', fontFamily: 'inherit'}}>{runResponse}</pre></div>
+                       <div>
+                         <div className="d-flex align-items-center gap-2 mb-2">
+                           <i className="bi bi-robot text-mint fs-5"></i>
+                           <strong className="text-white font-monospace" style={{ letterSpacing: '1px' }}>AGENT</strong>
+                         </div>
+                         <pre className="text-light opacity-75" style={{ whiteSpace: 'pre-wrap', fontFamily: 'var(--font-body)', lineHeight: '1.7' }}>{runResponse}</pre>
+                       </div>
                      ) : (
-                       <span className="text-muted">Agent response will appear here...</span>
+                       <div className="m-auto text-center opacity-50">
+                         <i className="bi bi-chat-dots text-muted display-4 mb-3 d-block"></i>
+                         <span className="text-muted" style={{ letterSpacing: '1px' }}>Agent response will appear here...</span>
+                       </div>
                      )}
                   </div>
                </div>
                {/* Right: Logs */}
-               <div className="w-50 p-3 h-100 d-flex flex-column text-start">
-                 <span className="text-muted mb-2 fw-bold" style={{fontSize: '0.75rem'}}>Execution Logs</span>
-                 <pre className="flex-grow-1 overflow-auto bg-dark p-2 rounded border border-secondary text-success font-monospace" style={{fontSize: '0.75rem'}}>
+               <div className="w-50 h-100 d-flex flex-column text-start glass-panel overflow-hidden" style={{ borderRadius: '16px', backgroundColor: 'rgba(5, 5, 5, 0.8)' }}>
+                 <div className="px-4 py-2 border-bottom d-flex align-items-center gap-2" style={{ borderColor: 'rgba(255,255,255,0.05)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                   <div className="d-flex gap-1">
+                     <div className="rounded-circle" style={{ width: '10px', height: '10px', backgroundColor: '#ff5f56' }}></div>
+                     <div className="rounded-circle" style={{ width: '10px', height: '10px', backgroundColor: '#ffbd2e' }}></div>
+                     <div className="rounded-circle" style={{ width: '10px', height: '10px', backgroundColor: '#27c93f' }}></div>
+                   </div>
+                   <span className="text-muted ms-3 font-monospace" style={{ fontSize: '0.8rem', letterSpacing: '1px' }}>execution_logs.sh</span>
+                 </div>
+                 <pre className="flex-grow-1 overflow-auto p-4 m-0 text-mint font-monospace" style={{ fontSize: '0.85rem', lineHeight: '1.6' }}>
                     {runLogs || 'Waiting for execution...'}
                  </pre>
                </div>
