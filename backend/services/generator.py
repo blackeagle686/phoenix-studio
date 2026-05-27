@@ -22,11 +22,31 @@ def generate_code(graph: dict) -> str:
     target_id = target_core_node.get("id")
     target_data = target_core_node.get("data", {})
 
-    # Identify connected sources
+    # Find specialized nodes
+    rag_node = next((n for n in nodes if n.get("type") == "rag"), None)
+    api_export_node = next((n for n in nodes if n.get("type") == "api_export"), None)
+
+    # Identify connected sources to the main node
     connected_sources = set()
     for edge in edges:
         if edge.get("target") == target_id:
             connected_sources.add(edge.get("source"))
+
+    # Identify connected sources to RAG
+    rag_sources = set()
+    if rag_node:
+        for edge in edges:
+            if edge.get("target") == rag_node.get("id"):
+                rag_sources.add(edge.get("source"))
+
+    # Check for API Export connection
+    export_as_api = False
+    api_export_key = "my_secure_api_key"
+    if api_export_node and chatbot_node:
+        for edge in edges:
+            if edge.get("source") == chatbot_node.get("id") and edge.get("target") == api_export_node.get("id"):
+                export_as_api = True
+                api_export_key = api_export_node.get("data", {}).get("api_key", "my_secure_api_key")
 
     scan_all = len(connected_sources) == 0
 
@@ -108,9 +128,17 @@ def generate_code(graph: dict) -> str:
                 tts_enabled = True
             elif node_type == "stt_node":
                 stt_enabled = True
-            elif node_type == "data_source":
-                if "data_sources" not in locals():
-                    data_sources = []
+
+        # Handle specialized data sources connected to RAG
+        if node_id in rag_sources:
+            if node_type in ["github_repo", "web_data_api"]:
+                if "data_sources" not in locals(): data_sources = []
+                data_sources.append(node_data.get("url") or "https://github.com/blackeagle686/phx-quantum")
+            elif node_type == "data_folder":
+                if "data_sources" not in locals(): data_sources = []
+                data_sources.append(node_data.get("path") or "./data")
+            elif node_type == "data_source": # Backward compatibility
+                if "data_sources" not in locals(): data_sources = []
                 data_sources.append(node_data.get("path") or "./data")
 
     if rag_data and "data_sources" in locals() and data_sources:
@@ -152,4 +180,4 @@ def generate_code(graph: dict) -> str:
             custom_tools=custom_tools
         )
 
-    return rendered_code
+    return rendered_code, export_as_api, api_export_key
