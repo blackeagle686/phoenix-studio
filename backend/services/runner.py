@@ -11,34 +11,39 @@ async def run_agent_graph(graph: Dict[str, Any], user_message: str, session_id: 
     with contextlib.redirect_stdout(log_capture), contextlib.redirect_stderr(log_capture):
         try:
             print("--- Loading Framework Dependencies ---")
-            from phoenix.framework.agent.tools.search import WebSearchTool
-            from phoenix.framework.agent.tools.code import CommandExecutionTool
-            from phoenix.framework.agent.core.agent import Agent
-            from phoenix.framework.agent.tools.base import tool
+            try:
+                from phoenix.framework.agent.tools.search import WebSearchTool
+                from phoenix.framework.agent.tools.code import CommandExecutionTool
+                from phoenix.framework.agent.core.agent import Agent
+                from phoenix.framework.agent.tools.base import tool
+            except ImportError as e:
+                print(f"Error loading core framework: {e}")
+                print("Make sure the core dependencies are installed in your environment.")
+                return {
+                    "response": f"System Error: {e}",
+                    "logs": log_capture.getvalue(),
+                    "success": False
+                }
 
             nodes = graph.get("nodes", [])
-    edges = graph.get("edges", [])
+            edges = graph.get("edges", [])
 
-    # Find agent node
-    agent_node = next((n for n in nodes if n.get("type") == "agent"), None)
-    
-    connected_sources = set()
-    if agent_node:
-        agent_id = agent_node.get("id")
-        for edge in edges:
-            if edge.get("target") == agent_id:
-                connected_sources.add(edge.get("source"))
+            # Find agent node
+            agent_node = next((n for n in nodes if n.get("type") == "agent"), None)
+            
+            connected_sources = set()
+            if agent_node:
+                agent_id = agent_node.get("id")
+                for edge in edges:
+                    if edge.get("target") == agent_id:
+                        connected_sources.add(edge.get("source"))
 
-    scan_all = len(connected_sources) == 0
+            scan_all = len(connected_sources) == 0
 
-    llm = None
-    memory = None
-    tools = []
-    
-    log_capture = io.StringIO()
-    
-    with contextlib.redirect_stdout(log_capture), contextlib.redirect_stderr(log_capture):
-        try:
+            llm = None
+            memory = None
+            tools = []
+            
             print("--- Initializing Agent from Graph ---")
             for node in nodes:
                 node_id = node.get("id")
@@ -100,17 +105,17 @@ async def run_agent_graph(graph: Dict[str, Any], user_message: str, session_id: 
                 
             print(f"\n--- Running Agent with message: '{user_message}' ---")
             # The agent.run method must be awaited
-            response = await agent.run(user_message, session_id=session_id)
+            response_msg = await agent.run(user_message, session_id=session_id)
             success = True
             print("\n--- Execution Complete ---")
         except Exception as e:
             print("\n--- Execution Failed ---")
             traceback.print_exc()
-            response = f"Execution Error: {str(e)}"
+            response_msg = f"Execution Error: {str(e)}"
             success = False
             
     return {
-        "response": str(response),
+        "response": str(response_msg),
         "logs": log_capture.getvalue(),
         "success": success
     }
