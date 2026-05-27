@@ -33,6 +33,22 @@ function LandingPage() {
             </div>
             <div className="col-12 col-lg-5 d-none d-lg-flex justify-content-center position-relative">
               <div className="position-absolute w-100 h-100 rounded-circle" style={{ background: 'radial-gradient(circle, rgba(114,239,221,0.15) 0%, rgba(0,0,0,0) 70%)', filter: 'blur(40px)', zIndex: 0, top: '10%' }}></div>
+              <div className="position-absolute fw-bolder fst-italic" style={{
+                top: '40%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                fontSize: 'clamp(4rem, 8vw, 7rem)',
+                letterSpacing: '8px',
+                background: 'linear-gradient(135deg, rgba(114,239,221,0.5) 0%, rgba(155,81,224,0.2) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                zIndex: 0,
+                whiteSpace: 'nowrap',
+                pointerEvents: 'none',
+                userSelect: 'none'
+              }}>
+                PHOENIX-AI
+              </div>
               <img src={heroImg} alt="Phoenix AI Agent" className="hero-image-3d position-relative z-1" style={{ width: '130%', maxWidth: '800px', objectFit: 'contain', marginLeft: '50px' }} />
             </div>
           </div>
