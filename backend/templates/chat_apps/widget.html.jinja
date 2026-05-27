@@ -151,6 +151,39 @@
         checkAuth();
     }
 
+    {% if is_preview %}
+    async function handleAuth(type) {
+        token = "preview_token";
+        localStorage.setItem('ai_widget_token', token);
+        checkAuth();
+    }
+
+    async function loadHistory() {
+        const container = document.getElementById('chatMessages');
+        container.innerHTML = `<div class="text-center text-muted small my-3">Welcome to the Live Preview!</div>`;
+        appendMessage('bot', 'This is a simulated preview. The backend is not connected.');
+    }
+
+    async function sendMessage() {
+        const text = input.value.trim();
+        if (!text && !currentFile) return;
+        appendMessage('user', text || `[Attached: ${currentFile.name}]`);
+        input.value = ''; input.placeholder = "Type a message...";
+        currentFile = null;
+
+        const c = document.getElementById('chatMessages');
+        const typing = document.createElement('div');
+        typing.className = 'message msg-bot';
+        typing.innerHTML = `<div class="bubble text-muted"><span class="spinner-grow spinner-grow-sm"></span></div>`;
+        c.appendChild(typing);
+        document.querySelector('.chat-body').scrollTop = document.querySelector('.chat-body').scrollHeight;
+
+        setTimeout(() => {
+            c.removeChild(typing);
+            appendMessage('bot', `Simulated response. Export the app to talk to your AI!`);
+        }, 1000);
+    }
+    {% else %}
     async function handleAuth(type) {
         const u = document.getElementById('wUsername').value;
         const p = document.getElementById('wPassword').value;
@@ -183,6 +216,7 @@
             }
         } catch (e) {}
     }
+    {% endif %}
 
     // Chat Logic
     let currentFile = null;
@@ -240,6 +274,7 @@
         document.querySelector('.chat-body').scrollTop = document.querySelector('.chat-body').scrollHeight;
     }
 
+    {% if not is_preview %}
     async function sendMessage() {
         const text = input.value.trim();
         if (!text && !currentFile) return;
@@ -275,6 +310,7 @@
             appendMessage('bot', 'Error');
         }
     }
+    {% endif %}
 </script>
 </body>
 </html>
