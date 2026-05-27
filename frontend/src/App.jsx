@@ -74,6 +74,8 @@ function App() {
   const [runMessage, setRunMessage] = useState('What is the weather in New York?');
   const [runLogs, setRunLogs] = useState('');
   const [runResponse, setRunResponse] = useState('');
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
 
   // Retrieve selected node object
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);
@@ -349,13 +351,41 @@ function App() {
         }}
       >
         {/* Left Side: Blocks panel */}
-        <div className="p-3 pr-0" style={{ height: '100%' }}>
+        <div 
+          className="p-3 pr-0" 
+          style={{ 
+            height: '100%', 
+            width: leftSidebarOpen ? '320px' : '0px', 
+            overflow: 'hidden', 
+            opacity: leftSidebarOpen ? 1 : 0, 
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            padding: leftSidebarOpen ? '' : '0 !important'
+          }}
+        >
           <BlocksPanel onAddNode={onAddNode} />
         </div>
 
         {/* Center: Canvas workspace */}
-        <div className="flex-grow-1 p-3" style={{ height: '100%' }}>
+        <div className="flex-grow-1 p-3" style={{ height: '100%', minWidth: 0 }}>
           <div className="glass-panel w-100 h-100 overflow-hidden" style={{ position: 'relative' }}>
+            <button 
+              className="btn btn-sm btn-outline-info position-absolute"
+              style={{ top: '15px', left: '15px', zIndex: 10, background: 'rgba(0,0,0,0.5)', border: '1px solid var(--accent-cyan)' }}
+              onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
+              title="Toggle Blocks Panel"
+            >
+              <i className={`bi ${leftSidebarOpen ? 'bi-chevron-left' : 'bi-list'}`}></i>
+            </button>
+
+            <button 
+              className="btn btn-sm btn-outline-info position-absolute"
+              style={{ top: '15px', right: '15px', zIndex: 10, background: 'rgba(0,0,0,0.5)', border: '1px solid var(--accent-cyan)' }}
+              onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
+              title="Toggle Properties Panel"
+            >
+              <i className={`bi ${rightSidebarOpen ? 'bi-chevron-right' : 'bi-sliders'}`}></i>
+            </button>
+
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -375,7 +405,17 @@ function App() {
         </div>
 
         {/* Right Side: Properties panel */}
-        <div className="p-3 pl-0" style={{ height: '100%' }}>
+        <div 
+          className="p-3 pl-0" 
+          style={{ 
+            height: '100%', 
+            width: rightSidebarOpen ? '320px' : '0px', 
+            overflow: 'hidden', 
+            opacity: rightSidebarOpen ? 1 : 0, 
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            padding: rightSidebarOpen ? '' : '0 !important'
+          }}
+        >
           <PropertiesPanel 
             selectedNode={selectedNode}
             onUpdateNode={onUpdateNode}
