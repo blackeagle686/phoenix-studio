@@ -4,6 +4,7 @@ import NetworkCanvas from '../components/UI/NetworkCanvas';
 import Navbar from '../components/UI/Navbar';
 import Footer from '../components/UI/Footer';
 import heroImg from '../assets/phx-rym-removebg-preview.png';
+import flowExampleImg from '../assets/flow-example.png';
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -148,8 +149,14 @@ function LandingPage() {
               </h2>
             </div>
           </div>
-          <div className="row mt-5">
-            <div className="col-12 col-lg-6 offset-lg-6">
+          <div className="row mt-5 align-items-center">
+            <div className="col-12 col-lg-6 mb-5 mb-lg-0 pe-lg-5">
+              <div className="position-relative">
+                <div className="position-absolute w-100 h-100 rounded-4" style={{ background: 'linear-gradient(135deg, rgba(114,239,221,0.2) 0%, rgba(155,81,224,0.1) 100%)', filter: 'blur(30px)', zIndex: 0 }}></div>
+                <img src={flowExampleImg} alt="Workflow Example" className="img-fluid rounded-4 position-relative z-1" style={{ border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }} />
+              </div>
+            </div>
+            <div className="col-12 col-lg-6 ps-lg-4">
               <p className="text-light mb-4" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
                 At <span className="text-mint">PHOENIX-AI</span>, we believe intelligence isn't just about generating answers—it's about understanding context, reasoning through complexity, and acting with intent.
               </p>
