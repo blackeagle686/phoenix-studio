@@ -87,7 +87,13 @@ def generate_code(graph: dict) -> str:
                 rag_data = {
                     "path": node_data.get("path") or "./data",
                     "chunk_size": node_data.get("chunk_size") or 500,
-                    "chunk_overlap": node_data.get("chunk_overlap") or 50
+                    "chunk_overlap": node_data.get("chunk_overlap") or 50,
+                    "reranking": node_data.get("reranking") or False,
+                    "fast_rag": node_data.get("fast_rag") or False,
+                    "hybrid_search": node_data.get("hybrid_search") or False,
+                    "cag": node_data.get("cag") or False,
+                    "threshold": node_data.get("threshold") or 0.5,
+                    "device": node_data.get("device") or "cpu"
                 }
             elif node_type == "openai_vlm":
                 openai_vlm_data = {
