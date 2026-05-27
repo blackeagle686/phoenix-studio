@@ -4,15 +4,26 @@ import { AuthContext } from '../context/AuthContext';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
 
 function Register() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    location: '',
+    phone_number: ''
+  });
   const [error, setError] = useState('');
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await register(username, password);
+    const success = await register(formData);
     if (success) {
       navigate('/login');
     } else {
@@ -61,32 +72,41 @@ function Register() {
           {error && <div className="alert alert-danger py-2 mb-4" style={{ background: 'rgba(255, 95, 86, 0.1)', border: '1px solid rgba(255, 95, 86, 0.3)', color: '#ff5f56' }}>{error}</div>}
           
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.9rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Username</label>
-              <input 
-                type="text" 
-                required 
-                className="form-control text-white shadow-none" 
-                style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: '8px' }}
-                value={username} 
-                onChange={e => setUsername(e.target.value)} 
-                onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
-              />
+            <div className="row g-3 mb-3">
+              <div className="col-6">
+                <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>First Name</label>
+                <input type="text" required name="first_name" className="form-control text-white shadow-none" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 16px', borderRadius: '8px' }} value={formData.first_name} onChange={handleChange} onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'} onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
+              </div>
+              <div className="col-6">
+                <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Last Name</label>
+                <input type="text" required name="last_name" className="form-control text-white shadow-none" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 16px', borderRadius: '8px' }} value={formData.last_name} onChange={handleChange} onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'} onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Username</label>
+              <input type="text" required name="username" className="form-control text-white shadow-none" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 16px', borderRadius: '8px' }} value={formData.username} onChange={handleChange} onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'} onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
             </div>
             
-            <div className="mb-5">
-              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.9rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Password</label>
-              <input 
-                type="password" 
-                required 
-                className="form-control text-white shadow-none" 
-                style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: '8px' }}
-                value={password} 
-                onChange={e => setPassword(e.target.value)} 
-                onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
-              />
+            <div className="mb-3">
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Email</label>
+              <input type="email" required name="email" className="form-control text-white shadow-none" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 16px', borderRadius: '8px' }} value={formData.email} onChange={handleChange} onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'} onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
+            </div>
+
+            <div className="row g-3 mb-3">
+              <div className="col-6">
+                <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Location <span className="text-lowercase fw-normal">(optional)</span></label>
+                <input type="text" name="location" className="form-control text-white shadow-none" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 16px', borderRadius: '8px' }} value={formData.location} onChange={handleChange} onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'} onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
+              </div>
+              <div className="col-6">
+                <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Phone <span className="text-lowercase fw-normal">(optional)</span></label>
+                <input type="text" name="phone_number" className="form-control text-white shadow-none" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 16px', borderRadius: '8px' }} value={formData.phone_number} onChange={handleChange} onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'} onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Password</label>
+              <input type="password" required name="password" className="form-control text-white shadow-none" style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 16px', borderRadius: '8px' }} value={formData.password} onChange={handleChange} onFocus={e => e.target.style.borderColor = 'var(--accent-mint)'} onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
             </div>
             
             <button type="submit" className="btn btn-mint w-100 py-3 mb-4 d-flex justify-content-center align-items-center gap-2" style={{ borderRadius: '8px', fontSize: '1.1rem' }}>
