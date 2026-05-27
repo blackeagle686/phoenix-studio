@@ -14,11 +14,24 @@ function LandingPage() {
             <Link className="navbar-brand text-white fw-bold d-flex align-items-center gap-2" style={{ fontSize: '1.2rem', letterSpacing: '1px' }} to="/">
               <i className="bi bi-circle-fill text-mint" style={{ fontSize: '0.8rem' }}></i> SYNTHORA
             </Link>
-            <div className="d-none d-lg-flex gap-4 ms-4">
+            <div className="d-none d-lg-flex gap-4 ms-4 align-items-center">
               <Link className="nav-link-custom active" to="/">Home</Link>
-              <Link className="nav-link-custom" to="/">Platform</Link>
-              <Link className="nav-link-custom" to="/">Use Case</Link>
-              <Link className="nav-link-custom" to="/">Labs</Link>
+              
+              <div className="dropdown">
+                <a className="nav-link-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Platform
+                </a>
+                <ul className="dropdown-menu dropdown-menu-dark" style={{ background: '#0a0a0d', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <li><Link className="dropdown-item text-light" to="/">Build AI Agent</Link></li>
+                  <li><Link className="dropdown-item text-light" to="/">Build Multi Agent System</Link></li>
+                  <li><Link className="dropdown-item text-light" to="/">Build Chatbots</Link></li>
+                  <li><Link className="dropdown-item text-light" to="/">Build RAG System</Link></li>
+                  <li><Link className="dropdown-item text-light" to="/">Build Computer Vision Models</Link></li>
+                </ul>
+              </div>
+
+              <Link className="nav-link-custom" to="/guide">Use Case</Link>
+              <Link className="nav-link-custom" to="/about">Labs</Link>
             </div>
           </div>
           <div className="ms-auto">
