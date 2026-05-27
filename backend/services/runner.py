@@ -3,13 +3,20 @@ import contextlib
 import traceback
 from typing import Dict, Any
 
-from phoenix.framework.agent.tools.search import WebSearchTool
-from phoenix.framework.agent.tools.code import CommandExecutionTool
-from phoenix.framework.agent.core.agent import Agent
-from phoenix.framework.agent.tools.base import tool
-
 async def run_agent_graph(graph: Dict[str, Any], user_message: str, session_id: str = "default") -> Dict[str, Any]:
-    nodes = graph.get("nodes", [])
+    log_capture = io.StringIO()
+    success = False
+    response_msg = ""
+    
+    with contextlib.redirect_stdout(log_capture), contextlib.redirect_stderr(log_capture):
+        try:
+            print("--- Loading Framework Dependencies ---")
+            from phoenix.framework.agent.tools.search import WebSearchTool
+            from phoenix.framework.agent.tools.code import CommandExecutionTool
+            from phoenix.framework.agent.core.agent import Agent
+            from phoenix.framework.agent.tools.base import tool
+
+            nodes = graph.get("nodes", [])
     edges = graph.get("edges", [])
 
     # Find agent node
