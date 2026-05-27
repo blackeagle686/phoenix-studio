@@ -94,3 +94,16 @@
   transform-style: preserve-3d;
   will-change: transform, filter;
 }
+
+/* Scroll Animation Classes */
+.fade-up-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.fade-up-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
