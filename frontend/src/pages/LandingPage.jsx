@@ -27,60 +27,68 @@ function LandingPage() {
   return (
     <div style={{ backgroundColor: '#050505', minHeight: '100vh', overflowX: 'hidden' }}>
       <Navbar />
-      {/* Hero Section */}
-      <section className="position-relative vh-100 d-flex flex-column justify-content-center" style={{ paddingTop: '80px' }}>
+      {/* Hero Section 1: Logo & Image */}
+      <section className="position-relative vh-100 d-flex flex-column align-items-center justify-content-center" style={{ paddingTop: '80px' }}>
         <NetworkCanvas />
-        <div className="container-fluid px-5 position-relative z-1" style={{ maxWidth: '1400px' }}>
-          <div className="row align-items-center">
-            <div className="col-12 col-lg-7">
-              <h1 className="hero-text mb-4">
-                BUILD AGENTS<br />THAT THINK LIKE<br />HUMANS
-              </h1>
-              <p className="text-light opacity-75 mb-5" style={{ fontSize: '1.2rem', maxWidth: '400px', lineHeight: '1.6' }}>
-                Synthetically trained. Symbolically steered. Deploy AI agents that adapt, act, and learn.
-              </p>
-              <div className="d-flex gap-3 flex-wrap">
-                <button className="btn btn-mint d-flex align-items-center gap-2" onClick={() => navigate('/register')}>
-                  TRY AGENT LIVE <i className="bi bi-arrow-up-right"></i>
-                </button>
-                <button className="btn btn-outline-mint" onClick={() => navigate('/login')}>
-                  EXPLORE S. ENGINE
-                </button>
-              </div>
-            </div>
-            <div className="col-12 col-lg-5 d-none d-lg-flex flex-column align-items-center justify-content-center position-relative">
-              <div className="position-absolute w-100 h-100 rounded-circle" style={{ background: 'radial-gradient(circle, rgba(114,239,221,0.15) 0%, rgba(0,0,0,0) 70%)', filter: 'blur(40px)', zIndex: 0, top: '10%' }}></div>
-                <img src={heroImg} alt="Phoenix AI Agent" className="hero-image-3d position-relative z-1 mb-4" style={{ width: '110%', maxWidth: '600px', objectFit: 'contain' }} />
-                <div className="fw-bolder fst-italic text-center position-relative z-1" style={{
-                  fontSize: 'clamp(2.5rem, 4vw, 4rem)',
-                  letterSpacing: '8px',
-                  background: 'linear-gradient(135deg, rgba(114,239,221,1) 0%, rgba(155,81,224,0.8) 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  whiteSpace: 'nowrap',
-                  userSelect: 'none'
-                }}>
-                  PHOENIX-AI
-              </div>
-            </div>
+        <div className="container-fluid px-5 position-relative z-1 d-flex flex-column align-items-center text-center" style={{ maxWidth: '1400px' }}>
+          <div className="position-absolute w-100 h-100 rounded-circle" style={{ background: 'radial-gradient(circle, rgba(114,239,221,0.15) 0%, rgba(0,0,0,0) 70%)', filter: 'blur(40px)', zIndex: 0, top: '10%' }}></div>
+          <img src={heroImg} alt="Phoenix AI Agent" className="hero-image-3d position-relative z-1 mb-4" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }} />
+          <div className="fw-bolder fst-italic position-relative z-1 fade-up-section is-visible" style={{
+            fontSize: 'clamp(3rem, 6vw, 6rem)',
+            letterSpacing: '10px',
+            background: 'linear-gradient(135deg, rgba(114,239,221,1) 0%, rgba(155,81,224,0.8) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            whiteSpace: 'nowrap',
+            userSelect: 'none'
+          }}>
+            PHOENIX-AI
+          </div>
+          
+          <div 
+            className="position-absolute bottom-0 mb-5 d-flex flex-column align-items-center justify-content-center text-muted" 
+            style={{ transform: 'translateY(120px)', animation: 'float3d 3s ease-in-out infinite', cursor: 'pointer' }}
+            onClick={() => document.getElementById('explore-section').scrollIntoView({ behavior: 'smooth' })}
+          >
+            <span style={{ fontSize: '0.8rem', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '10px' }}>Scroll to Explore</span>
+            <i className="bi bi-chevron-down fs-4 text-mint"></i>
           </div>
         </div>
-        {/* Subtle gradient overlay on bottom to fade into next section */}
         <div className="position-absolute bottom-0 w-100" style={{ height: '200px', background: 'linear-gradient(to bottom, transparent, #050505)' }}></div>
+      </section>
+
+      {/* Hero Section 2: Intro */}
+      <section id="explore-section" className="py-5 fade-up-section" style={{ backgroundColor: '#050505', minHeight: '60vh', display: 'flex', alignItems: 'center' }}>
+        <div className="container-fluid px-5 text-center" style={{ maxWidth: '1000px' }}>
+          <h1 className="hero-text mb-4" style={{ fontSize: 'clamp(2.5rem, 4vw, 4.5rem)' }}>
+            BUILD AGENTS THAT<br />THINK LIKE HUMANS
+          </h1>
+          <p className="text-light opacity-75 mb-5 mx-auto" style={{ fontSize: '1.2rem', maxWidth: '600px', lineHeight: '1.6' }}>
+            Synthetically trained. Symbolically steered. Deploy AI agents that adapt, act, and learn.
+          </p>
+          <div className="d-flex gap-3 flex-wrap justify-content-center">
+            <button className="btn btn-mint d-flex align-items-center gap-2 px-4 py-3" onClick={() => navigate('/register')}>
+              TRY AGENT LIVE <i className="bi bi-arrow-up-right"></i>
+            </button>
+            <button className="btn btn-outline-mint px-4 py-3" onClick={() => navigate('/login')}>
+              EXPLORE S. ENGINE
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* Logos and Stats Section */}
       <section className="py-5 fade-up-section" style={{ backgroundColor: '#050505' }}>
         <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
-          <p className="text-center text-muted mb-5" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>Trusted by 8,000+ users from</p>
-          <div className="d-flex justify-content-between align-items-center flex-wrap gap-4 mb-5 opacity-50" style={{ filter: 'grayscale(100%) brightness(200%)' }}>
-            <span className="fs-4 fw-bold">swile</span>
-            <span className="fs-4 fw-bold"><i className="bi bi-heart-pulse"></i> Hinge Health</span>
-            <span className="fs-4 fw-bold">Polestar</span>
-            <span className="fs-4 fw-bold">MERCK</span>
-            <span className="fs-4 fw-bold">SEMRUSH</span>
-            <span className="fs-4 fw-bold">NBCUniversal</span>
-            <span className="fs-4 fw-bold">Klarna</span>
+          <p className="text-center text-muted mb-5" style={{ fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Powering next-generation solutions across</p>
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-4 mb-5 opacity-75">
+            <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-robot fs-4 text-mint"></i> Robotics</span>
+            <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-heart-pulse fs-4 text-mint"></i> Healthcare AI</span>
+            <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-bank fs-4 text-mint"></i> FinTech</span>
+            <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-car-front fs-4 text-mint"></i> Autonomous Mobility</span>
+            <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-shield-lock fs-4 text-mint"></i> Cybersecurity</span>
+            <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-boxes fs-4 text-mint"></i> Supply Chain</span>
+            <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-controller fs-4 text-mint"></i> Gaming AI</span>
           </div>
 
           <div className="row mt-5 pt-5 border-top" style={{ borderColor: 'rgba(255,255,255,0.05) !important' }}>
