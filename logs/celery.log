@@ -20,3 +20,5 @@
 
 [2026-05-27 23:45:09,573: INFO/MainProcess] Connected to redis://localhost:6379/0
 [2026-05-27 23:45:10,062: INFO/MainProcess] mingle: searching for neighbors
+[2026-05-27 23:45:12,192: INFO/MainProcess] mingle: all alone
+[2026-05-27 23:45:14,883: INFO/MainProcess] celery@tlk-Vostro-3500 ready.
