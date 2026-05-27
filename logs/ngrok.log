@@ -1,0 +1,5 @@
+t=2026-05-27T23:49:52+0300 lvl=info msg="no configuration paths supplied"
+t=2026-05-27T23:49:52+0300 lvl=info msg="using configuration at default config path" path=/home/tlk/.config/ngrok/ngrok.yml
+t=2026-05-27T23:49:52+0300 lvl=info msg="open config file" path=/home/tlk/.config/ngrok/ngrok.yml err=nil
+t=2026-05-27T23:49:52+0300 lvl=info msg="FIPS 140 mode" enabled=false
+t=2026-05-27T23:49:52+0300 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
