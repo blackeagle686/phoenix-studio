@@ -5,6 +5,10 @@ import NetworkCanvas from '../components/UI/NetworkCanvas';
 
 function Dashboard() {
   const [workspaces, setWorkspaces] = useState([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newWorkspaceName, setNewWorkspaceName] = useState('');
+  const [newWorkspaceDesc, setNewWorkspaceDesc] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
   const { token, logout, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -26,10 +30,11 @@ function Dashboard() {
     }
   };
 
-  const createWorkspace = async () => {
-    const name = prompt("Enter a name for the new workspace:");
-    if (!name) return;
+  const handleCreateSubmit = async (e) => {
+    e.preventDefault();
+    if (!newWorkspaceName.trim()) return;
     
+    setIsCreating(true);
     try {
       const response = await fetch('http://localhost:8000/api/workspaces/', {
         method: 'POST',
@@ -37,14 +42,19 @@ function Dashboard() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}` 
         },
-        body: JSON.stringify({ name, description: '' })
+        body: JSON.stringify({ name: newWorkspaceName, description: newWorkspaceDesc })
       });
       if (response.ok) {
         const data = await response.json();
+        setShowCreateModal(false);
+        setNewWorkspaceName('');
+        setNewWorkspaceDesc('');
         navigate(`/workspace/${data.id}`);
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -103,7 +113,7 @@ function Dashboard() {
             </p>
           </div>
           <div className="col-lg-4 text-lg-end mt-4 mt-lg-0">
-            <button className="btn btn-mint py-3 px-4 d-inline-flex align-items-center gap-2" style={{ borderRadius: '8px', fontSize: '1.1rem' }} onClick={createWorkspace}>
+            <button className="btn btn-mint py-3 px-4 d-inline-flex align-items-center gap-2" style={{ borderRadius: '8px', fontSize: '1.1rem' }} onClick={() => setShowCreateModal(true)}>
               <i className="bi bi-plus-circle-fill"></i> CREATE WORKSPACE
             </button>
           </div>
@@ -117,7 +127,7 @@ function Dashboard() {
                 <i className="bi bi-diagram-3 text-muted display-3 mb-4 d-block opacity-50"></i>
                 <h3 className="text-white fw-bold mb-2" style={{ fontFamily: 'var(--font-title)' }}>No Active Workspaces</h3>
                 <p className="text-muted mb-4">Initialize your first AI agent or logic flow to get started.</p>
-                <button className="btn btn-outline-mint px-4 py-2" onClick={createWorkspace}>
+                <button className="btn btn-outline-mint px-4 py-2" onClick={() => setShowCreateModal(true)}>
                   Initialize Workspace
                 </button>
               </div>
@@ -177,6 +187,64 @@ function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Create Workspace Modal */}
+      {showCreateModal && (
+        <div 
+          className="position-absolute w-100 h-100 d-flex justify-content-center align-items-center" 
+          style={{ top: 0, left: 0, zIndex: 1050, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+        >
+          <div className="glass-panel p-5 position-relative" style={{ width: '100%', maxWidth: '500px', borderRadius: '16px', background: 'rgba(15, 15, 20, 0.9)' }}>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h3 className="text-white fw-bold m-0" style={{ fontFamily: 'var(--font-title)' }}>Initialize Workspace</h3>
+              <button 
+                className="btn-close btn-close-white" 
+                onClick={() => setShowCreateModal(false)}
+                style={{ opacity: 0.5 }}
+              ></button>
+            </div>
+            
+            <p className="text-muted mb-4">Set up a new isolated environment for your AI agents and logic flows.</p>
+            
+            <form onSubmit={handleCreateSubmit}>
+              <div className="mb-4">
+                <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Workspace Name</label>
+                <input 
+                  type="text" 
+                  className="form-control bg-transparent text-white shadow-none" 
+                  style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: '8px' }}
+                  placeholder="e.g. Customer Support Agent"
+                  value={newWorkspaceName}
+                  onChange={(e) => setNewWorkspaceName(e.target.value)}
+                  autoFocus
+                  required
+                />
+              </div>
+
+              <div className="mb-5">
+                <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Description <span className="text-secondary text-lowercase" style={{letterSpacing:'0'}}>(optional)</span></label>
+                <input 
+                  type="text" 
+                  className="form-control bg-transparent text-white shadow-none" 
+                  style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: '8px' }}
+                  placeholder="What is the purpose of this workspace?"
+                  value={newWorkspaceDesc}
+                  onChange={(e) => setNewWorkspaceDesc(e.target.value)}
+                />
+              </div>
+
+              <div className="d-flex gap-3 justify-content-end">
+                <button type="button" className="btn btn-link text-muted text-decoration-none" onClick={() => setShowCreateModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-mint px-4" style={{ borderRadius: '8px' }} disabled={isCreating || !newWorkspaceName.trim()}>
+                  {isCreating ? <span className="spinner-border spinner-border-sm text-dark"></span> : 'Create Workspace'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
