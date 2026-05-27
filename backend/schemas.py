@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+import re
 from typing import Optional, Any
 from datetime import datetime
 
@@ -21,6 +22,17 @@ class UserCreate(UserBase):
     email: str
     location: Optional[str] = None
     phone_number: Optional[str] = None
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters long')
+        if not re.search(r"\d", v):
+            raise ValueError('Password must contain at least one digit')
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", v):
+            raise ValueError('Password must contain at least one special character')
+        return v
 
 class UserUpdate(BaseModel):
     first_name: Optional[str] = None

@@ -12,4 +12,3 @@ celery
 redis
 torch 
 sentence-transformers
-python-dotenv
