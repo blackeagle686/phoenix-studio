@@ -34,11 +34,11 @@ function Register() {
             <label className="form-label text-light fw-semibold">Password</label>
             <input type="password" required className="form-control bg-dark border-secondary text-white" value={password} onChange={e => setPassword(e.target.value)} />
           </div>
-          <button type="submit" className="btn btn-info w-100 fw-bold mb-3" style={{ borderRadius: '8px', background: 'linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%)', border: 'none', color: '#080810' }}>
+          <button type="submit" className="btn btn-mint w-100 fw-bold mb-3" style={{ borderRadius: '8px' }}>
             Create Account
           </button>
           <div className="text-center text-light" style={{ fontSize: '0.9rem' }}>
-            Already have an account? <Link to="/login" className="text-info text-decoration-none fw-semibold glow-cyan">Login here</Link>
+            Already have an account? <Link to="/login" className="text-mint text-decoration-none fw-semibold">Login here</Link>
           </div>
         </form>
       </div>
