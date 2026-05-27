@@ -37,6 +37,11 @@ function deploy() {
     pip install --upgrade pip
     pip install -r requirements.txt
     
+    # Install frontend dependencies
+    echo "Installing frontend dependencies..."
+    cd "$PROJECT_DIR/frontend"
+    npm install
+    
     # Ngrok setup
     if ! command -v ngrok &> /dev/null; then
         echo "Installing ngrok..."
@@ -78,11 +83,17 @@ function start() {
     # nohup ngrok http 8010 --log stdout --log-format logfmt > "$LOGS_DIR/ngrok.log" 2>&1 &
     # echo $! > "$LOGS_DIR/ngrok.pid"
     # echo "Ngrok started. Use './deploy.sh logs ngrok' to see the forwarding URL."
+    
+    # Start Frontend
+    cd "$PROJECT_DIR/frontend"
+    nohup npm run dev > "$LOGS_DIR/front.log" 2>&1 &
+    echo $! > "$LOGS_DIR/front.pid"
+    echo "Frontend started."
 }
 
 function stop() {
     echo "Stopping services..."
-    for svc in redis backend celery ngrok; do
+    for svc in redis backend celery ngrok front; do
         if [ -f "$LOGS_DIR/$svc.pid" ]; then
             PID=$(cat "$LOGS_DIR/$svc.pid")
             if ps -p $PID > /dev/null; then
@@ -102,6 +113,8 @@ function stop() {
     pkill -f "celery -A backend.core.celery_app" || true
     pkill -f "ngrok http" || true
     pkill -f "redis-server --port 6385" || true
+    pkill -f "vite" || true
+    pkill -f "npm run dev" || true
 }
 
 function restart() {
@@ -112,8 +125,8 @@ function restart() {
 
 function logs() {
     if [ -z "$service" ]; then
-        echo "Please specify a service to view logs: backend, celery, or ngrok"
-        echo "Usage: ./deploy.sh logs [backend|celery|ngrok]"
+        echo "Please specify a service to view logs: backend, celery, ngrok, or front"
+        echo "Usage: ./deploy.sh logs [backend|celery|ngrok|front]"
         exit 1
     fi
     
