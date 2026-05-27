@@ -142,6 +142,28 @@ def login(user_data: AuthSchema, db: Session = Depends(get_db)):
     return {"access_token": access_token, "token_type": "bearer", "username": user.username}
 
 # --- Chat Endpoints ---
+{% if export_as_api %}
+from fastapi import Header
+
+API_KEY = "{{ api_export_key }}"
+
+@app.post("/api/v1/chat")
+async def headless_chat(
+    request: Request,
+    text: Optional[str] = Form(None),
+    x_api_key: str = Header(None)
+):
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing API Key")
+    
+    try:
+        # Send to Phoenix ChatBot
+        bot.set_session("headless_api_session")
+        response = await bot.chat(text=text)
+        return JSONResponse({"status": "success", "response": response})
+    except Exception as e:
+        return JSONResponse({"status": "error", "message": str(e)}, status_code=500)
+{% endif %}
 @app.get("/api/history")
 def get_history(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     messages = db.query(ChatMessage).filter(ChatMessage.user_id == current_user.id).order_by(ChatMessage.timestamp.asc()).all()
