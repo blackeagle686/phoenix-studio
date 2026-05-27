@@ -22,7 +22,13 @@ const nodeTypes = {
   local_llm: CustomNode,
   hybrid_memory: CustomNode,
   default_tool: CustomNode,
-  custom_tool: CustomNode
+  custom_tool: CustomNode,
+  chatbot: CustomNode,
+  rag: CustomNode,
+  openai_vlm: CustomNode,
+  local_vlm: CustomNode,
+  tts_node: CustomNode,
+  stt_node: CustomNode
 };
 
 // Initial nodes
