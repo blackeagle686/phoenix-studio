@@ -14,4 +14,4 @@ torch
 sentence-transformers
 phx-ashborn
 chromadb
-p
+pyngrok
