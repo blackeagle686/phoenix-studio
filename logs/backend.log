@@ -4,3 +4,5 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
 INFO:     127.0.0.1:36264 - "GET / HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:36274 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33868 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33878 - "GET /favicon.ico HTTP/1.1" 404 Not Found
