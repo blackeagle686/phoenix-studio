@@ -206,6 +206,7 @@ function LandingPage() {
         </div>
       </section>
 
+      <Footer />
     </div>
   );
 }
