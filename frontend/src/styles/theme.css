@@ -17,6 +17,7 @@
   --accent-blue: #4facfe;
   --accent-pink: #f093fb;
   --accent-green: #00ff87;
+  --accent-mint: #4ade80; /* Synthora green style */
   
   --text-primary: #f5f6fa;
   --text-muted: #8e90a6;
@@ -148,4 +149,119 @@ h1, h2, h3, h4, h5, h6 {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 242, 254, 0.3);
+}
+
+/* Landing Page Synthora Utilities */
+.text-mint {
+  color: var(--accent-mint) !important;
+}
+
+.bg-mint {
+  background-color: var(--accent-mint) !important;
+}
+
+.hero-text {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 5.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+@media (max-width: 992px) {
+  .hero-text {
+    font-size: 3.5rem;
+  }
+}
+
+.manifesto-text {
+  font-family: var(--font-title);
+  font-weight: 500;
+  font-size: 3.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+@media (max-width: 992px) {
+  .manifesto-text {
+    font-size: 2.2rem;
+  }
+}
+
+.btn-mint {
+  background-color: var(--accent-mint);
+  color: #000;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.btn-mint:hover {
+  opacity: 0.9;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.btn-outline-mint {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  padding: 12px 24px;
+  transition: border-color 0.2s;
+}
+
+.btn-outline-mint:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.stat-block h2 {
+  font-size: 8rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: #fff;
+}
+
+@media (max-width: 992px) {
+  .stat-block h2 {
+    font-size: 5rem;
+  }
+}
+
+.feature-card {
+  background-color: #0f0f13; /* Very dark slightly greyish background */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: border-color 0.3s, transform 0.3s;
+  height: 100%;
+}
+
+.feature-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link-custom {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+
+.nav-link-custom:hover, .nav-link-custom.active {
+  color: #fff;
 }
