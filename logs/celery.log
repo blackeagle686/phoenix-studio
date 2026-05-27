@@ -22,3 +22,7 @@
 [2026-05-28 00:04:25,546: INFO/MainProcess] mingle: searching for neighbors
 [2026-05-28 00:04:27,392: INFO/MainProcess] mingle: all alone
 [2026-05-28 00:04:29,597: INFO/MainProcess] celery@tlk-Vostro-3500 ready.
+
+worker: Warm shutdown (MainProcess)
+
+worker: Warm shutdown (MainProcess)
