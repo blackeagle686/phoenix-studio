@@ -1,0 +1,54 @@
+import asyncio
+from phoenix.framework.multi_agent.manager import MultiAgentManager
+from phoenix.framework.multi_agent.config import MultiAgentConfig, AgentConfig
+from phoenix.framework.agent.core.profile import AgentProfile
+
+async def main():
+    print("Initializing Multi-Agent Team...")
+    config = MultiAgentConfig(
+        team_name="{{ team_name }}",
+        shared_memory={{ shared_memory }},
+        agents=[
+            {% for agent in agents %}
+            AgentConfig(
+                name="{{ agent.name }}",
+                llm_type="{{ agent.llm_type }}",
+                profile=AgentProfile(role_title="{{ agent.name }}", mission="Execute tasks assigned by the orchestrator"),
+                llm_params={
+                    {% if agent.llm_type == 'openai' %}
+                    "model": "{{ agent.model }}",
+                    "api_key": "{{ agent.api_key }}"{% if agent.base_url %},
+                    "base_url": "{{ agent.base_url }}"{% endif %}
+                    {% else %}
+                    "model": "{{ agent.model }}"
+                    {% endif %}
+                }
+            ),
+            {% endfor %}
+        ]
+    )
+    
+    manager = MultiAgentManager(config=config)
+    print("\n🔥 Multi-Agent Team '{{ team_name }}' is ready! Type 'exit' to quit.")
+    
+    session_id = "{{ session_id }}"
+    while True:
+        try:
+            user_input = input("\nYou: ")
+            if user_input.strip().lower() == "exit":
+                print("Exiting. Goodbye!")
+                break
+            if not user_input.strip(): 
+                continue
+                
+            print("Manager is routing your request...")
+            response = await manager.run_autonomous(user_input, session_id=session_id)
+            print(f"\nResult: {response}")
+        except KeyboardInterrupt:
+            print("\nExiting. Goodbye!")
+            break
+        except Exception as e:
+            print(f"\nError: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
