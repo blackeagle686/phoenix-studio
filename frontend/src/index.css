@@ -116,7 +116,7 @@
 }
 
 .hover-scale-img:hover {
-  transform: scale(1.06) perspective(1000px) translateZ(20px);
+  transform: scale(1.6) perspective(1000px) translateZ(20px);
   box-shadow: 0 30px 60px rgba(114, 239, 221, 0.25) !important;
   z-index: 10;
 }
