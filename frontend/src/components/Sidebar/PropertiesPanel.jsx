@@ -113,6 +113,10 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
                 <option value="gpt-4o">gpt-4o</option>
                 <option value="gpt-4-turbo">gpt-4-turbo</option>
                 <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                <option value="LongCat-Flash-Lite">LongCat-Flash-Lite</option>
+                <option value="LongCat-Flash-Chat">LongCat-Flash-Chat</option>
+                <option value="LongCat-Flash-Thinking-2601">LongCat-Flash-Thinking-2601</option>
+                <option value="LongCat-Flash-Omni-2603">LongCat-Flash-Omni-2603</option>
               </select>
             </div>
             <div>
