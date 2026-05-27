@@ -1,0 +1,7 @@
+venv/
+smart_git.py
+__pycache__/
+node_modules/
+database.sqlite
+database.sqlite-journal
+.db3

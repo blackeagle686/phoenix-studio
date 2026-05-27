@@ -1,0 +1,93 @@
+Phoenix Studio: Master Architecture & Implementation Plan
+This document serves as the master blueprint for building Phoenix Studio, a no-code visual builder for the Phoenix AI SDK. It details how the web app will be structured, how visual nodes map to the Phoenix SDK components, and how the backend will generate production-ready Python projects.
+
+1. Tech Stack Overview
+Frontend: React (via Vite) + Vanilla CSS + Bootstrap.
+Diagram Engine: React Flow (reactflow), the industry standard for node-based editors.
+Backend: FastAPI (Python) - lightweight, asynchronous, and perfect for handling Python code generation and ZIP packaging.
+Code Templating: Jinja2 (Python) or dynamic string builders to generate the final main.py files.
+2. Node-to-SDK Mapping Strategy
+The core concept of Phoenix Studio is translating visual drag-and-drop nodes into Phoenix SDK Python code.
+
+Core Nodes & Their Phoenix Equivalents:
+Agent Node
+Visual: The central block. Accepts connections for LLM, Memory, and Tools.
+SDK Mapping: from phoenix.framework.agent import Agent -> agent = Agent(llm=..., memory=..., tools=...)
+LLM Nodes (OpenAI / Local)
+Visual: Nodes where users can input api_key or select model names.
+SDK Mapping: from phoenix.services.llm.openai import OpenAILLM -> llm = OpenAILLM(api_key="...", model="...")
+Memory Node (Hybrid)
+Visual: Toggle for Redis persistence and Vector DB.
+SDK Mapping: from phoenix.framework.agent.memory.hybrid import HybridMemory -> memory = HybridMemory()
+Tool Nodes (Web Search, File I/O, Custom)
+Visual: Pre-built blocks or a "Custom Python Tool" block where users paste code.
+SDK Mapping:
+Default: ToolRegistry.load_default()
+Custom: Wrapping the user's code string with the @tool(name="...", description="...") decorator.
+3. The Code Generation Engine (Backend)
+When the user clicks "Download Agent", the React frontend will serialize the React Flow canvas into a JSON payload and send it to the FastAPI backend.
+
+Expected Graph JSON Payload
+json
+{
+  "nodes": [
+    { "id": "agent-1", "type": "agent", "data": { "session_id": "default" } },
+    { "id": "llm-1", "type": "openai", "data": { "model": "gpt-4o" } },
+    { "id": "mem-1", "type": "hybrid_memory", "data": { "use_redis": true } }
+  ],
+  "edges": [
+    { "source": "llm-1", "target": "agent-1" },
+    { "source": "mem-1", "target": "agent-1" }
+  ]
+}
+FastAPI Processing Flow
+Parse Graph: The backend reads the nodes and edges to determine dependencies.
+Generate Code: It constructs a python script using Jinja2 templates:
+python
+# Generated template output example:
+import asyncio
+from phoenix.framework.agent import Agent
+from phoenix.services.llm.openai import OpenAILLM
+from phoenix.framework.agent.memory.hybrid import HybridMemory
+async def main():
+    llm = OpenAILLM(model="gpt-4o")
+    memory = HybridMemory()
+    agent = Agent(llm=llm, memory=memory)
+    
+    print("Agent is ready! Type 'exit' to quit.")
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "exit": break
+        response = await agent.run(user_input, session_id="default")
+        print(f"Agent: {response}")
+if __name__ == "__main__":
+    asyncio.run(main())
+Package Project: It creates a .zip file containing:
+main.py (the generated code)
+.env (holding any API keys passed)
+requirements.txt (containing phx-ashborn[full])
+Return to User: FastAPI streams the ZIP file back as an HTTP response for the browser to download.
+4. Phase-by-Phase Roadmap
+Phase 1: Foundation (Current Goal)
+Setup separate repository/directory structure.
+Initialize FastAPI backend (pip install fastapi uvicorn).
+Initialize React Vite frontend (npm create vite@latest frontend -- --template react).
+Install Bootstrap and React Flow.
+Create the base layout and Navbar.
+Phase 2: Canvas Editor (Frontend)
+Build the React Flow Canvas.
+Create custom React components for AgentNode, LLMNode, ToolNode.
+Implement the Property Sidebar (clicking a node lets the user edit its settings like name, model, api_key).
+Implement basic ready templates (e.g., "Load Basic Chatbot Template" button which pre-populates the graph).
+Phase 3: The Generation API (Backend)
+Create a FastAPI endpoint POST /api/generate.
+Write the graph parsing logic.
+Implement the Jinja2 code generation pipeline.
+Implement zipfile creation and memory streaming (StreamingResponse).
+Phase 4: Polish & Integration
+Connect the frontend "Download" button to the backend endpoint.
+Style the UI using Vanilla CSS and Bootstrap to match the premium dark-glassmorphic brand identity.
+Verify that the downloaded project correctly runs the Phoenix SDK.
+
+here is the path of the phx-ashborn phoenix framework if you need to take a deep look on how to use:
+/home/tlk/Documents/Projects/my_AItools/phoenix-studio/venv/lib/python3.12/site-packages/phoenix/framework
