@@ -56,11 +56,11 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
 
-  const register = async (username, password) => {
+  const register = async (userData) => {
     const response = await fetch('http://localhost:8000/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify(userData)
     });
     return response.ok;
   };
