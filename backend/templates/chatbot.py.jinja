@@ -25,7 +25,13 @@ builder.with_memory()
 builder.with_rag(
     data_to_insight_path="{{ rag.path }}", 
     chunk_size={{ rag.chunk_size }}, 
-    chunk_overlap={{ rag.chunk_overlap }}
+    chunk_overlap={{ rag.chunk_overlap }},
+    reranking={{ 'True' if rag.reranking else 'False' }},
+    fast_rag={{ 'True' if rag.fast_rag else 'False' }},
+    hybrid_search={{ 'True' if rag.hybrid_search else 'False' }},
+    cag={{ 'True' if rag.cag else 'False' }},
+    threshold={{ rag.threshold }},
+    device="{{ rag.device }}"
 )
 {% endif %}
 
