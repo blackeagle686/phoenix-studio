@@ -1,0 +1,67 @@
+from phoenix.framework.chatbot.core import ChatBot
+import asyncio
+
+# Setup ChatBot builder
+builder = ChatBot(
+    local={{ is_local }},
+    vlm={{ vlm_enabled }},
+    tts={{ tts_enabled }},
+    stt={{ stt_enabled }}
+)
+
+# Apply settings
+builder.with_system_prompt("{{ system_prompt }}")
+builder.set_session("{{ session_id }}")
+
+{% if security_mode and security_mode != "none" %}
+builder.with_security(mode="{{ security_mode }}")
+{% endif %}
+
+{% if memory_enabled %}
+builder.with_memory()
+{% endif %}
+
+{% if rag %}
+builder.with_rag(
+    data_to_insight_path="{{ rag.path }}", 
+    chunk_size={{ rag.chunk_size }}, 
+    chunk_overlap={{ rag.chunk_overlap }}
+)
+{% endif %}
+
+{% if openai_llm %}
+builder.with_openai(
+    api_key="{{ openai_llm.api_key }}"{% if openai_llm.base_url %}, 
+    base_url="{{ openai_llm.base_url }}"{% endif %}
+)
+builder.with_model(llm="{{ openai_llm.model }}")
+{% elif local_llm %}
+builder.with_model(llm="{{ local_llm.model }}")
+{% endif %}
+
+{% if openai_vlm %}
+# VLM uses the same API key context in Phoenix builder currently, but model can be overridden
+builder.with_model(vlm="{{ openai_vlm.model }}")
+{% if not openai_llm %}
+# Set OpenAI key purely for VLM since LLM is missing or local
+builder.with_openai(api_key="{{ openai_vlm.api_key }}")
+{% endif %}
+{% elif local_vlm %}
+builder.with_model(vlm="{{ local_vlm.model }}")
+{% endif %}
+
+async def main():
+    print("Building ChatBot instance...")
+    bot = builder.build()
+    
+    # Initialize components lazily
+    await bot._lazy_init()
+    
+    print(f"ChatBot initialized for session: {bot.builder._session_id}")
+    
+    # Example interaction
+    response = await bot.chat(text="Hello, are you ready?")
+    print(f"Bot: {response}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
