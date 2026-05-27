@@ -181,7 +181,7 @@ const blockCategories = [
 export const BlocksPanel = ({ onAddNode, workspaceMode = 'chatbot' }) => {
   return (
     <div 
-      className="glass-panel h-100 d-flex flex-column overflow-hidden pr-4"
+      className="glass-panel h-100 d-flex flex-column overflow-hidden "
       style={{
         width: 'var(--sidebar-width)',
         zIndex: 10,
