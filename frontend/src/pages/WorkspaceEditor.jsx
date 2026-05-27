@@ -485,7 +485,7 @@ function WorkspaceEditor() {
             padding: leftSidebarOpen ? '' : '0 !important'
           }}
         >
-          <BlocksPanel onAddNode={onAddNode} />
+          <BlocksPanel onAddNode={onAddNode} workspaceMode={workspaceMode} />
         </div>
 
         {/* Center: Canvas workspace */}
