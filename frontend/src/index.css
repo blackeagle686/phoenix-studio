@@ -116,7 +116,29 @@
 }
 
 .hover-scale-img:hover {
-  transform: scale(1.6) perspective(1000px) translateZ(20px);
+  transform: scale(1.06) perspective(1000px) translateZ(20px);
   box-shadow: 0 30px 60px rgba(114, 239, 221, 0.25) !important;
   z-index: 10;
+}
+
+/* Card Hover Animation */
+.hover-lift-card {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s ease, box-shadow 0.4s ease !important;
+  will-change: transform, box-shadow, border-color;
+  cursor: pointer;
+}
+
+.hover-lift-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(114, 239, 221, 0.4) !important;
+  box-shadow: 0 15px 35px rgba(114, 239, 221, 0.15) !important;
+}
+
+.hover-lift-card i {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.hover-lift-card:hover i {
+  color: rgba(114, 239, 221, 0.8) !important;
+  transform: scale(1.1);
 }

@@ -184,8 +184,8 @@ function LandingPage() {
 
           <div className="row g-4 flex-nowrap overflow-auto pb-3" style={{ scrollSnapType: 'x mandatory' }}>
             {/* Card 1 */}
-            <div className="col-11 col-md-6 col-lg-3" style={{ scrollSnapAlign: 'start' }}>
-              <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
+            <div className="col-11 col-md-6 col-lg-3 fade-up-section" style={{ scrollSnapAlign: 'start', transitionDelay: '0.1s' }}>
+              <div className="feature-card d-flex flex-column h-100 hover-lift-card" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[01]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
                   <i className="bi bi-diagram-3" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
@@ -196,8 +196,8 @@ function LandingPage() {
             </div>
 
             {/* Card 2 */}
-            <div className="col-11 col-md-6 col-lg-3" style={{ scrollSnapAlign: 'start' }}>
-              <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
+            <div className="col-11 col-md-6 col-lg-3 fade-up-section" style={{ scrollSnapAlign: 'start', transitionDelay: '0.2s' }}>
+              <div className="feature-card d-flex flex-column h-100 hover-lift-card" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[02]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
                   <i className="bi bi-eye" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
@@ -208,8 +208,8 @@ function LandingPage() {
             </div>
 
             {/* Card 3 */}
-            <div className="col-11 col-md-6 col-lg-3" style={{ scrollSnapAlign: 'start' }}>
-              <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
+            <div className="col-11 col-md-6 col-lg-3 fade-up-section" style={{ scrollSnapAlign: 'start', transitionDelay: '0.3s' }}>
+              <div className="feature-card d-flex flex-column h-100 hover-lift-card" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[03]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
                   <i className="bi bi-database-check" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
@@ -220,8 +220,8 @@ function LandingPage() {
             </div>
 
             {/* Card 4 */}
-            <div className="col-11 col-md-6 col-lg-3" style={{ scrollSnapAlign: 'start' }}>
-              <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
+            <div className="col-11 col-md-6 col-lg-3 fade-up-section" style={{ scrollSnapAlign: 'start', transitionDelay: '0.4s' }}>
+              <div className="feature-card d-flex flex-column h-100 hover-lift-card" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[04]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
                   <i className="bi bi-router" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
