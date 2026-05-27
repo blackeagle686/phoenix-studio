@@ -27,6 +27,7 @@ class UserResponse(UserBase):
 class WorkspaceBase(BaseModel):
     name: str
     description: Optional[str] = None
+    workspace_type: str = "ai_agent"
     graph_data: Optional[str] = "{}"
 
 class WorkspaceCreate(WorkspaceBase):
