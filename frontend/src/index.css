@@ -1,68 +1,82 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* Imports for external libraries */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'reactflow/dist/style.css';
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* Import custom theme variables and utility classes */
+@import './styles/theme.css';
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
+/* Reset basic React App settings to allow full height */
+#root {
+  height: 100vh;
+  width: 100vw;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* React Flow custom style overrides to fit the dark glassmorphic theme */
+.react-flow {
+  background-color: transparent !important;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.react-flow__background {
+  background-color: var(--bg-deep) !important;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.react-flow__edge-path {
+  stroke: var(--text-dim) !important;
+  stroke-width: 2.5;
+  transition: stroke 0.3s;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: var(--accent-cyan) !important;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: var(--accent-purple) !important;
+}
+
+.react-flow__controls {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.react-flow__controls-button {
+  background: transparent !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  fill: var(--text-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--glass-bg-accent) !important;
+  fill: var(--accent-cyan) !important;
+  color: var(--accent-cyan) !important;
+}
+
+.react-flow__minimap {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(0, 0, 0, 0.4) !important;
+}
+
+.react-flow__handle {
+  width: 10px !important;
+  height: 10px !important;
+  background: var(--accent-cyan) !important;
+  border: 2px solid var(--bg-deep) !important;
+  box-shadow: 0 0 5px var(--accent-cyan) !important;
+}
+
+.react-flow__handle:hover {
+  background: var(--accent-purple) !important;
+  box-shadow: 0 0 8px var(--accent-purple) !important;
 }
