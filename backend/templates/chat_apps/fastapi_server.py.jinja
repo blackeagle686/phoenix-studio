@@ -1,0 +1,80 @@
+import os
+import io
+import mimetypes
+from fastapi import FastAPI, Request, File, UploadFile, Form
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.middleware.cors import CORSMiddleware
+from typing import Optional
+from bot import builder  # Generated bot.py
+
+app = FastAPI(title="Phoenix AI Chat App")
+
+# Disable CORS restrictions for local app usage
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize the ChatBot instance from the generated builder
+bot = builder.build()
+
+@app.on_event("startup")
+async def startup_event():
+    print("[*] Initializing Phoenix ChatBot backend...")
+    await bot._lazy_init()
+    print("[+] Ready to chat!")
+
+@app.get("/", response_class=HTMLResponse)
+async def serve_frontend():
+    index_path = os.path.join(os.path.dirname(__file__), "..", "frontend", "index.html")
+    with open(index_path, "r", encoding="utf-8") as f:
+        return f.read()
+
+@app.post("/api/chat")
+async def chat_endpoint(
+    text: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None),
+    audio: Optional[UploadFile] = File(None)
+):
+    try:
+        image_path = None
+        audio_path = None
+        
+        # Save uploaded image temporarily if provided
+        if image and image.filename:
+            image_path = os.path.join("/tmp", image.filename)
+            with open(image_path, "wb") as f:
+                content = await image.read()
+                f.write(content)
+                
+        # Save uploaded audio temporarily if provided
+        if audio and audio.filename:
+            audio_path = os.path.join("/tmp", audio.filename)
+            with open(audio_path, "wb") as f:
+                content = await audio.read()
+                f.write(content)
+
+        # Send to Phoenix ChatBot
+        response = await bot.chat(
+            text=text,
+            image_path=image_path,
+            audio_path=audio_path
+        )
+        
+        # Cleanup temp files
+        if image_path and os.path.exists(image_path):
+            os.remove(image_path)
+        if audio_path and os.path.exists(audio_path):
+            os.remove(audio_path)
+            
+        return JSONResponse({"status": "success", "response": response})
+        
+    except Exception as e:
+        return JSONResponse({"status": "error", "message": str(e)}, status_code=500)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8080)
