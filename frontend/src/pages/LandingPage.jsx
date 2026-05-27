@@ -12,7 +12,7 @@ function LandingPage() {
         <div className="container-fluid">
           <div className="d-flex align-items-center gap-4">
             <Link className="navbar-brand text-white fw-bold d-flex align-items-center gap-2" style={{ fontSize: '1.2rem', letterSpacing: '1px' }} to="/">
-              <i className="bi bi-circle-fill text-mint" style={{ fontSize: '0.8rem' }}></i> SYNTHORA
+              <i className="bi bi-circle-fill text-mint" style={{ fontSize: '0.8rem' }}></i> PHOENIX-AI
             </Link>
             <div className="d-none d-lg-flex gap-4 ms-4 align-items-center">
               <Link className="nav-link-custom active" to="/">Home</Link>
