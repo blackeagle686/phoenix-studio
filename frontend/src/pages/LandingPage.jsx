@@ -1,47 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
-
+import Navbar from '../components/UI/Navbar';
+import Footer from '../components/UI/Footer';
 function LandingPage() {
   const navigate = useNavigate();
 
   return (
     <div style={{ backgroundColor: '#050505', minHeight: '100vh', overflowX: 'hidden' }}>
-      {/* Navbar */}
-      <nav className="navbar navbar-expand-lg py-4 px-5 fixed-top" style={{ background: 'rgba(5, 5, 5, 0.8)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="container-fluid">
-          <div className="d-flex align-items-center gap-4">
-            <Link className="navbar-brand text-white fw-bold d-flex align-items-center gap-2" style={{ fontSize: '1.2rem', letterSpacing: '1px' }} to="/">
-              <i className="bi bi-circle-fill text-mint" style={{ fontSize: '0.8rem' }}></i> PHOENIX-AI
-            </Link>
-            <div className="d-none d-lg-flex gap-4 ms-4 align-items-center">
-              <Link className="nav-link-custom active" to="/">Home</Link>
-
-              <div className="dropdown">
-                <a className="nav-link-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Platform
-                </a>
-                <ul className="dropdown-menu dropdown-menu-dark" style={{ background: '#0a0a0d', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <li><Link className="dropdown-item text-light" to="/">Build AI Agent</Link></li>
-                  <li><Link className="dropdown-item text-light" to="/">Build Multi Agent System</Link></li>
-                  <li><Link className="dropdown-item text-light" to="/">Build Chatbots</Link></li>
-                  <li><Link className="dropdown-item text-light" to="/">Build RAG System</Link></li>
-                  <li><Link className="dropdown-item text-light" to="/">Build Computer Vision Models</Link></li>
-                </ul>
-              </div>
-
-              <Link className="nav-link-custom" to="/guide">Use Case</Link>
-              <Link className="nav-link-custom" to="/about">Labs</Link>
-            </div>
-          </div>
-          <div className="ms-auto">
-            <button className="btn btn-light rounded-1 px-4 py-2 fw-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }} onClick={() => navigate('/login')}>
-              LAUNCH AGENT <i className="bi bi-arrow-up-right ms-2"></i>
-            </button>
-          </div>
-        </div>
-      </nav>
-
+      <Navbar />
       {/* Hero Section */}
       <section className="position-relative vh-100 d-flex flex-column justify-content-center" style={{ paddingTop: '80px' }}>
         <NetworkCanvas />
