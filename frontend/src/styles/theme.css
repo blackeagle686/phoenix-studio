@@ -32,8 +32,8 @@
   --accent-mint: var(--palette-9); /* Using the vibrant turquoise/mint from palette */
 
   --text-primary: #ffffff;
-  --text-muted: #b0b2c3; /* Brightened for dark mode readability */
-  --text-dim: #7a7c93;
+  --text-muted: #c8cad6; /* Much lighter, legible gray-blue */
+  --text-dim: #9496a8;
 
   --border-glow: rgba(0, 242, 254, 0.3);
   --border-muted: rgba(255, 255, 255, 0.05);
@@ -169,6 +169,10 @@ h6 {
 /* Landing Page PHOENIX-AI Utilities */
 .text-mint {
   color: var(--accent-mint) !important;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
 }
 
 .text-gradient {
