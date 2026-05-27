@@ -36,36 +36,85 @@ const nodeTypes = {
   web_data_api: CustomNode
 };
 
-// Initial nodes
-const initialNodes = [
-  {
-    id: 'agent-1',
-    type: 'agent',
-    data: { name: 'PhoenixAgent', session_id: 'default' },
-    position: { x: 450, y: 150 },
-  },
-  {
+const getInitialNodesForType = (type) => {
+  const baseLLM = {
     id: 'llm-1',
     type: 'openai_llm',
     data: { model: 'gpt-4o', api_key: '' },
     position: { x: 100, y: 80 },
-  },
-  {
-    id: 'mem-1',
-    type: 'hybrid_memory',
-    data: { use_redis: true },
-    position: { x: 100, y: 260 },
-  },
-];
+  };
 
-const initialEdges = [];
+  if (type === 'ai_chatbot') {
+    return [
+      baseLLM,
+      {
+        id: 'chatbot-1',
+        type: 'chatbot',
+        data: { name: 'SupportBot', session_id: 'default' },
+        position: { x: 450, y: 80 },
+      }
+    ];
+  } else if (type === 'rag_system') {
+    return [
+      baseLLM,
+      {
+        id: 'data-1',
+        type: 'data_folder',
+        data: { path: './docs' },
+        position: { x: 100, y: 260 },
+      },
+      {
+        id: 'rag-1',
+        type: 'rag',
+        data: { chunk_size: 500 },
+        position: { x: 450, y: 150 },
+      }
+    ];
+  } else if (type === 'computer_vision') {
+    return [
+      {
+        id: 'vlm-1',
+        type: 'openai_vlm',
+        data: { model: 'gpt-4o-mini', api_key: '' },
+        position: { x: 100, y: 80 },
+      },
+      {
+        id: 'agent-1',
+        type: 'agent',
+        data: { name: 'VisionAgent', session_id: 'vision_1' },
+        position: { x: 450, y: 80 },
+      }
+    ];
+  }
+
+  // Default to ai_agent or multi_agent
+  return [
+    baseLLM,
+    {
+      id: 'agent-1',
+      type: 'agent',
+      data: { name: 'PhoenixAgent', session_id: 'default' },
+      position: { x: 450, y: 150 },
+    },
+    {
+      id: 'mem-1',
+      type: 'hybrid_memory',
+      data: { use_redis: true },
+      position: { x: 100, y: 260 },
+    },
+  ];
+};
+
+const getInitialEdgesForType = (type) => {
+  return [];
+};
 
 function WorkspaceEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [workspaceName, setWorkspaceName] = useState('Untitled Workspace');
   const [workspaceMode, setWorkspaceMode] = useState('chatbot'); // 'chatbot' or 'agent'
   const [isSaving, setIsSaving] = useState(false);
@@ -128,8 +177,19 @@ function WorkspaceEditor() {
           setWorkspaceName(data.name);
           if (data.graph_data) {
             const graph = JSON.parse(data.graph_data);
-            if (graph.nodes && graph.nodes.length > 0) setNodes(graph.nodes);
-            if (graph.edges && graph.edges.length > 0) setEdges(graph.edges);
+            if (graph.nodes && graph.nodes.length > 0) {
+              setNodes(graph.nodes);
+            } else {
+              setNodes(getInitialNodesForType(data.workspace_type));
+            }
+            if (graph.edges && graph.edges.length > 0) {
+              setEdges(graph.edges);
+            } else {
+              setEdges(getInitialEdgesForType(data.workspace_type));
+            }
+          } else {
+            setNodes(getInitialNodesForType(data.workspace_type));
+            setEdges(getInitialEdgesForType(data.workspace_type));
           }
         } else {
           navigate('/dashboard');
