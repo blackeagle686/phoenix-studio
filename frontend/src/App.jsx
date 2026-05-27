@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -6,89 +6,216 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   addEdge,
+  MarkerType
 } from 'reactflow';
+import CustomNode from './components/Nodes/CustomNode';
+import BlocksPanel from './components/Sidebar/BlocksPanel';
+import PropertiesPanel from './components/Sidebar/PropertiesPanel';
 import './App.css';
 
-// Initial placeholder nodes
+// Map custom node types to React Flow
+const nodeTypes = {
+  agent: CustomNode,
+  openai_llm: CustomNode,
+  local_llm: CustomNode,
+  hybrid_memory: CustomNode,
+  default_tool: CustomNode,
+  custom_tool: CustomNode
+};
+
+// Initial nodes
 const initialNodes = [
   {
     id: 'agent-1',
-    type: 'default',
-    data: { label: '🤖 Agent Core (Phoenix)' },
-    position: { x: 350, y: 200 },
-    style: {
-      background: 'rgba(21, 21, 40, 0.8)',
-      color: '#f5f6fa',
-      border: '1px solid var(--accent-cyan)',
-      boxShadow: '0 0 15px rgba(0, 242, 254, 0.25)',
-      borderRadius: '8px',
-      padding: '10px 15px',
-      fontSize: '14px',
-      fontWeight: '500',
-    },
+    type: 'agent',
+    data: { name: 'PhoenixAgent', session_id: 'default' },
+    position: { x: 450, y: 150 },
   },
   {
     id: 'llm-1',
-    type: 'input',
-    data: { label: '🔌 OpenAILLM (gpt-4o)' },
-    position: { x: 100, y: 100 },
-    style: {
-      background: 'rgba(21, 21, 40, 0.8)',
-      color: '#f5f6fa',
-      border: '1px solid var(--accent-purple)',
-      boxShadow: '0 0 15px rgba(155, 81, 224, 0.25)',
-      borderRadius: '8px',
-      padding: '10px 15px',
-      fontSize: '14px',
-      fontWeight: '500',
-    },
+    type: 'openai_llm',
+    data: { model: 'gpt-4o', api_key: '' },
+    position: { x: 100, y: 80 },
   },
   {
     id: 'mem-1',
-    type: 'input',
-    data: { label: '💾 HybridMemory (Redis)' },
-    position: { x: 100, y: 300 },
-    style: {
-      background: 'rgba(21, 21, 40, 0.8)',
-      color: '#f5f6fa',
-      border: '1px solid var(--accent-pink)',
-      boxShadow: '0 0 15px rgba(240, 147, 251, 0.25)',
-      borderRadius: '8px',
-      padding: '10px 15px',
-      fontSize: '14px',
-      fontWeight: '500',
-    },
+    type: 'hybrid_memory',
+    data: { use_redis: true },
+    position: { x: 100, y: 260 },
   },
 ];
 
 const initialEdges = [
-  { id: 'e-llm-agent', source: 'llm-1', target: 'agent-1', animated: true },
-  { id: 'e-mem-agent', source: 'mem-1', target: 'agent-1', animated: true },
+  { 
+    id: 'e-llm-agent', 
+    source: 'llm-1', 
+    target: 'agent-1', 
+    animated: true,
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#9b51e0' }
+  },
+  { 
+    id: 'e-mem-agent', 
+    source: 'mem-1', 
+    target: 'agent-1', 
+    animated: true,
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#f093fb' }
+  },
 ];
 
 function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
+  const [globalCode, setGlobalCode] = useState('');
+  const [showCodeDrawer, setShowCodeDrawer] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
 
+  // Retrieve selected node object
+  const selectedNode = nodes.find((n) => n.id === selectedNodeId);
+
+  // Track select events
+  const onNodeClick = useCallback((event, node) => {
+    setSelectedNodeId(node.id);
+  }, []);
+
+  const onPaneClick = useCallback(() => {
+    setSelectedNodeId(null);
+  }, []);
+
+  // Update selected node config data
+  const onUpdateNode = useCallback((id, newData) => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === id) {
+          return { ...node, data: newData };
+        }
+        return node;
+      })
+    );
+  }, [setNodes]);
+
+  // Delete node and its edges
+  const onDeleteNode = useCallback((id) => {
+    setNodes((nds) => nds.filter((n) => n.id !== id));
+    setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
+    if (selectedNodeId === id) {
+      setSelectedNodeId(null);
+    }
+  }, [selectedNodeId, setNodes, setEdges]);
+
+  // Add node helper
+  const onAddNode = useCallback((type, defaultData) => {
+    const id = `${type}-${Date.now()}`;
+    // Position slightly offset from center
+    const position = {
+      x: 200 + Math.random() * 100,
+      y: 150 + Math.random() * 100
+    };
+    const newNode = {
+      id,
+      type,
+      data: { ...defaultData },
+      position
+    };
+    setNodes((nds) => [...nds, newNode]);
+    setSelectedNodeId(id);
+  }, [setNodes]);
+
+  // React Flow onConnect handler
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge({ ...params, animated: true }, eds)),
-    [setEdges]
+    (params) => {
+      // Color connections according to source node types
+      const sourceNode = nodes.find((n) => n.id === params.source);
+      let edgeColor = '#5c5d73';
+      if (sourceNode) {
+        if (sourceNode.type === 'openai_llm') edgeColor = '#9b51e0';
+        else if (sourceNode.type === 'local_llm') edgeColor = '#4facfe';
+        else if (sourceNode.type === 'hybrid_memory') edgeColor = '#f093fb';
+        else if (sourceNode.type === 'default_tool' || sourceNode.type === 'custom_tool') edgeColor = '#00ff87';
+      }
+
+      setEdges((eds) => 
+        addEdge(
+          { 
+            ...params, 
+            animated: true,
+            style: { stroke: edgeColor },
+            markerEnd: { type: MarkerType.ArrowClosed, color: edgeColor }
+          }, 
+          eds
+        )
+      );
+    },
+    [nodes, setEdges]
   );
 
+  // Sync global code preview
+  useEffect(() => {
+    const fetchPreview = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nodes, edges })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setGlobalCode(data.code);
+        }
+      } catch (err) {
+        console.error('Failed to fetch code preview:', err);
+      }
+    };
+    
+    // Simple debounce to prevent flooding backend requests
+    const timeout = setTimeout(fetchPreview, 400);
+    return () => clearTimeout(timeout);
+  }, [nodes, edges]);
+
+  // Handle ZIP generate download
+  const handleDownload = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await fetch('http://localhost:8000/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nodes, edges })
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${selectedNode?.data?.name || 'phoenix_agent'}.zip`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } else {
+        alert('Failed to package project archive.');
+      }
+    } catch (err) {
+      alert('Error communicating with generation endpoint.');
+      console.error(err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      {/* Ambient background orbs */}
+    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      {/* Background visual layers */}
       <div className="ambient-bg"></div>
 
-      {/* Header / Navbar */}
+      {/* Main Navbar */}
       <nav
-        className="navbar navbar-expand-lg glass-panel py-3 px-4 position-absolute w-100"
+        className="navbar navbar-expand-lg glass-panel py-2 px-4 position-absolute"
         style={{
           top: '15px',
           left: '15px',
           right: '15px',
           width: 'calc(100% - 30px)',
-          zIndex: 1000,
+          zIndex: 100,
           borderRadius: '12px',
         }}
       >
@@ -110,39 +237,138 @@ function App() {
 
           <div className="d-flex align-items-center gap-3">
             <button
-              className="btn btn-outline-info d-flex align-items-center gap-2"
+              className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
               style={{
                 borderRadius: '8px',
-                border: '1px solid var(--accent-cyan)',
-                background: 'transparent',
-                color: 'var(--accent-cyan)',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 500,
-                padding: '6px 16px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: 'var(--text-primary)',
               }}
-              onClick={() => alert('Download pipeline configured in Phase 4.')}
+              onClick={() => setShowCodeDrawer(!showCodeDrawer)}
             >
-              <i className="bi bi-download"></i>
-              Download Agent
+              <i className={`bi ${showCodeDrawer ? 'bi-eye-slash-fill' : 'bi-eye-fill'}`}></i>
+              {showCodeDrawer ? 'Hide Code' : 'Show Code'}
+            </button>
+
+            <button
+              className="btn btn-info d-flex align-items-center gap-2"
+              style={{
+                borderRadius: '8px',
+                background: 'linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%)',
+                border: 'none',
+                color: '#080810',
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                padding: '8px 20px',
+                boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)',
+              }}
+              onClick={handleDownload}
+              disabled={isGenerating}
+            >
+              {isGenerating ? (
+                <>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Building...
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-download"></i>
+                  Download Agent
+                </>
+              )}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Canvas Area */}
-      <div style={{ width: '100%', height: '100%', paddingTop: '0px' }}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          fitView
-        >
-          <Background color="#5c5d73" gap={16} size={1} />
-          <Controls />
-          <MiniMap nodeStrokeWidth={3} zoomable pannable />
-        </ReactFlow>
+      {/* Main Workspace Panel */}
+      <div 
+        className="d-flex w-100" 
+        style={{ 
+          height: `calc(100vh - ${showCodeDrawer ? '300px' : '0px'})`, 
+          paddingTop: '95px',
+          transition: 'height 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
+      >
+        {/* Left Side: Blocks panel */}
+        <div className="p-3 pr-0" style={{ height: '100%' }}>
+          <BlocksPanel onAddNode={onAddNode} />
+        </div>
+
+        {/* Center: Canvas workspace */}
+        <div className="flex-grow-1 p-3" style={{ height: '100%' }}>
+          <div className="glass-panel w-100 h-100 overflow-hidden" style={{ position: 'relative' }}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              nodeTypes={nodeTypes}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onNodeClick={onNodeClick}
+              onPaneClick={onPaneClick}
+              fitView
+            >
+              <Background color="#5c5d73" gap={20} size={1} />
+              <Controls />
+              <MiniMap nodeStrokeWidth={3} zoomable pannable />
+            </ReactFlow>
+          </div>
+        </div>
+
+        {/* Right Side: Properties panel */}
+        <div className="p-3 pl-0" style={{ height: '100%' }}>
+          <PropertiesPanel 
+            selectedNode={selectedNode}
+            onUpdateNode={onUpdateNode}
+            onDeleteNode={onDeleteNode}
+          />
+        </div>
+      </div>
+
+      {/* Bottom Collapsible Global Code Preview Drawer */}
+      <div
+        className="glass-panel position-absolute"
+        style={{
+          bottom: '15px',
+          left: '15px',
+          right: '15px',
+          height: '280px',
+          zIndex: 90,
+          borderRadius: '12px',
+          transform: showCodeDrawer ? 'translateY(0)' : 'translateY(310px)',
+          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          display: 'flex',
+          flexDirection: 'column',
+          textAlign: 'left'
+        }}
+      >
+        {/* Header of Drawer */}
+        <div className="d-flex justify-content-between align-items-center px-4 py-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
+          <span className="fw-semibold text-white d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', fontSize: '0.95rem' }}>
+            <i className="bi bi-file-earmark-code text-info glow-cyan"></i> generated_project / main.py
+          </span>
+          <button 
+            className="btn btn-sm btn-outline-info"
+            style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '6px' }}
+            onClick={() => {
+              navigator.clipboard.writeText(globalCode);
+              alert('Code copied to clipboard!');
+            }}
+          >
+            Copy Code
+          </button>
+        </div>
+        
+        {/* Code Content */}
+        <div className="flex-grow-1 p-3 overflow-auto" style={{ background: '#07070e' }}>
+          <pre 
+            className="m-0 font-monospace text-info"
+            style={{ fontSize: '0.8rem', lineHeight: '1.4' }}
+          >
+            {globalCode || '# Assemble the graph to generate code preview'}
+          </pre>
+        </div>
       </div>
     </div>
   );
