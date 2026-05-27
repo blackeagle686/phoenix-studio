@@ -38,7 +38,7 @@ def package_project(graph: dict) -> io.BytesIO:
         if template_type == "raw":
             # Backward compatibility / raw export
             zip_file.writestr("main.py", bot_py_content)
-            requirements = "# Phoenix SDK Agent Dependencies\nphx-ashborn[full]>=1.0.0\nopenai>=1.0.0\npython-dotenv>=1.0.0\n"
+            requirements = "# Phoenix SDK Agent Dependencies\nphx-ashborn[full]>=0.2.8\nopenai>=1.0.0\npython-dotenv>=1.0.0\n"
             zip_file.writestr("requirements.txt", requirements)
             zip_file.writestr(".env", "\n".join(env_lines) + "\n")
             
@@ -64,7 +64,7 @@ def package_project(graph: dict) -> io.BytesIO:
             # requirements.txt
             requirements = (
                 "# Phoenix Web App Dependencies\n"
-                "phx-ashborn[full]>=1.0.0\n"
+                "phx-ashborn[full]>=0.2.8\n"
                 "fastapi>=0.100.0\n"
                 "uvicorn>=0.23.0\n"
                 "python-multipart>=0.0.6\n"
