@@ -1,18 +1,8 @@
 import React from 'react';
 
-export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) => {
+export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode, onClose }) => {
   if (!selectedNode) {
-    return (
-      <div 
-        className="glass-panel p-3 h-100 d-flex align-items-center justify-content-center text-center text-muted"
-        style={{ width: 'var(--sidebar-width)', zIndex: 10 }}
-      >
-        <div>
-          <i className="bi bi-info-circle fs-3 mb-2 d-block"></i>
-          <span>Select a node on the canvas to configure it</span>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const { type, data } = selectedNode;
@@ -78,25 +68,51 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
 
   return (
     <div 
-      className="glass-panel p-3 h-100 d-flex flex-column text-start"
+      className="position-fixed d-flex align-items-center justify-content-center"
       style={{
-        width: 'var(--sidebar-width)',
-        zIndex: 10,
-        overflowY: 'auto'
+        top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        zIndex: 1050,
+        backdropFilter: 'blur(5px)'
+      }}
+      onClick={(e) => {
+        if(e.target === e.currentTarget && onClose) onClose();
       }}
     >
-      <div className="d-flex justify-content-between align-items-center mb-4" style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '10px' }}>
-        <h5 className="m-0 text-white d-flex align-items-center gap-2">
-          <i className="bi bi-sliders text-info glow-cyan"></i> Config Properties
-        </h5>
-        <button 
-          className="btn btn-sm btn-outline-danger"
-          style={{ padding: '2px 8px', fontSize: '0.75rem', borderRadius: '6px' }}
-          onClick={() => onDeleteNode(selectedNode.id)}
-        >
-          Delete
-        </button>
-      </div>
+      <div 
+        className="glass-panel p-4 d-flex flex-column text-start"
+        style={{
+          width: '90%',
+          maxWidth: '500px',
+          maxHeight: '85vh',
+          overflowY: 'auto',
+          borderRadius: '16px'
+        }}
+      >
+        <div className="d-flex justify-content-between align-items-center mb-4" style={{ borderBottom: '1px solid var(--glass-border)', paddingBottom: '15px' }}>
+          <h5 className="m-0 text-white d-flex align-items-center gap-2 font-title fw-bold">
+            <i className="bi bi-sliders text-info glow-cyan"></i> Config Properties
+          </h5>
+          <div className="d-flex gap-2">
+            <button 
+              className="btn btn-sm btn-outline-danger"
+              style={{ padding: '4px 12px', fontSize: '0.8rem', borderRadius: '8px' }}
+              onClick={() => {
+                onDeleteNode(selectedNode.id);
+                if (onClose) onClose();
+              }}
+            >
+              <i className="bi bi-trash"></i> Delete
+            </button>
+            <button 
+              className="btn btn-sm btn-outline-secondary"
+              style={{ padding: '4px 12px', fontSize: '0.8rem', borderRadius: '8px' }}
+              onClick={() => { if (onClose) onClose(); }}
+            >
+              <i className="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
 
       <div style={{ flexGrow: 1 }}>
         {/* Render node-specific inputs */}
@@ -497,6 +513,7 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
         >
           {getCodePreview()}
         </pre>
+      </div>
       </div>
     </div>
   );
