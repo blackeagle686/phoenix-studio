@@ -64,7 +64,15 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username already registered")
     
     hashed_password = get_password_hash(user.password)
-    new_user = models.User(username=user.username, hashed_password=hashed_password)
+    new_user = models.User(
+        username=user.username, 
+        hashed_password=hashed_password,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        email=user.email,
+        location=user.location,
+        phone_number=user.phone_number
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -87,4 +95,19 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 
 @router.get("/me", response_model=schemas.UserResponse)
 def read_users_me(current_user: models.User = Depends(get_current_user)):
+    return current_user
+
+@router.put("/me", response_model=schemas.UserResponse)
+def update_user_me(
+    user_update: schemas.UserUpdate, 
+    current_user: models.User = Depends(get_current_user), 
+    db: Session = Depends(get_db)
+):
+    update_data = user_update.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(current_user, key, value)
+    
+    db.add(current_user)
+    db.commit()
+    db.refresh(current_user)
     return current_user
