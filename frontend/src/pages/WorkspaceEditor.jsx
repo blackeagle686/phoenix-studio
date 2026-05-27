@@ -363,10 +363,10 @@ function WorkspaceEditor() {
       >
         <div className="container-fluid d-flex justify-content-between align-items-center">
           <a className="navbar-brand d-flex align-items-center text-decoration-none" href="#">
-            <button className="btn btn-link text-info p-0 me-3" onClick={() => navigate('/dashboard')} title="Back to Dashboard">
+            <button className="btn btn-link text-mint p-0 me-3" onClick={() => navigate('/dashboard')} title="Back to Dashboard">
               <i className="bi bi-arrow-left fs-4"></i>
             </button>
-            <i className="bi bi-fire text-info me-2 fs-3 glow-cyan"></i>
+            <i className="bi bi-circle-fill text-mint me-2 fs-5"></i>
             <span
               style={{
                 fontFamily: 'var(--font-title)',
@@ -376,17 +376,17 @@ function WorkspaceEditor() {
                 color: 'white',
               }}
             >
-              PHOENIX <span className="text-info glow-cyan">STUDIO</span>
+              PHOENIX-AI <span className="text-mint">STUDIO</span>
             </span>
             <span className="ms-3 text-secondary">|</span>
             <span className="ms-3 text-light fw-semibold me-4">{workspaceName}</span>
             
             <div className="btn-group" role="group">
               <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked={workspaceMode === 'chatbot'} onChange={() => setWorkspaceMode('chatbot')} />
-              <label className="btn btn-sm btn-outline-info" htmlFor="btnradio1"><i className="bi bi-chat-left-dots-fill me-1"></i> ChatBot</label>
+              <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio1"><i className="bi bi-chat-left-dots-fill me-1"></i> ChatBot</label>
 
               <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={workspaceMode === 'agent'} onChange={() => setWorkspaceMode('agent')} />
-              <label className="btn btn-sm btn-outline-info" htmlFor="btnradio2"><i className="bi bi-cpu-fill me-1"></i> Agent</label>
+              <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio2"><i className="bi bi-cpu-fill me-1"></i> Agent</label>
             </div>
           </a>
 
@@ -439,16 +439,10 @@ function WorkspaceEditor() {
             </button>
 
             <button
-              className="btn btn-info d-flex align-items-center gap-2"
+              className="btn btn-mint d-flex align-items-center gap-2"
               style={{
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%)',
-                border: 'none',
-                color: '#080810',
                 fontFamily: 'var(--font-body)',
-                fontWeight: 600,
                 padding: '8px 20px',
-                boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)',
               }}
               onClick={() => setShowExportModal(true)}
               disabled={isGenerating}
