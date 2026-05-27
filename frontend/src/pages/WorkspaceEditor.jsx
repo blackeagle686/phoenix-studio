@@ -79,7 +79,7 @@ function WorkspaceEditor() {
   // Export Modal State
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportTemplate, setExportTemplate] = useState('raw'); // 'raw', 'full_screen', 'widget'
-  const [exportPrimaryColor, setExportPrimaryColor] = useState('#00f2fe');
+  const [exportGradientColors, setExportGradientColors] = useState(['#00f2fe', '#4facfe', '#00f2fe']);
   const [exportTheme, setExportTheme] = useState('dark'); // 'dark' or 'light'
 
   // Retrieve selected node object
@@ -237,14 +237,18 @@ function WorkspaceEditor() {
   const handlePreviewTemplate = async () => {
     if (exportTemplate === 'raw') return;
     try {
+      const payload = {
+        nodes,
+        edges,
+        template_type: exportTemplate,
+        gradient_colors: exportGradientColors,
+        theme_mode: exportTheme
+      };
+      
       const response = await fetch('http://localhost:8000/api/preview_template', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          template_type: exportTemplate,
-          primary_color: exportPrimaryColor,
-          theme_mode: exportTheme
-        })
+        body: JSON.stringify(payload)
       });
       if (response.ok) {
         const data = await response.json();
@@ -274,7 +278,7 @@ function WorkspaceEditor() {
         nodes,
         edges,
         template_type: exportTemplate,
-        primary_color: exportPrimaryColor,
+        gradient_colors: exportGradientColors,
         theme_mode: exportTheme
       };
       
@@ -672,7 +676,7 @@ function WorkspaceEditor() {
 
             {exportTemplate !== 'raw' && (
               <div className="row mb-4">
-                <div className="col-6">
+                <div className="col-12 mb-3">
                   <label className="form-label text-info fw-bold">Theme Mode</label>
                   <select 
                     className="form-select bg-dark border-secondary text-white" 
@@ -683,18 +687,55 @@ function WorkspaceEditor() {
                     <option value="light">Light Mode</option>
                   </select>
                 </div>
-                <div className="col-6">
-                  <label className="form-label text-info fw-bold">Primary Color</label>
-                  <div className="d-flex align-items-center gap-2">
-                    <input 
-                      type="color" 
-                      className="form-control form-control-color bg-dark border-secondary p-1" 
-                      value={exportPrimaryColor} 
-                      title="Choose your color"
-                      onChange={(e) => setExportPrimaryColor(e.target.value)}
-                    />
-                    <span className="text-white font-monospace">{exportPrimaryColor}</span>
+                <div className="col-12">
+                  <label className="form-label text-info fw-bold d-flex justify-content-between">
+                    Gradient Palette (3-5 Colors)
+                    <div>
+                      <button 
+                        className="btn btn-sm btn-outline-success me-1" 
+                        onClick={() => setExportGradientColors([...exportGradientColors, '#ffffff'])}
+                        disabled={exportGradientColors.length >= 5}
+                      >
+                        <i className="bi bi-plus-circle"></i> Add
+                      </button>
+                      <button 
+                        className="btn btn-sm btn-outline-danger" 
+                        onClick={() => setExportGradientColors(exportGradientColors.slice(0, -1))}
+                        disabled={exportGradientColors.length <= 3}
+                      >
+                        <i className="bi bi-dash-circle"></i> Remove
+                      </button>
+                    </div>
+                  </label>
+                  
+                  <div className="d-flex gap-2 mb-3">
+                    {exportGradientColors.map((color, index) => (
+                      <div key={index} className="flex-fill position-relative">
+                        <input 
+                          type="color" 
+                          className="form-control form-control-color bg-dark border-secondary w-100 p-1" 
+                          value={color}
+                          onChange={(e) => {
+                            const newColors = [...exportGradientColors];
+                            newColors[index] = e.target.value;
+                            setExportGradientColors(newColors);
+                          }}
+                        />
+                        <div className="text-center mt-1" style={{ fontSize: '0.7rem', color: '#aaa' }}>{color}</div>
+                      </div>
+                    ))}
                   </div>
+
+                  {/* Live Gradient Preview Box */}
+                  <div 
+                    className="w-100 rounded" 
+                    style={{ 
+                      height: '40px', 
+                      background: `linear-gradient(90deg, ${exportGradientColors.join(', ')})`,
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                    }}
+                  ></div>
+
                 </div>
               </div>
             )}
