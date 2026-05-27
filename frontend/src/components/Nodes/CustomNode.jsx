@@ -63,17 +63,25 @@ export const CustomNode = ({ data, type, selected }) => {
       title = 'ChatBot Core';
       icon = 'bi-chat-left-dots-fill';
       colorVar = '--accent-cyan';
-      showInputHandle = true; // Inputs from LLM, VLM, Memory, Tools, RAG, TTS, STT
-      showOutputHandle = false;
+      showInputHandle = true; // Inputs from RAG, etc.
+      showOutputHandle = true; // Connects to API Export
       desc = `Session: ${data.session_id || 'default_session'}`;
       break;
     case 'rag':
       title = 'RAG Pipeline';
       icon = 'bi-database-fill-gear';
       colorVar = '--accent-purple';
-      showInputHandle = false;
-      showOutputHandle = true;
+      showInputHandle = true; // Receives from Data Sources
+      showOutputHandle = true; // Connects to ChatBot
       desc = `Chunk Size: ${data.chunk_size || 500}`;
+      break;
+    case 'api_export':
+      title = 'API Export';
+      icon = 'bi-cloud-arrow-up-fill';
+      colorVar = '--accent-blue';
+      showInputHandle = true; // Connects from ChatBot
+      showOutputHandle = false;
+      desc = 'Headless API access';
       break;
     case 'openai_vlm':
       title = 'OpenAI VLM';
@@ -107,13 +115,29 @@ export const CustomNode = ({ data, type, selected }) => {
       showOutputHandle = true;
       desc = 'Audio input enabled';
       break;
-    case 'data_source':
-      title = 'Data Source';
-      icon = 'bi-cloud-arrow-down-fill';
+    case 'github_repo':
+      title = 'GitHub Repo';
+      icon = 'bi-github';
       colorVar = '--accent-green';
       showInputHandle = false;
       showOutputHandle = true;
-      desc = `Type: ${data.source_type || 'Local Path'}`;
+      desc = `${data.url || 'None'}`;
+      break;
+    case 'data_folder':
+      title = 'Data Folder';
+      icon = 'bi-folder-fill';
+      colorVar = '--accent-green';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = `${data.path || './data'}`;
+      break;
+    case 'web_data_api':
+      title = 'Web Data API';
+      icon = 'bi-globe2';
+      colorVar = '--accent-green';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = `${data.url || 'None'}`;
       break;
     default:
       break;
