@@ -10,6 +10,9 @@ router = APIRouter()
 class GraphPayload(BaseModel):
     nodes: List[Dict[str, Any]]
     edges: List[Dict[str, Any]]
+    template_type: Optional[str] = "raw"
+    primary_color: Optional[str] = "#00f2fe"
+    theme_mode: Optional[str] = "dark"
 
 @router.get("/status")
 async def get_status():
