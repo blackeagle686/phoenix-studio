@@ -505,15 +505,6 @@ function WorkspaceEditor() {
               <i className={`bi ${leftSidebarOpen ? 'bi-chevron-left' : 'bi-list'}`}></i>
             </button>
 
-            <button 
-              className="btn btn-sm btn-outline-info position-absolute"
-              style={{ top: '15px', right: '15px', zIndex: 10, background: 'rgba(0,0,0,0.5)', border: '1px solid var(--accent-cyan)' }}
-              onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
-              title="Toggle Properties Panel"
-            >
-              <i className={`bi ${rightSidebarOpen ? 'bi-chevron-right' : 'bi-sliders'}`}></i>
-            </button>
-
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -532,24 +523,15 @@ function WorkspaceEditor() {
           </div>
         </div>
 
-        {/* Right Side: Properties panel */}
-        <div 
-          className="p-3 pl-0" 
-          style={{ 
-            height: '100%', 
-            width: rightSidebarOpen ? '320px' : '0px', 
-            overflow: 'hidden', 
-            opacity: rightSidebarOpen ? 1 : 0, 
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            padding: rightSidebarOpen ? '' : '0 !important'
-          }}
-        >
-          <PropertiesPanel 
-            selectedNode={selectedNode}
-            onUpdateNode={onUpdateNode}
-            onDeleteNode={onDeleteNode}
-          />
-        </div>
+      {/* Properties Modal */}
+      {showPropertiesModal && (
+        <PropertiesPanel 
+          selectedNode={selectedNode}
+          onUpdateNode={onUpdateNode}
+          onDeleteNode={onDeleteNode}
+          onClose={() => setShowPropertiesModal(false)}
+        />
+      )}
       </div>
 
       {/* Bottom Collapsible Global Code Preview Drawer */}
