@@ -18,3 +18,7 @@
   . cleanup_stale_sessions
   . process_agent_training
 
+[2026-05-27 23:52:45,331: INFO/MainProcess] Connected to redis://localhost:6385/0
+[2026-05-27 23:52:46,187: INFO/MainProcess] mingle: searching for neighbors
+[2026-05-27 23:52:48,058: INFO/MainProcess] mingle: all alone
+[2026-05-27 23:52:49,761: INFO/MainProcess] celery@tlk-Vostro-3500 ready.
