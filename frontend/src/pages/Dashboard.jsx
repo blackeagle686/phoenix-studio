@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
+import Footer from '../components/UI/Footer';
 
 function Dashboard() {
   const [workspaces, setWorkspaces] = useState([]);
@@ -78,7 +79,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="w-100 min-vh-100 position-relative text-white" style={{ backgroundColor: '#050505', overflowX: 'hidden' }}>
+    <div className="w-100 min-vh-100 position-relative text-white d-flex flex-column" style={{ backgroundColor: '#050505', overflowX: 'hidden' }}>
       
       {/* Background Interactive Net & Overlay */}
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.4, zIndex: 0, background: 'linear-gradient(180deg, rgba(8,8,16,1) 0%, rgba(105,48,195,0.05) 50%, rgba(5,5,5,1) 100%)' }}>
@@ -102,7 +103,7 @@ function Dashboard() {
         </div>
       </nav>
 
-      <div className="container position-relative z-1 pb-5">
+      <div className="container position-relative z-1 pb-5 flex-grow-1">
         
         {/* Dashboard Hero */}
         <div className="row mb-5 align-items-center pt-3">
@@ -199,6 +200,8 @@ function Dashboard() {
           )}
         </div>
       </div>
+
+      <Footer />
 
       {/* Create Workspace Modal */}
       {showCreateModal && (
