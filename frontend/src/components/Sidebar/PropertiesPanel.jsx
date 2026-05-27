@@ -49,6 +49,20 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
         const fnName = data.name || 'custom_tool';
         const code = data.code || `@tool(name="${fnName}", description="Custom tool.")\ndef ${fnName}(param: str):\n    return f"Processed {param}"`;
         return `# Custom tool registration\nfrom phoenix.framework.agent.tools.base import tool\n\n${code}\n\n# Register on agent\nagent.register_tool(${fnName})`;
+      case 'chatbot':
+        return `# ChatBot Orchestrator\nfrom phoenix.framework.chatbot.core import ChatBot\n\nbot = ChatBot(\n    tts=${data.tts_enabled ? 'True' : 'False'},\n    stt=${data.stt_enabled ? 'True' : 'False'}\n).with_system_prompt("${data.system_prompt || ''}").set_session("${data.session_id || 'default'}")`;
+      case 'rag':
+        return `# RAG Configuration\n.with_rag("${data.path || './data'}", chunk_size=${data.chunk_size || 500}, chunk_overlap=${data.chunk_overlap || 50})`;
+      case 'openai_vlm':
+        const vlmModel = data.model || 'gpt-4o';
+        const vlmKey = data.api_key ? `"${data.api_key}"` : '"your-api-key-here"';
+        return `# VLM Config\n.with_model(vlm="${vlmModel}").with_openai(api_key=${vlmKey})`;
+      case 'local_vlm':
+        return `# Local VLM Config\n.with_model(vlm="${data.model || 'Qwen2-VL'}")`;
+      case 'tts_node':
+        return `# TTS Node enabled -> Passed to ChatBot constructor`;
+      case 'stt_node':
+        return `# STT Node enabled -> Passed to ChatBot constructor`;
       default:
         return `# Standard node representation`;
     }
@@ -194,6 +208,138 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
                 onChange={(e) => handleChange('code', e.target.value)} 
               />
             </div>
+          </div>
+        )}
+
+        {type === 'chatbot' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Session ID</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                value={data.session_id || ''} 
+                onChange={(e) => handleChange('session_id', e.target.value)} 
+              />
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>System Prompt</label>
+              <textarea 
+                className="form-control bg-dark border-secondary text-white"
+                style={{ fontSize: '0.85rem', height: '100px' }}
+                value={data.system_prompt || ''} 
+                onChange={(e) => handleChange('system_prompt', e.target.value)} 
+              />
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Security Mode</label>
+              <select 
+                className="form-select bg-dark border-secondary text-white"
+                value={data.security_mode || 'standard'} 
+                onChange={(e) => handleChange('security_mode', e.target.value)}
+              >
+                <option value="none">Disabled</option>
+                <option value="standard">Standard</option>
+                <option value="strict">Strict</option>
+              </select>
+            </div>
+            <div className="form-check form-switch mt-2">
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                role="switch" 
+                checked={data.tts_enabled || false}
+                onChange={(e) => handleChange('tts_enabled', e.target.checked)}
+              />
+              <label className="form-check-label text-light" style={{ fontSize: '0.85rem' }}>Enable Text-to-Speech (TTS)</label>
+            </div>
+            <div className="form-check form-switch">
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                role="switch" 
+                checked={data.stt_enabled || false}
+                onChange={(e) => handleChange('stt_enabled', e.target.checked)}
+              />
+              <label className="form-check-label text-light" style={{ fontSize: '0.85rem' }}>Enable Speech-to-Text (STT)</label>
+            </div>
+          </div>
+        )}
+
+        {type === 'rag' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Data Path</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                value={data.path || ''} 
+                onChange={(e) => handleChange('path', e.target.value)} 
+                placeholder="./data"
+              />
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Chunk Size</label>
+              <input 
+                type="number" 
+                className="form-control bg-dark border-secondary text-white"
+                value={data.chunk_size || 500} 
+                onChange={(e) => handleChange('chunk_size', parseInt(e.target.value) || 500)} 
+              />
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Chunk Overlap</label>
+              <input 
+                type="number" 
+                className="form-control bg-dark border-secondary text-white"
+                value={data.chunk_overlap || 50} 
+                onChange={(e) => handleChange('chunk_overlap', parseInt(e.target.value) || 50)} 
+              />
+            </div>
+          </div>
+        )}
+
+        {type === 'openai_vlm' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>VLM Model</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                value={data.model || 'gpt-4o'} 
+                onChange={(e) => handleChange('model', e.target.value)} 
+              />
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>API Key</label>
+              <input 
+                type="password" 
+                className="form-control bg-dark border-secondary text-white"
+                placeholder="sk-..."
+                value={data.api_key || ''} 
+                onChange={(e) => handleChange('api_key', e.target.value)} 
+              />
+            </div>
+          </div>
+        )}
+
+        {type === 'local_vlm' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Local VLM Model</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                value={data.model || ''} 
+                onChange={(e) => handleChange('model', e.target.value)} 
+              />
+            </div>
+          </div>
+        )}
+
+        {(type === 'tts_node' || type === 'stt_node') && (
+          <div className="mb-4">
+            <span className="text-muted d-block mb-2" style={{ fontSize: '0.8rem' }}>Enable this feature on the ChatBot core.</span>
           </div>
         )}
       </div>
