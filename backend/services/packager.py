@@ -69,7 +69,7 @@ def package_project(graph: dict) -> io.BytesIO:
                 "uvicorn>=0.23.0\n"
                 "python-multipart>=0.0.6\n"
                 "sqlalchemy>=2.0.0\n"
-                "passlib[bcrypt]>=1.7.4\n"
+                "bcrypt>=4.0.0\n"
                 "pyjwt>=2.8.0\n"
                 "openai>=1.0.0\n"
                 "python-dotenv>=1.0.0\n"
