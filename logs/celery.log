@@ -1,10 +1,10 @@
  
  -------------- celery@tlk-Vostro-3500 v5.6.3 (recovery)
 --- ***** ----- 
--- ******* ---- Linux-6.17.0-23-generic-x86_64-with-glibc2.39 2026-05-27 23:49:53
+-- ******* ---- Linux-6.17.0-23-generic-x86_64-with-glibc2.39 2026-05-27 23:52:44
 - *** --- * --- 
 - ** ---------- [config]
-- ** ---------- .> app:         phoenix_tasks:0x72a2f0b3e030
+- ** ---------- .> app:         phoenix_tasks:0x7d058f12e450
 - ** ---------- .> transport:   redis://localhost:6385/0
 - ** ---------- .> results:     redis://localhost:6385/0
 - *** --- * --- .> concurrency: 8 (prefork)
@@ -18,7 +18,3 @@
   . cleanup_stale_sessions
   . process_agent_training
 
-[2026-05-27 23:49:54,820: INFO/MainProcess] Connected to redis://localhost:6385/0
-[2026-05-27 23:49:55,655: INFO/MainProcess] mingle: searching for neighbors
-[2026-05-27 23:49:57,488: INFO/MainProcess] mingle: all alone
-[2026-05-27 23:49:59,367: INFO/MainProcess] celery@tlk-Vostro-3500 ready.
