@@ -16,7 +16,7 @@ function LandingPage() {
             </Link>
             <div className="d-none d-lg-flex gap-4 ms-4 align-items-center">
               <Link className="nav-link-custom active" to="/">Home</Link>
-              
+
               <div className="dropdown">
                 <a className="nav-link-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Platform
@@ -91,7 +91,7 @@ function LandingPage() {
             </div>
             <div className="col-12 col-md-6 mb-5 d-flex flex-column justify-content-center">
               <p className="text-light opacity-75 mb-4" style={{ fontSize: '1.1rem', maxWidth: '400px' }}>
-                Synthora's modular engine allows your agents to reason through logic, learn from memory, and operate within real-world tools.
+                PHOENIX-AI's modular engine allows your agents to reason through logic, learn from memory, and operate within real-world tools.
               </p>
               <div>
                 <button className="btn btn-light rounded-1 px-4 py-2 fw-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }} onClick={() => navigate('/login')}>
@@ -152,7 +152,7 @@ function LandingPage() {
           <div className="row mt-5">
             <div className="col-12 col-lg-6 offset-lg-6">
               <p className="text-light mb-4" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
-                At <span className="text-mint">Synthora</span>, we believe intelligence isn't just about generating answers—it's about understanding context, reasoning through complexity, and acting with intent.
+                At <span className="text-mint">PHOENIX-AI</span>, we believe intelligence isn't just about generating answers—it's about understanding context, reasoning through complexity, and acting with intent.
               </p>
               <p className="text-light opacity-75" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
                 True AI should be controllable, predictable in behavior, steerable by design, and fully auditable in every step. It must be context-aware, able to learn from interactions and adapt over time. And it has to be tool-native, seamlessly operating within real environments, not isolated sandboxes.
@@ -188,7 +188,7 @@ function LandingPage() {
                 <p className="text-muted small mb-0">Agents learn what matters across sessions.</p>
               </div>
             </div>
-            
+
             {/* Card 2 */}
             <div className="col-11 col-md-6 col-lg-3" style={{ scrollSnapAlign: 'start' }}>
               <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>

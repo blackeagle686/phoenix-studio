@@ -8,24 +8,25 @@
   --bg-dark: #0e0e1a;
   --bg-card: #151528;
   --bg-card-hover: #1c1c38;
-  
+
   --primary-glow: rgba(0, 242, 254, 0.15);
   --secondary-glow: rgba(161, 140, 209, 0.15);
-  
+
   --accent-cyan: #00f2fe;
   --accent-purple: #9b51e0;
   --accent-blue: #4facfe;
   --accent-pink: #f093fb;
   --accent-green: #00ff87;
-  --accent-mint: #4ade80; /* Synthora green style */
-  
+  --accent-mint: #4ade80;
+  /* PHOENIX-AI green style */
+
   --text-primary: #f5f6fa;
   --text-muted: #8e90a6;
   --text-dim: #5c5d73;
-  
+
   --border-glow: rgba(0, 242, 254, 0.3);
   --border-muted: rgba(255, 255, 255, 0.05);
-  
+
   /* Glassmorphism */
   --glass-bg: rgba(14, 14, 26, 0.7);
   --glass-bg-accent: rgba(255, 255, 255, 0.03);
@@ -33,11 +34,11 @@
   --glass-border-focus: rgba(0, 242, 254, 0.4);
   --glass-blur: blur(12px);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-  
+
   /* Fonts */
   --font-title: 'Space Grotesk', sans-serif;
   --font-body: 'Outfit', sans-serif;
-  
+
   /* Layout sizes */
   --navbar-height: 70px;
   --sidebar-width: 320px;
@@ -52,7 +53,12 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-title);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -124,6 +130,7 @@ h1, h2, h3, h4, h5, h6 {
   0% {
     transform: translate(0, 0) scale(1);
   }
+
   100% {
     transform: translate(10%, 15%) scale(1.15);
   }
@@ -148,7 +155,7 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(0, 242, 254, 0.3);
 }
 
-/* Landing Page Synthora Utilities */
+/* Landing Page PHOENIX-AI Utilities */
 .text-mint {
   color: var(--accent-mint) !important;
 }
@@ -238,7 +245,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .feature-card {
-  background-color: #0f0f13; /* Very dark slightly greyish background */
+  background-color: #0f0f13;
+  /* Very dark slightly greyish background */
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 2rem;
@@ -259,6 +267,7 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
-.nav-link-custom:hover, .nav-link-custom.active {
+.nav-link-custom:hover,
+.nav-link-custom.active {
   color: #fff;
 }
