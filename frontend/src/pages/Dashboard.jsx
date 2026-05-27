@@ -72,20 +72,20 @@ function Dashboard() {
       <nav className="navbar navbar-expand-lg glass-panel py-3 px-4 position-relative z-1 mb-5" style={{ borderRadius: '0 0 20px 20px' }}>
         <div className="container-fluid d-flex justify-content-between align-items-center">
           <span className="navbar-brand d-flex align-items-center text-white fw-bold" style={{ fontFamily: 'var(--font-title)' }}>
-            <i className="bi bi-fire text-info me-2 fs-4 glow-cyan"></i>
-            PHOENIX <span className="text-info glow-cyan ms-2">STUDIO</span>
+            <i className="bi bi-circle-fill text-mint me-2 fs-6"></i>
+            PHOENIX-AI <span className="text-mint ms-2">STUDIO</span>
           </span>
           <div className="d-flex align-items-center gap-3 text-light fw-semibold">
-            <span>Welcome, <strong className="text-info glow-cyan">{user?.username}</strong>!</span>
+            <span>Welcome, <strong className="text-mint">{user?.username}</strong>!</span>
             <button className="btn btn-sm btn-outline-danger" style={{ borderRadius: '8px' }} onClick={logout}>Logout</button>
           </div>
         </div>
       </nav>
 
       <div className="container position-relative z-1">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="fw-bold m-0" style={{ fontFamily: 'var(--font-title)' }}>Your Workspaces</h2>
-          <button className="btn btn-info fw-bold" style={{ borderRadius: '8px', background: 'linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%)', color: '#080810', border: 'none' }} onClick={createWorkspace}>
+        <div className="d-flex justify-content-between align-items-center mb-4 mt-5">
+          <h2 className="fw-bold m-0 text-white" style={{ fontFamily: 'var(--font-title)' }}>Your Workspaces</h2>
+          <button className="btn btn-mint fw-bold" onClick={createWorkspace}>
             <i className="bi bi-plus-lg me-2"></i>New Workspace
           </button>
         </div>
@@ -106,8 +106,8 @@ function Dashboard() {
                   onClick={() => navigate(`/workspace/${ws.id}`)}
                   onMouseOver={e => {
                     e.currentTarget.style.transform = 'translateY(-5px)';
-                    e.currentTarget.style.boxShadow = '0 10px 20px rgba(0, 242, 254, 0.15)';
-                    e.currentTarget.style.border = '1px solid rgba(0, 242, 254, 0.4)';
+                    e.currentTarget.style.boxShadow = '0 10px 20px rgba(114, 239, 221, 0.15)';
+                    e.currentTarget.style.border = '1px solid rgba(114, 239, 221, 0.4)';
                   }}
                   onMouseOut={e => {
                     e.currentTarget.style.transform = 'translateY(0)';
