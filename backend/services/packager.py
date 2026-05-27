@@ -81,13 +81,46 @@ def package_project(graph: dict) -> io.BytesIO:
             
             # README.md
             readme = (
-                "# Phoenix AI Web App\n\n"
-                "## Setup\n"
-                "1. `pip install -r requirements.txt`\n"
-                "2. `python backend/server.py`\n\n"
-                "The app will be available at http://localhost:8080"
+                "# Phoenix AI Full-Stack App\n\n"
+                "Welcome to your generated AI Chat application!\n"
+                "This project contains a fully functional FastAPI backend, an SQLite database for chat history, "
+                "and a stunning responsive frontend.\n\n"
+                "## Quick Start\n\n"
+                "The easiest way to run your app is to use the provided run scripts:\n\n"
+                "- **Windows:** Double-click `run.bat` or run it in the terminal.\n"
+                "- **Mac/Linux:** Run `bash run.sh` in your terminal.\n\n"
+                "## Manual Setup\n\n"
+                "If you prefer to run it manually:\n"
+                "1. Create and activate a Python virtual environment (recommended).\n"
+                "2. Install dependencies: `pip install -r requirements.txt`\n"
+                "3. Start the server: `python backend/server.py`\n\n"
+                "Your web application will be available at: **http://localhost:8080**\n"
             )
             zip_file.writestr("README.md", readme)
+            
+            # run.sh (Linux/Mac)
+            run_sh = (
+                "#!/bin/bash\n"
+                "echo \"[*] Installing dependencies...\"\n"
+                "pip install -r requirements.txt\n"
+                "echo \"[*] Starting Phoenix FastAPI Server...\"\n"
+                "python backend/server.py\n"
+            )
+            # 0o755 permissions for bash script
+            info_sh = zipfile.ZipInfo("run.sh")
+            info_sh.external_attr = 0o755 << 16
+            zip_file.writestr(info_sh, run_sh)
+            
+            # run.bat (Windows)
+            run_bat = (
+                "@echo off\n"
+                "echo [*] Installing dependencies...\n"
+                "pip install -r requirements.txt\n"
+                "echo [*] Starting Phoenix FastAPI Server...\n"
+                "python backend\\server.py\n"
+                "pause\n"
+            )
+            zip_file.writestr("run.bat", run_bat)
 
     zip_buffer.seek(0)
     return zip_buffer
