@@ -63,8 +63,14 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
         return `# TTS Node enabled -> Passed to ChatBot constructor`;
       case 'stt_node':
         return `# STT Node enabled -> Passed to ChatBot constructor`;
-      case 'data_source':
-        return `# Data Source Config\n# Connected to RAG Pipeline\npath = "${data.path || './data'}"`;
+      case 'api_export':
+        return `# Export as Headless API\n# Using API Key: ${data.api_key || 'my_secure_api_key'}\nexport_as_api = True`;
+      case 'github_repo':
+        return `# GitHub Repository Ingestion\ndata_path = "${data.url || 'https://github.com/user/repo'}"`;
+      case 'data_folder':
+        return `# Local Folder Ingestion\ndata_path = "${data.path || './data'}"`;
+      case 'web_data_api':
+        return `# Web Data API Ingestion\ndata_path = "${data.url || 'https://api.example.com/data'}"`;
       default:
         return `# Standard node representation`;
     }
@@ -407,34 +413,66 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
           </div>
         )}
 
-        {type === 'data_source' && (
+        {type === 'api_export' && (
           <div className="d-flex flex-column gap-3 mb-4">
             <div>
-              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Source Type</label>
-              <select 
-                className="form-select bg-dark border-secondary text-white"
-                value={data.source_type || 'Local Path'} 
-                onChange={(e) => handleChange('source_type', e.target.value)}
-              >
-                <option value="Local Path">Local Path</option>
-                <option value="GitHub Repo">GitHub Repo</option>
-                <option value="API Endpoint">API Endpoint</option>
-              </select>
-            </div>
-            <div>
-              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>URL / Path</label>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Secure API Key</label>
               <input 
                 type="text" 
                 className="form-control bg-dark border-secondary text-white"
-                placeholder={data.source_type === 'GitHub Repo' ? 'https://github.com/user/repo' : (data.source_type === 'API Endpoint' ? 'https://api.example.com/data' : './data')}
-                value={data.path || ''} 
-                onChange={(e) => handleChange('path', e.target.value)} 
+                value={data.api_key || ''} 
+                onChange={(e) => handleChange('api_key', e.target.value)} 
               />
             </div>
             <div className="mt-2">
               <span className="text-muted d-block" style={{ fontSize: '0.75rem' }}>
-                Connect this node to your RAG Pipeline to inject knowledge.
+                Connect ChatBot Output to this node to export a headless API server instead of the standard UI.
               </span>
+            </div>
+          </div>
+        )}
+
+        {type === 'github_repo' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>GitHub URL</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                placeholder="https://github.com/user/repo"
+                value={data.url || ''} 
+                onChange={(e) => handleChange('url', e.target.value)} 
+              />
+            </div>
+          </div>
+        )}
+
+        {type === 'data_folder' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Folder Path</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                placeholder="./data"
+                value={data.path || ''} 
+                onChange={(e) => handleChange('path', e.target.value)} 
+              />
+            </div>
+          </div>
+        )}
+
+        {type === 'web_data_api' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>API Endpoint URL</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                placeholder="https://api.example.com/data"
+                value={data.url || ''} 
+                onChange={(e) => handleChange('url', e.target.value)} 
+              />
             </div>
           </div>
         )}
