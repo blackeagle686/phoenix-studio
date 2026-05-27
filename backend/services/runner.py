@@ -3,8 +3,6 @@ import contextlib
 import traceback
 from typing import Dict, Any
 
-from phoenix.services.llm.openai import OpenAILLM
-from phoenix.framework.agent.memory.hybrid import HybridMemory
 from phoenix.framework.agent.tools.search import WebSearchTool
 from phoenix.framework.agent.tools.code import CommandExecutionTool
 from phoenix.framework.agent.core.agent import Agent
@@ -46,11 +44,15 @@ async def run_agent_graph(graph: Dict[str, Any], user_message: str, session_id: 
                 if node_id in connected_sources or scan_all:
                     if node_type == "openai_llm":
                         print(f"Initializing OpenAILLM ({node_data.get('model', 'gpt-4o')})...")
-                        llm = OpenAILLM(
-                            model=node_data.get("model") or "gpt-4o",
-                            api_key=node_data.get("api_key") or "your-api-key",
-                            base_url=node_data.get("base_url") or None
-                        )
+                        try:
+                            from phoenix.services.llm.openai import OpenAILLM
+                            llm = OpenAILLM(
+                                model=node_data.get("model") or "gpt-4o",
+                                api_key=node_data.get("api_key") or "your-api-key",
+                                base_url=node_data.get("base_url") or None
+                            )
+                        except ImportError:
+                            print("Warning: OpenAILLM dependencies not installed. Skipping.")
                     elif node_type == "local_llm":
                         print(f"Initializing LocalLLM ({node_data.get('model', 'Qwen')})...")
                         try:
@@ -60,7 +62,11 @@ async def run_agent_graph(graph: Dict[str, Any], user_message: str, session_id: 
                             print("Warning: LocalLLM dependencies not installed. Skipping.")
                     elif node_type == "hybrid_memory":
                         print("Initializing HybridMemory...")
-                        memory = HybridMemory()
+                        try:
+                            from phoenix.framework.agent.memory.hybrid import HybridMemory
+                            memory = HybridMemory()
+                        except ImportError:
+                            print("Warning: HybridMemory dependencies (like torch) not installed. Skipping.")
                     elif node_type == "default_tool":
                         t_type = node_data.get("tool_type")
                         if t_type == "web_search":
