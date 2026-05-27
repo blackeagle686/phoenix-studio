@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react';
+import React, { useState, useCallback, useEffect, useContext, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import ReactFlow, {
@@ -86,6 +86,32 @@ function WorkspaceEditor() {
   const [exportTemplate, setExportTemplate] = useState('raw'); // 'raw', 'full_screen', 'widget'
   const [exportGradientColors, setExportGradientColors] = useState(['#00f2fe', '#4facfe', '#00f2fe']);
   const [exportTheme, setExportTheme] = useState('dark'); // 'dark' or 'light'
+
+  // Resizable Drawer State
+  const [drawerHeight, setDrawerHeight] = useState(300);
+  const isDraggingDrawer = useRef(false);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isDraggingDrawer.current) return;
+      // Calculate new height based on window height minus mouse Y and bottom padding (15px)
+      const newHeight = window.innerHeight - e.clientY - 15;
+      setDrawerHeight(Math.max(150, Math.min(newHeight, window.innerHeight - 150)));
+    };
+    const handleMouseUp = () => {
+      if (isDraggingDrawer.current) {
+        isDraggingDrawer.current = false;
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto'; // Re-enable text selection
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
 
   // Retrieve selected node object
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);
@@ -467,9 +493,9 @@ function WorkspaceEditor() {
       <div 
         className="d-flex w-100" 
         style={{ 
-          height: `calc(100vh - ${showCodeDrawer ? '300px' : '0px'})`, 
+          height: `calc(100vh - ${showCodeDrawer ? drawerHeight + 20 : 0}px)`, 
           paddingTop: '95px',
-          transition: 'height 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          transition: isDraggingDrawer.current ? 'none' : 'height 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         {/* Left Side: Blocks panel */}
@@ -535,16 +561,28 @@ function WorkspaceEditor() {
           bottom: '15px',
           left: '15px',
           right: '15px',
-          height: '280px',
+          height: `${drawerHeight}px`,
           zIndex: 90,
           borderRadius: '12px',
-          transform: showCodeDrawer ? 'translateY(0)' : 'translateY(310px)',
-          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transform: showCodeDrawer ? 'translateY(0)' : `translateY(${drawerHeight + 30}px)`,
+          transition: isDraggingDrawer.current ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           display: 'flex',
           flexDirection: 'column',
           textAlign: 'left'
         }}
       >
+        {/* Resize Handle */}
+        <div 
+          className="w-100 d-flex justify-content-center align-items-center"
+          style={{ height: '8px', cursor: 'ns-resize', background: 'rgba(255,255,255,0.02)' }}
+          onMouseDown={() => {
+            isDraggingDrawer.current = true;
+            document.body.style.cursor = 'ns-resize';
+            document.body.style.userSelect = 'none'; // Prevent text selection during drag
+          }}
+        >
+          <div style={{ width: '40px', height: '4px', backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: '2px' }}></div>
+        </div>
         {/* Header of Drawer */}
         <div className="d-flex justify-content-between align-items-center px-4 py-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
           <span className="fw-semibold text-white d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', fontSize: '0.95rem' }}>
