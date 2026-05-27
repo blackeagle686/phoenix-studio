@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import ReactFlow, {
   Background,
   Controls,
@@ -45,26 +47,16 @@ const initialNodes = [
   },
 ];
 
-const initialEdges = [
-  { 
-    id: 'e-llm-agent', 
-    source: 'llm-1', 
-    target: 'agent-1', 
-    animated: true,
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#9b51e0' }
-  },
-  { 
-    id: 'e-mem-agent', 
-    source: 'mem-1', 
-    target: 'agent-1', 
-    animated: true,
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#f093fb' }
-  },
-];
+const initialEdges = [];
 
-function App() {
+function WorkspaceEditor() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [workspaceName, setWorkspaceName] = useState('Untitled Workspace');
+  const [isSaving, setIsSaving] = useState(false);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [globalCode, setGlobalCode] = useState('');
   const [showCodeDrawer, setShowCodeDrawer] = useState(true);
@@ -79,6 +71,55 @@ function App() {
 
   // Retrieve selected node object
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);
+
+  // Load workspace data
+  useEffect(() => {
+    const loadWorkspace = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/workspaces/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setWorkspaceName(data.name);
+          if (data.graph_data) {
+            const graph = JSON.parse(data.graph_data);
+            if (graph.nodes && graph.nodes.length > 0) setNodes(graph.nodes);
+            if (graph.edges && graph.edges.length > 0) setEdges(graph.edges);
+          }
+        } else {
+          navigate('/dashboard');
+        }
+      } catch (err) {
+        console.error('Failed to load workspace', err);
+      }
+    };
+    loadWorkspace();
+  }, [id, token, navigate, setNodes, setEdges]);
+
+  // Save workspace data
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const response = await fetch(`http://localhost:8000/api/workspaces/${id}`, {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify({
+          name: workspaceName,
+          graph_data: JSON.stringify({ nodes, edges })
+        })
+      });
+      if (!response.ok) alert('Failed to save workspace');
+    } catch (err) {
+      console.error(err);
+      alert('Error communicating with server');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Track select events
   const onNodeClick = useCallback((event, node) => {
@@ -257,6 +298,9 @@ function App() {
       >
         <div className="container-fluid d-flex justify-content-between align-items-center">
           <a className="navbar-brand d-flex align-items-center text-decoration-none" href="#">
+            <button className="btn btn-link text-info p-0 me-3" onClick={() => navigate('/dashboard')} title="Back to Dashboard">
+              <i className="bi bi-arrow-left fs-4"></i>
+            </button>
             <i className="bi bi-fire text-info me-2 fs-3 glow-cyan"></i>
             <span
               style={{
@@ -269,9 +313,20 @@ function App() {
             >
               PHOENIX <span className="text-info glow-cyan">STUDIO</span>
             </span>
+            <span className="ms-3 text-secondary">|</span>
+            <span className="ms-3 text-light fw-semibold">{workspaceName}</span>
           </a>
 
           <div className="d-flex align-items-center gap-3">
+            <button
+              className="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
+              style={{ borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.2)' }}
+              onClick={handleSave}
+              disabled={isSaving}
+            >
+              {isSaving ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-cloud-arrow-up text-primary"></i>}
+              Save
+            </button>
             <button
               className={`btn btn-sm ${showCodeDrawer && drawerTab === 'code' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
               style={{
@@ -512,4 +567,4 @@ function App() {
   );
 }
 
-export default App;
+export default WorkspaceEditor;

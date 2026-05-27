@@ -1,514 +1,81 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import ReactFlow, {
-  Background,
-  Controls,
-  MiniMap,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-  MarkerType
-} from 'reactflow';
-import CustomNode from './components/Nodes/CustomNode';
-import BlocksPanel from './components/Sidebar/BlocksPanel';
-import PropertiesPanel from './components/Sidebar/PropertiesPanel';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './context/AuthContext';
+import LandingPage from './pages/LandingPage';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import WorkspaceEditor from './pages/WorkspaceEditor';
 import './App.css';
 
-// Map custom node types to React Flow
-const nodeTypes = {
-  agent: CustomNode,
-  openai_llm: CustomNode,
-  local_llm: CustomNode,
-  hybrid_memory: CustomNode,
-  default_tool: CustomNode,
-  custom_tool: CustomNode
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { token, loading } = useContext(AuthContext);
+  
+  if (loading) {
+    return (
+      <div className="d-flex w-100 min-vh-100 align-items-center justify-content-center text-info bg-dark">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return children;
 };
 
-// Initial nodes
-const initialNodes = [
-  {
-    id: 'agent-1',
-    type: 'agent',
-    data: { name: 'PhoenixAgent', session_id: 'default' },
-    position: { x: 450, y: 150 },
-  },
-  {
-    id: 'llm-1',
-    type: 'openai_llm',
-    data: { model: 'gpt-4o', api_key: '' },
-    position: { x: 100, y: 80 },
-  },
-  {
-    id: 'mem-1',
-    type: 'hybrid_memory',
-    data: { use_redis: true },
-    position: { x: 100, y: 260 },
-  },
-];
+// Redirect if already logged in
+const PublicOnlyRoute = ({ children }) => {
+  const { token, loading } = useContext(AuthContext);
+  
+  if (loading) return null;
+  if (token) return <Navigate to="/dashboard" replace />;
+  
+  return children;
+};
 
-const initialEdges = [
-  { 
-    id: 'e-llm-agent', 
-    source: 'llm-1', 
-    target: 'agent-1', 
-    animated: true,
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#9b51e0' }
-  },
-  { 
-    id: 'e-mem-agent', 
-    source: 'mem-1', 
-    target: 'agent-1', 
-    animated: true,
-    markerEnd: { type: MarkerType.ArrowClosed, color: '#f093fb' }
-  },
-];
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<PublicOnlyRoute><LandingPage /></PublicOnlyRoute>} />
+      <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
+      <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+      
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/workspace/:id" 
+        element={
+          <ProtectedRoute>
+            <WorkspaceEditor />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Catch-all redirect */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
 
 function App() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [selectedNodeId, setSelectedNodeId] = useState(null);
-  const [globalCode, setGlobalCode] = useState('');
-  const [showCodeDrawer, setShowCodeDrawer] = useState(true);
-  const [drawerTab, setDrawerTab] = useState('code'); // 'code' or 'run'
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isExecuting, setIsExecuting] = useState(false);
-  const [runMessage, setRunMessage] = useState('What is the weather in New York?');
-  const [runLogs, setRunLogs] = useState('');
-  const [runResponse, setRunResponse] = useState('');
-  const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
-
-  // Retrieve selected node object
-  const selectedNode = nodes.find((n) => n.id === selectedNodeId);
-
-  // Track select events
-  const onNodeClick = useCallback((event, node) => {
-    setSelectedNodeId(node.id);
-  }, []);
-
-  const onPaneClick = useCallback(() => {
-    setSelectedNodeId(null);
-  }, []);
-
-  // Update selected node config data
-  const onUpdateNode = useCallback((id, newData) => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === id) {
-          return { ...node, data: newData };
-        }
-        return node;
-      })
-    );
-  }, [setNodes]);
-
-  // Delete node and its edges
-  const onDeleteNode = useCallback((id) => {
-    setNodes((nds) => nds.filter((n) => n.id !== id));
-    setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
-    if (selectedNodeId === id) {
-      setSelectedNodeId(null);
-    }
-  }, [selectedNodeId, setNodes, setEdges]);
-
-  // Add node helper
-  const onAddNode = useCallback((type, defaultData) => {
-    const id = `${type}-${Date.now()}`;
-    // Position slightly offset from center
-    const position = {
-      x: 200 + Math.random() * 100,
-      y: 150 + Math.random() * 100
-    };
-    const newNode = {
-      id,
-      type,
-      data: { ...defaultData },
-      position
-    };
-    setNodes((nds) => [...nds, newNode]);
-    setSelectedNodeId(id);
-  }, [setNodes]);
-
-  // React Flow onConnect handler
-  const onConnect = useCallback(
-    (params) => {
-      // Color connections according to source node types
-      const sourceNode = nodes.find((n) => n.id === params.source);
-      let edgeColor = '#5c5d73';
-      if (sourceNode) {
-        if (sourceNode.type === 'openai_llm') edgeColor = '#9b51e0';
-        else if (sourceNode.type === 'local_llm') edgeColor = '#4facfe';
-        else if (sourceNode.type === 'hybrid_memory') edgeColor = '#f093fb';
-        else if (sourceNode.type === 'default_tool' || sourceNode.type === 'custom_tool') edgeColor = '#00ff87';
-      }
-
-      setEdges((eds) => 
-        addEdge(
-          { 
-            ...params, 
-            animated: true,
-            style: { stroke: edgeColor },
-            markerEnd: { type: MarkerType.ArrowClosed, color: edgeColor }
-          }, 
-          eds
-        )
-      );
-    },
-    [nodes, setEdges]
-  );
-
-  // Sync global code preview
-  useEffect(() => {
-    const fetchPreview = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/preview', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nodes, edges })
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setGlobalCode(data.code);
-        }
-      } catch (err) {
-        console.error('Failed to fetch code preview:', err);
-      }
-    };
-    
-    // Simple debounce to prevent flooding backend requests
-    const timeout = setTimeout(fetchPreview, 400);
-    return () => clearTimeout(timeout);
-  }, [nodes, edges]);
-
-  // Handle ZIP generate download
-  const handleDownload = async () => {
-    setIsGenerating(true);
-    try {
-      const response = await fetch('http://localhost:8000/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nodes, edges })
-      });
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${selectedNode?.data?.name || 'phoenix_agent'}.zip`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      } else {
-        alert('Failed to package project archive.');
-      }
-    } catch (err) {
-      alert('Error communicating with generation endpoint.');
-      console.error(err);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleRun = async () => {
-    if (!runMessage.trim()) return;
-    setIsExecuting(true);
-    setRunLogs('Running...\n');
-    setRunResponse('');
-    try {
-      const response = await fetch('http://localhost:8000/api/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          graph: { nodes, edges },
-          message: runMessage,
-          session_id: selectedNode?.data?.session_id || 'default'
-        })
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setRunLogs(data.logs);
-        setRunResponse(data.response);
-      } else {
-        setRunLogs(`Error: HTTP ${response.status}`);
-      }
-    } catch (err) {
-      setRunLogs(`Request Failed: ${err.message}`);
-    } finally {
-      setIsExecuting(false);
-    }
-  };
-
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
-      {/* Background visual layers */}
-      <div className="ambient-bg"></div>
-
-      {/* Main Navbar */}
-      <nav
-        className="navbar navbar-expand-lg glass-panel py-2 px-4 position-absolute"
-        style={{
-          top: '15px',
-          left: '15px',
-          right: '15px',
-          width: 'calc(100% - 30px)',
-          zIndex: 100,
-          borderRadius: '12px',
-        }}
-      >
-        <div className="container-fluid d-flex justify-content-between align-items-center">
-          <a className="navbar-brand d-flex align-items-center text-decoration-none" href="#">
-            <i className="bi bi-fire text-info me-2 fs-3 glow-cyan"></i>
-            <span
-              style={{
-                fontFamily: 'var(--font-title)',
-                fontWeight: 700,
-                fontSize: '1.4rem',
-                letterSpacing: '1px',
-                color: 'white',
-              }}
-            >
-              PHOENIX <span className="text-info glow-cyan">STUDIO</span>
-            </span>
-          </a>
-
-          <div className="d-flex align-items-center gap-3">
-            <button
-              className={`btn btn-sm ${showCodeDrawer && drawerTab === 'code' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
-              style={{
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                background: showCodeDrawer && drawerTab === 'code' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
-              }}
-              onClick={() => {
-                if (showCodeDrawer && drawerTab === 'code') setShowCodeDrawer(false);
-                else {
-                  setShowCodeDrawer(true);
-                  setDrawerTab('code');
-                }
-              }}
-            >
-              <i className="bi bi-code-square"></i>
-              Show Code
-            </button>
-
-            <button
-              className={`btn btn-sm ${showCodeDrawer && drawerTab === 'run' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
-              style={{
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                background: showCodeDrawer && drawerTab === 'run' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
-              }}
-              onClick={() => {
-                if (showCodeDrawer && drawerTab === 'run') setShowCodeDrawer(false);
-                else {
-                  setShowCodeDrawer(true);
-                  setDrawerTab('run');
-                }
-              }}
-            >
-              <i className="bi bi-play-fill text-success"></i>
-              Run Flow
-            </button>
-
-            <button
-              className="btn btn-info d-flex align-items-center gap-2"
-              style={{
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 100%)',
-                border: 'none',
-                color: '#080810',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                padding: '8px 20px',
-                boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)',
-              }}
-              onClick={handleDownload}
-              disabled={isGenerating}
-            >
-              {isGenerating ? (
-                <>
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Building...
-                </>
-              ) : (
-                <>
-                  <i className="bi bi-download"></i>
-                  Download Agent
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Main Workspace Panel */}
-      <div 
-        className="d-flex w-100" 
-        style={{ 
-          height: `calc(100vh - ${showCodeDrawer ? '300px' : '0px'})`, 
-          paddingTop: '95px',
-          transition: 'height 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-        }}
-      >
-        {/* Left Side: Blocks panel */}
-        <div 
-          className="p-3 pr-0" 
-          style={{ 
-            height: '100%', 
-            width: leftSidebarOpen ? '320px' : '0px', 
-            overflow: 'hidden', 
-            opacity: leftSidebarOpen ? 1 : 0, 
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            padding: leftSidebarOpen ? '' : '0 !important'
-          }}
-        >
-          <BlocksPanel onAddNode={onAddNode} />
-        </div>
-
-        {/* Center: Canvas workspace */}
-        <div className="flex-grow-1 p-3" style={{ height: '100%', minWidth: 0 }}>
-          <div className="glass-panel w-100 h-100 overflow-hidden" style={{ position: 'relative' }}>
-            <button 
-              className="btn btn-sm btn-outline-info position-absolute"
-              style={{ top: '15px', left: '15px', zIndex: 10, background: 'rgba(0,0,0,0.5)', border: '1px solid var(--accent-cyan)' }}
-              onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
-              title="Toggle Blocks Panel"
-            >
-              <i className={`bi ${leftSidebarOpen ? 'bi-chevron-left' : 'bi-list'}`}></i>
-            </button>
-
-            <button 
-              className="btn btn-sm btn-outline-info position-absolute"
-              style={{ top: '15px', right: '15px', zIndex: 10, background: 'rgba(0,0,0,0.5)', border: '1px solid var(--accent-cyan)' }}
-              onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
-              title="Toggle Properties Panel"
-            >
-              <i className={`bi ${rightSidebarOpen ? 'bi-chevron-right' : 'bi-sliders'}`}></i>
-            </button>
-
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              nodeTypes={nodeTypes}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              onNodeClick={onNodeClick}
-              onPaneClick={onPaneClick}
-              fitView
-            >
-              <Background color="#5c5d73" gap={20} size={1} />
-              <Controls />
-              <MiniMap nodeStrokeWidth={3} zoomable pannable />
-            </ReactFlow>
-          </div>
-        </div>
-
-        {/* Right Side: Properties panel */}
-        <div 
-          className="p-3 pl-0" 
-          style={{ 
-            height: '100%', 
-            width: rightSidebarOpen ? '320px' : '0px', 
-            overflow: 'hidden', 
-            opacity: rightSidebarOpen ? 1 : 0, 
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            padding: rightSidebarOpen ? '' : '0 !important'
-          }}
-        >
-          <PropertiesPanel 
-            selectedNode={selectedNode}
-            onUpdateNode={onUpdateNode}
-            onDeleteNode={onDeleteNode}
-          />
-        </div>
-      </div>
-
-      {/* Bottom Collapsible Global Code Preview Drawer */}
-      <div
-        className="glass-panel position-absolute"
-        style={{
-          bottom: '15px',
-          left: '15px',
-          right: '15px',
-          height: '280px',
-          zIndex: 90,
-          borderRadius: '12px',
-          transform: showCodeDrawer ? 'translateY(0)' : 'translateY(310px)',
-          transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          display: 'flex',
-          flexDirection: 'column',
-          textAlign: 'left'
-        }}
-      >
-        {/* Header of Drawer */}
-        <div className="d-flex justify-content-between align-items-center px-4 py-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
-          <span className="fw-semibold text-white d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', fontSize: '0.95rem' }}>
-            {drawerTab === 'code' ? (
-              <><i className="bi bi-file-earmark-code text-info glow-cyan"></i> generated_project / main.py</>
-            ) : (
-              <><i className="bi bi-terminal-fill text-success glow-green"></i> Live Execution Console</>
-            )}
-          </span>
-          {drawerTab === 'code' && (
-            <button 
-              className="btn btn-sm btn-outline-info"
-              style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '6px' }}
-              onClick={() => {
-                navigator.clipboard.writeText(globalCode);
-                alert('Code copied to clipboard!');
-              }}
-            >
-              Copy Code
-            </button>
-          )}
-        </div>
-        
-        {/* Drawer Content */}
-        <div className="flex-grow-1 p-0 overflow-hidden d-flex" style={{ background: '#07070e' }}>
-          {drawerTab === 'code' ? (
-            <div className="p-3 w-100 h-100 overflow-auto">
-              <pre className="m-0 font-monospace text-info" style={{ fontSize: '0.8rem', lineHeight: '1.4' }}>
-                {globalCode || '# Assemble the graph to generate code preview'}
-              </pre>
-            </div>
-          ) : (
-            <div className="d-flex w-100 h-100">
-               {/* Left: Chat input & Response */}
-               <div className="d-flex flex-column border-end border-secondary w-50 p-3 h-100">
-                  <div className="d-flex gap-2 mb-3">
-                     <input 
-                       type="text" 
-                       className="form-control bg-dark border-secondary text-white" 
-                       placeholder="Enter message for agent..."
-                       value={runMessage}
-                       onChange={e => setRunMessage(e.target.value)}
-                       onKeyDown={e => { if(e.key === 'Enter') handleRun(); }}
-                     />
-                     <button className="btn btn-success d-flex align-items-center" onClick={handleRun} disabled={isExecuting}>
-                       {isExecuting ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-send-fill"></i>}
-                     </button>
-                  </div>
-                  <div className="flex-grow-1 overflow-auto bg-dark p-2 rounded border border-secondary text-white text-start" style={{fontSize: '0.85rem'}}>
-                     {runResponse ? (
-                       <div><strong className="text-info">Agent:</strong><br/><pre style={{whiteSpace: 'pre-wrap', fontFamily: 'inherit'}}>{runResponse}</pre></div>
-                     ) : (
-                       <span className="text-muted">Agent response will appear here...</span>
-                     )}
-                  </div>
-               </div>
-               {/* Right: Logs */}
-               <div className="w-50 p-3 h-100 d-flex flex-column text-start">
-                 <span className="text-muted mb-2 fw-bold" style={{fontSize: '0.75rem'}}>Execution Logs</span>
-                 <pre className="flex-grow-1 overflow-auto bg-dark p-2 rounded border border-secondary text-success font-monospace" style={{fontSize: '0.75rem'}}>
-                    {runLogs || 'Waiting for execution...'}
-                 </pre>
-               </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
   );
 }
 
