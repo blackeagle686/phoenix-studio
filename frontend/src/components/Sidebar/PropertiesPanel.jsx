@@ -52,7 +52,7 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
       case 'chatbot':
         return `# ChatBot Orchestrator\nfrom phoenix.framework.chatbot.core import ChatBot\n\nbot = ChatBot(\n    tts=${data.tts_enabled ? 'True' : 'False'},\n    stt=${data.stt_enabled ? 'True' : 'False'}\n).with_system_prompt("${data.system_prompt || ''}").set_session("${data.session_id || 'default'}")`;
       case 'rag':
-        return `# RAG Configuration\n.with_rag("${data.path || './data'}", chunk_size=${data.chunk_size || 500}, chunk_overlap=${data.chunk_overlap || 50})`;
+        return `# RAG Configuration\n.with_rag(\n    data_to_insight_path="${data.path || './data'}",\n    chunk_size=${data.chunk_size || 500},\n    chunk_overlap=${data.chunk_overlap || 50},\n    reranking=${data.reranking ? 'True' : 'False'},\n    fast_rag=${data.fast_rag ? 'True' : 'False'},\n    hybrid_search=${data.hybrid_search ? 'True' : 'False'},\n    cag=${data.cag ? 'True' : 'False'},\n    threshold=${data.threshold || 0.5},\n    device="${data.device || 'cpu'}"\n)`;
       case 'openai_vlm':
         const vlmModel = data.model || 'gpt-4o';
         const vlmKey = data.api_key ? `"${data.api_key}"` : '"your-api-key-here"';
@@ -295,6 +295,68 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
                 value={data.chunk_overlap || 50} 
                 onChange={(e) => handleChange('chunk_overlap', parseInt(e.target.value) || 50)} 
               />
+            </div>
+            <div className="form-check form-switch mt-2">
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                role="switch" 
+                checked={data.reranking || false}
+                onChange={(e) => handleChange('reranking', e.target.checked)}
+              />
+              <label className="form-check-label text-light" style={{ fontSize: '0.85rem' }}>Enable Reranking</label>
+            </div>
+            <div className="form-check form-switch">
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                role="switch" 
+                checked={data.fast_rag || false}
+                onChange={(e) => handleChange('fast_rag', e.target.checked)}
+              />
+              <label className="form-check-label text-light" style={{ fontSize: '0.85rem' }}>Fast RAG Mode</label>
+            </div>
+            <div className="form-check form-switch">
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                role="switch" 
+                checked={data.hybrid_search || false}
+                onChange={(e) => handleChange('hybrid_search', e.target.checked)}
+              />
+              <label className="form-check-label text-light" style={{ fontSize: '0.85rem' }}>Hybrid Search (BM25 + Semantic)</label>
+            </div>
+            <div className="form-check form-switch">
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                role="switch" 
+                checked={data.cag || false}
+                onChange={(e) => handleChange('cag', e.target.checked)}
+              />
+              <label className="form-check-label text-light" style={{ fontSize: '0.85rem' }}>Cache-Augmented Generation (CAG)</label>
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Similarity Threshold</label>
+              <input 
+                type="number" 
+                step="0.01"
+                className="form-control bg-dark border-secondary text-white"
+                value={data.threshold || 0.5} 
+                onChange={(e) => handleChange('threshold', parseFloat(e.target.value) || 0.5)} 
+              />
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Device</label>
+              <select 
+                className="form-select bg-dark border-secondary text-white"
+                value={data.device || 'cpu'} 
+                onChange={(e) => handleChange('device', e.target.value)}
+              >
+                <option value="cpu">CPU</option>
+                <option value="cuda">CUDA (GPU)</option>
+                <option value="mps">MPS (Mac)</option>
+              </select>
             </div>
           </div>
         )}
