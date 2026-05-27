@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import WorkspaceEditor from './pages/WorkspaceEditor';
 import GuidePage from './pages/GuidePage';
 import AboutPage from './pages/AboutPage';
+import ProfileSettings from './pages/ProfileSettings';
 import './App.css';
 
 // Protected Route Component
@@ -63,6 +64,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <WorkspaceEditor />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute>
+            <ProfileSettings />
           </ProtectedRoute>
         } 
       />
