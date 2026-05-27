@@ -3,3 +3,7 @@ t=2026-05-27T23:49:52+0300 lvl=info msg="using configuration at default config p
 t=2026-05-27T23:49:52+0300 lvl=info msg="open config file" path=/home/tlk/.config/ngrok/ngrok.yml err=nil
 t=2026-05-27T23:49:52+0300 lvl=info msg="FIPS 140 mode" enabled=false
 t=2026-05-27T23:49:52+0300 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+t=2026-05-27T23:49:57+0300 lvl=warn msg="failed to check for update" obj=updater err="Post \"https://update.ngrok-agent.com/check\": context deadline exceeded"
+t=2026-05-27T23:50:02+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
+t=2026-05-27T23:50:02+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
+t=2026-05-27T23:50:04+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
