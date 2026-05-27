@@ -22,8 +22,7 @@ function deploy() {
     fi
     
     # Initialize redis
-    sudo systemctl enable redis-server || echo "Systemd not available, skipping enable"
-    sudo systemctl start redis-server || sudo service redis-server start
+    # Removed systemctl logic. Redis will now be started on port 6385 by the start() function.
     
     # Create venv
     if [ ! -d "$VENV_DIR" ]; then
@@ -58,6 +57,12 @@ function start() {
     echo "Starting services in the background..."
     source "$VENV_DIR/bin/activate"
     
+    # Start Redis
+    cd "$PROJECT_DIR"
+    nohup redis-server --port 6385 > "$LOGS_DIR/redis.log" 2>&1 &
+    echo $! > "$LOGS_DIR/redis.pid"
+    echo "Redis started on port 6385."
+    
     # Start Backend
     cd "$PROJECT_DIR"
     nohup uvicorn backend.main:app --host 0.0.0.0 --port 8010 > "$LOGS_DIR/backend.log" 2>&1 &
@@ -77,7 +82,7 @@ function start() {
 
 function stop() {
     echo "Stopping services..."
-    for svc in backend celery ngrok; do
+    for svc in redis backend celery ngrok; do
         if [ -f "$LOGS_DIR/$svc.pid" ]; then
             PID=$(cat "$LOGS_DIR/$svc.pid")
             if ps -p $PID > /dev/null; then
@@ -96,6 +101,7 @@ function stop() {
     pkill -f "uvicorn backend.main:app" || true
     pkill -f "celery -A backend.core.celery_app" || true
     pkill -f "ngrok http" || true
+    pkill -f "redis-server --port 6385" || true
 }
 
 function restart() {
