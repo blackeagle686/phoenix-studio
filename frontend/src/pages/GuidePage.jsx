@@ -103,6 +103,8 @@ function GuidePage() {
           </button>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
