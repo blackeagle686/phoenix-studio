@@ -28,7 +28,8 @@ const nodeTypes = {
   openai_vlm: CustomNode,
   local_vlm: CustomNode,
   tts_node: CustomNode,
-  stt_node: CustomNode
+  stt_node: CustomNode,
+  data_source: CustomNode
 };
 
 // Initial nodes
