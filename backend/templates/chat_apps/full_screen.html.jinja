@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="{{ theme_mode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: {{ primary_color }};
+        }
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bs-body-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chat-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 2rem 10%;
+        }
+        .message {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            color: white;
+        }
+        .user-icon { background-color: #6c757d; }
+        .bot-icon { background-color: var(--primary-color); }
+        
+        .message-content {
+            background-color: var(--bs-tertiary-bg);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            max-width: 80%;
+            line-height: 1.6;
+        }
+        
+        .input-area {
+            padding: 1.5rem 10%;
+            background-color: var(--bs-body-bg);
+            border-top: 1px solid var(--bs-border-color);
+        }
+        
+        .input-box {
+            background-color: var(--bs-tertiary-bg);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .input-box textarea {
+            border: none;
+            background: transparent;
+            color: var(--bs-body-color);
+            resize: none;
+            flex-grow: 1;
+            padding: 0.5rem;
+            max-height: 150px;
+        }
+        
+        .input-box textarea:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--bs-secondary-color);
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .btn-action:hover {
+            background-color: var(--bs-secondary-bg);
+            color: var(--primary-color);
+        }
+        .btn-send {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+        }
+        .btn-send:hover { opacity: 0.8; color: white; }
+        
+        /* Attachment Preview */
+        .attachment-preview {
+            display: none;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bs-secondary-bg);
+            border-radius: 0.5rem;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .attachment-preview img {
+            max-width: 50px;
+            border-radius: 4px;
+        }
+        .attachment-preview .remove-btn {
+            margin-left: auto;
+            cursor: pointer;
+            color: var(--bs-danger);
+        }
+        .recording-pulse {
+            animation: pulse 1.5s infinite;
+            color: #dc3545 !important;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="text-center my-4 text-muted">
+            <h4>How can I help you today?</h4>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <div class="attachment-preview" id="attachmentPreview">
+            <div id="previewIcon"></div>
+            <span id="previewName"></span>
+            <i class="bi bi-x-circle remove-btn" onclick="clearAttachment()"></i>
+        </div>
+        
+        <div class="input-box">
+            <button class="btn-action" title="Upload Image/File" onclick="document.getElementById('fileInput').click()">
+                <i class="bi bi-paperclip"></i>
+            </button>
+            <input type="file" id="fileInput" class="d-none" onchange="handleFileSelect(event)">
+            
+            <button class="btn-action" id="recordBtn" title="Voice Record" onclick="toggleRecording()">
+                <i class="bi bi-mic"></i>
+            </button>
+
+            <textarea id="messageInput" rows="1" placeholder="Message the AI..."></textarea>
+            
+            <button class="btn-send" onclick="sendMessage()">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+
+<script>
+    let currentFile = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+
+    // Auto-resize textarea
+    const textarea = document.getElementById('messageInput');
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+    
+    // Enter to send
+    textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        currentFile = file;
+        
+        const preview = document.getElementById('attachmentPreview');
+        const icon = document.getElementById('previewIcon');
+        const name = document.getElementById('previewName');
+        
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                icon.innerHTML = `<img src="${e.target.result}" alt="preview">`;
+            }
+            reader.readAsDataURL(file);
+        } else {
+            icon.innerHTML = `<i class="bi bi-file-earmark-text"></i>`;
+        }
+        
+        name.textContent = file.name;
+        preview.style.display = 'flex';
+    }
+
+    function clearAttachment() {
+        currentFile = null;
+        document.getElementById('fileInput').value = '';
+        document.getElementById('attachmentPreview').style.display = 'none';
+        
+        // Also clear any recorded audio
+        audioChunks = [];
+    }
+
+    async function toggleRecording() {
+        const btn = document.getElementById('recordBtn');
+        const icon = btn.querySelector('i');
+        
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                
+                mediaRecorder.ondataavailable = e => {
+                    audioChunks.push(e.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    currentFile = new File([audioBlob], "recording.webm", { type: 'audio/webm' });
+                    
+                    const preview = document.getElementById('attachmentPreview');
+                    document.getElementById('previewIcon').innerHTML = `<i class="bi bi-mic-fill text-danger"></i>`;
+                    document.getElementById('previewName').textContent = "Voice Recording (Ready to send)";
+                    preview.style.display = 'flex';
+                    
+                    // Stop tracks to release mic
+                    stream.getTracks().forEach(track => track.stop());
+                };
+                
+                audioChunks = [];
+                mediaRecorder.start();
+                isRecording = true;
+                btn.classList.add('recording-pulse');
+                icon.className = 'bi bi-stop-fill';
+                
+            } catch (err) {
+                alert("Microphone access denied or not available.");
+            }
+        } else {
+            mediaRecorder.stop();
+            isRecording = false;
+            btn.classList.remove('recording-pulse');
+            icon.className = 'bi bi-mic';
+        }
+    }
+
+    function playTTS(text) {
+        if ('speechSynthesis' in window) {
+            // Strip markdown before speaking
+            const cleanText = text.replace(/[*#_`]/g, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function appendMessage(role, content, attachmentHtml = '') {
+        const container = document.getElementById('chatContainer');
+        const div = document.createElement('div');
+        div.className = 'message';
+        
+        const isUser = role === 'user';
+        const iconClass = isUser ? 'user-icon' : 'bot-icon';
+        const iconName = isUser ? 'bi-person' : 'bi-robot';
+        const name = isUser ? 'You' : 'AI Assistant';
+        
+        // Very basic markdown formatting for display
+        let formattedContent = content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>');
+            
+        let ttsBtn = '';
+        if (!isUser) {
+            ttsBtn = `<button class="btn btn-sm btn-link text-muted p-0 ms-2" onclick="playTTS(this.dataset.text)" data-text="${content.replace(/"/g, '&quot;')}"><i class="bi bi-volume-up"></i> Play</button>`;
+        }
+
+        div.innerHTML = `
+            <div class="message-icon ${iconClass}"><i class="bi ${iconName}"></i></div>
+            <div class="message-content">
+                <div class="fw-bold mb-1" style="font-size: 0.85rem; color: var(--bs-secondary-color)">
+                    ${name} ${ttsBtn}
+                </div>
+                ${attachmentHtml}
+                <div>${formattedContent}</div>
+            </div>
+        `;
+        
+        container.appendChild(div);
+        container.scrollTo(0, container.scrollHeight);
+    }
+
+    async function sendMessage() {
+        const text = textarea.value.trim();
+        if (!text && !currentFile) return;
+
+        // UI updates
+        let attachmentHtml = '';
+        if (currentFile) {
+            attachmentHtml = `<div class="mb-2 text-info small"><i class="bi bi-paperclip"></i> Attached: ${currentFile.name}</div>`;
+        }
+        
+        appendMessage('user', text || '(Audio/File Message)', attachmentHtml);
+        
+        textarea.value = '';
+        textarea.style.height = 'auto';
+        
+        // Prepare FormData for FastAPI backend
+        const formData = new FormData();
+        if (text) formData.append('text', text);
+        
+        if (currentFile) {
+            if (currentFile.type.startsWith('audio/')) {
+                formData.append('audio', currentFile);
+            } else {
+                formData.append('image', currentFile); // Treats all non-audio as image for this demo
+            }
+        }
+        
+        clearAttachment();
+
+        // Show typing indicator
+        const container = document.getElementById('chatContainer');
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message typing-indicator';
+        typingDiv.innerHTML = `
+            <div class="message-icon bot-icon"><i class="bi bi-robot"></i></div>
+            <div class="message-content text-muted">
+                <div class="spinner-grow spinner-grow-sm" role="status"></div>
+                <div class="spinner-grow spinner-grow-sm" role="status"></div>
+                <div class="spinner-grow spinner-grow-sm" role="status"></div>
+            </div>
+        `;
+        container.appendChild(typingDiv);
+        container.scrollTo(0, container.scrollHeight);
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            
+            // Remove typing indicator
+            container.removeChild(typingDiv);
+            
+            if (data.status === 'success') {
+                const botResponse = typeof data.response === 'string' ? data.response : JSON.stringify(data.response);
+                appendMessage('assistant', botResponse);
+            } else {
+                appendMessage('assistant', `Error: ${data.message}`);
+            }
+        } catch (err) {
+            container.removeChild(typingDiv);
+            appendMessage('assistant', `Connection Error: Could not reach the server.`);
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
