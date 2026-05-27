@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="{{ theme_mode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Awesome Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: {{ primary_color }};
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bs-body-bg);
+        }
+        
+        /* Chat Widget Container */
+        #widgetContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        /* The Chat Window */
+        #chatWindow {
+            display: none;
+            width: 350px;
+            height: 500px;
+            background-color: var(--bs-body-bg);
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            border: 1px solid var(--bs-border-color);
+            flex-direction: column;
+            margin-bottom: 15px;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Widget Toggle Button */
+        #widgetToggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        #widgetToggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h5 { margin: 0; font-size: 1.1rem; }
+
+        /* Chat Body */
+        .chat-body {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: var(--bs-tertiary-bg);
+        }
+
+        /* Message Bubbles */
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.3s;
+        }
+        .msg-user { align-items: flex-end; }
+        .msg-bot { align-items: flex-start; }
+
+        .bubble {
+            max-width: 85%;
+            padding: 0.6rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .msg-user .bubble {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 0.2rem;
+        }
+        .msg-bot .bubble {
+            background-color: var(--bs-body-bg);
+            border: 1px solid var(--bs-border-color);
+            border-bottom-left-radius: 0.2rem;
+        }
+
+        /* Input Area */
+        .chat-footer {
+            padding: 0.8rem;
+            background-color: var(--bs-body-bg);
+            border-top: 1px solid var(--bs-border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .chat-footer input {
+            flex-grow: 1;
+            border: none;
+            background: var(--bs-tertiary-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--bs-body-color);
+        }
+        .chat-footer input:focus { outline: none; }
+        
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--bs-secondary-color);
+            font-size: 1.1rem;
+        }
+        .btn-send {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* Dummy Website Styling */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .attachment-preview {
+            display: none;
+            padding: 0.5rem;
+            background: var(--bs-secondary-bg);
+            font-size: 0.8rem;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--bs-border-color);
+        }
+        
+        .recording-pulse {
+            animation: pulse 1.5s infinite;
+            color: #dc3545 !important;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dummy Website Content -->
+    <div class="hero">
+        <h1 class="display-3 fw-bold">Welcome to Our Service</h1>
+        <p class="lead text-muted mt-3">We build amazing things. Have a question? Ask our AI assistant!</p>
+        <button class="btn btn-outline-primary mt-4" style="border-color: var(--primary-color); color: var(--primary-color)" onclick="toggleChat()">Contact Us</button>
+    </div>
+
+    <!-- Chat Widget -->
+    <div id="widgetContainer">
+        
+        <div id="chatWindow">
+            <div class="chat-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h5>AI Assistant</h5>
+                </div>
+                <button class="btn-close btn-close-white" onclick="toggleChat()"></button>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <div class="message msg-bot text-center w-100 text-muted small my-3">
+                    Chat Started
+                </div>
+                <div class="message msg-bot">
+                    <div class="bubble">Hi there! 👋 How can I help you?</div>
+                </div>
+            </div>
+            
+            <div class="attachment-preview" id="attachmentPreview">
+                <span id="previewName" class="text-truncate" style="max-width: 250px;"></span>
+                <i class="bi bi-x-circle text-danger" style="cursor: pointer;" onclick="clearAttachment()"></i>
+            </div>
+            
+            <div class="chat-footer">
+                <input type="file" id="fileInput" class="d-none" onchange="handleFileSelect(event)">
+                <button class="btn-action" title="Attach file" onclick="document.getElementById('fileInput').click()">
+                    <i class="bi bi-paperclip"></i>
+                </button>
+                <button class="btn-action" id="recordBtn" title="Voice message" onclick="toggleRecording()">
+                    <i class="bi bi-mic"></i>
+                </button>
+                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button class="btn-action btn-send" onclick="sendMessage()">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="widgetToggle" onclick="toggleChat()">
+            <i class="bi bi-chat-dots-fill"></i>
+        </div>
+        
+    </div>
+
+<script>
+    let isChatOpen = false;
+    let currentFile = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+
+    function toggleChat() {
+        const chatWindow = document.getElementById('chatWindow');
+        const widgetIcon = document.getElementById('widgetToggle').querySelector('i');
+        
+        isChatOpen = !isChatOpen;
+        chatWindow.style.display = isChatOpen ? 'flex' : 'none';
+        widgetIcon.className = isChatOpen ? 'bi bi-x-lg' : 'bi bi-chat-dots-fill';
+    }
+
+    const input = document.getElementById('messageInput');
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        currentFile = file;
+        
+        document.getElementById('previewName').innerHTML = `<i class="bi bi-file-earmark me-1"></i> ${file.name}`;
+        document.getElementById('attachmentPreview').style.display = 'flex';
+    }
+
+    function clearAttachment() {
+        currentFile = null;
+        document.getElementById('fileInput').value = '';
+        document.getElementById('attachmentPreview').style.display = 'none';
+        audioChunks = [];
+    }
+
+    async function toggleRecording() {
+        const btn = document.getElementById('recordBtn');
+        const icon = btn.querySelector('i');
+        
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                
+                mediaRecorder.ondataavailable = e => {
+                    audioChunks.push(e.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    currentFile = new File([audioBlob], "recording.webm", { type: 'audio/webm' });
+                    
+                    document.getElementById('previewName').innerHTML = `<i class="bi bi-mic-fill text-danger me-1"></i> Voice Message`;
+                    document.getElementById('attachmentPreview').style.display = 'flex';
+                    
+                    stream.getTracks().forEach(track => track.stop());
+                };
+                
+                audioChunks = [];
+                mediaRecorder.start();
+                isRecording = true;
+                btn.classList.add('recording-pulse');
+                icon.className = 'bi bi-stop-fill';
+                
+            } catch (err) {
+                alert("Microphone access denied.");
+            }
+        } else {
+            mediaRecorder.stop();
+            isRecording = false;
+            btn.classList.remove('recording-pulse');
+            icon.className = 'bi bi-mic';
+        }
+    }
+
+    function playTTS(text) {
+        if ('speechSynthesis' in window) {
+            const cleanText = text.replace(/[*#_`]/g, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function appendMessage(role, content, attachmentText = '') {
+        const container = document.getElementById('chatBody');
+        const div = document.createElement('div');
+        div.className = `message ${role === 'user' ? 'msg-user' : 'msg-bot'}`;
+        
+        let formattedContent = content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>');
+            
+        let ttsBtn = '';
+        if (role === 'bot') {
+            ttsBtn = `<div class="text-start mt-1"><button class="btn btn-sm btn-link text-muted p-0" style="font-size:0.75rem;" onclick="playTTS(this.dataset.text)" data-text="${content.replace(/"/g, '&quot;')}"><i class="bi bi-volume-up"></i> Play</button></div>`;
+        }
+
+        let attachHtml = attachmentText ? `<div class="small fw-bold mb-1 opacity-75"><i class="bi bi-paperclip"></i> ${attachmentText}</div>` : '';
+
+        div.innerHTML = `
+            <div class="bubble">
+                ${attachHtml}
+                <div>${formattedContent}</div>
+                ${ttsBtn}
+            </div>
+        `;
+        
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const text = input.value.trim();
+        if (!text && !currentFile) return;
+
+        let attachText = currentFile ? currentFile.name : '';
+        appendMessage('user', text || '(Audio Message)', attachText);
+        
+        input.value = '';
+        
+        const formData = new FormData();
+        if (text) formData.append('text', text);
+        
+        if (currentFile) {
+            if (currentFile.type.startsWith('audio/')) {
+                formData.append('audio', currentFile);
+            } else {
+                formData.append('image', currentFile);
+            }
+        }
+        
+        clearAttachment();
+
+        const container = document.getElementById('chatBody');
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message msg-bot typing-indicator';
+        typingDiv.innerHTML = `
+            <div class="bubble text-muted d-flex gap-1 align-items-center" style="height: 38px">
+                <span class="spinner-grow spinner-grow-sm" style="width: 0.5rem; height: 0.5rem;"></span>
+                <span class="spinner-grow spinner-grow-sm" style="width: 0.5rem; height: 0.5rem; animation-delay: 0.2s"></span>
+                <span class="spinner-grow spinner-grow-sm" style="width: 0.5rem; height: 0.5rem; animation-delay: 0.4s"></span>
+            </div>
+        `;
+        container.appendChild(typingDiv);
+        container.scrollTop = container.scrollHeight;
+
+        try {
+            const response = await fetch('/api/chat', { method: 'POST', body: formData });
+            const data = await response.json();
+            
+            container.removeChild(typingDiv);
+            
+            if (data.status === 'success') {
+                const botResponse = typeof data.response === 'string' ? data.response : JSON.stringify(data.response);
+                appendMessage('bot', botResponse);
+            } else {
+                appendMessage('bot', `Error: ${data.message}`);
+            }
+        } catch (err) {
+            container.removeChild(typingDiv);
+            appendMessage('bot', `Error: Connection failed.`);
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
