@@ -41,7 +41,8 @@ async def preview_template(payload: TemplatePreviewPayload):
         html_template = jinja_env.get_template(html_template_name)
         index_html_content = html_template.render(
             gradient_colors=payload.gradient_colors,
-            theme_mode=payload.theme_mode
+            theme_mode=payload.theme_mode,
+            is_preview=True
         )
         return {"html": index_html_content}
     except Exception as e:
