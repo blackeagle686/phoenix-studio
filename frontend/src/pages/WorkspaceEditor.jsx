@@ -233,6 +233,39 @@ function WorkspaceEditor() {
     return () => clearTimeout(timeout);
   }, [nodes, edges]);
 
+  // Handle template preview
+  const handlePreviewTemplate = async () => {
+    if (exportTemplate === 'raw') return;
+    try {
+      const response = await fetch('http://localhost:8000/api/preview_template', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          template_type: exportTemplate,
+          primary_color: exportPrimaryColor,
+          theme_mode: exportTheme
+        })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        // Open a new window and write the HTML
+        const newWin = window.open('', '_blank');
+        if (newWin) {
+          newWin.document.open();
+          newWin.document.write(data.html);
+          newWin.document.close();
+        } else {
+          alert('Popup blocked! Please allow popups for this site to preview templates.');
+        }
+      } else {
+        alert('Failed to load template preview.');
+      }
+    } catch (err) {
+      alert('Error communicating with preview endpoint.');
+      console.error(err);
+    }
+  };
+
   // Handle ZIP generate download
   const handleDownload = async () => {
     setIsGenerating(true);
@@ -666,11 +699,24 @@ function WorkspaceEditor() {
               </div>
             )}
 
-            <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top border-secondary">
-              <button className="btn btn-outline-secondary text-white" onClick={() => setShowExportModal(false)}>Cancel</button>
-              <button className="btn btn-info glow-cyan px-4" onClick={handleDownload} disabled={isGenerating}>
-                {isGenerating ? <span className="spinner-border spinner-border-sm"></span> : 'Export ZIP'}
-              </button>
+            <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary">
+              <div>
+                {exportTemplate !== 'raw' && (
+                  <button 
+                    className="btn btn-outline-info" 
+                    onClick={handlePreviewTemplate}
+                  >
+                    <i className="bi bi-eye me-2"></i>
+                    Live Preview
+                  </button>
+                )}
+              </div>
+              <div className="d-flex gap-2">
+                <button className="btn btn-outline-secondary text-white" onClick={() => setShowExportModal(false)}>Cancel</button>
+                <button className="btn btn-info glow-cyan px-4" onClick={handleDownload} disabled={isGenerating}>
+                  {isGenerating ? <span className="spinner-border spinner-border-sm"></span> : 'Export ZIP'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
