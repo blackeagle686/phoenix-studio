@@ -66,16 +66,19 @@ const NetworkCanvas = () => {
         if (mouse.x != null && mouse.y != null) {
           let dx = mouse.x - p.x;
           let dy = mouse.y - p.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < mouse.radius) {
-            const forceDirectionX = dx / distance;
-            const forceDirectionY = dy / distance;
-            const force = (mouse.radius - distance) / mouse.radius;
-            const pushX = forceDirectionX * force * 5;
-            const pushY = forceDirectionY * force * 5;
-            
-            p.x -= pushX;
-            p.y -= pushY;
+          let distSq = dx * dx + dy * dy;
+          let radiusSq = mouse.radius * mouse.radius;
+          
+          if (distSq < radiusSq) {
+            let distance = Math.sqrt(distSq);
+            if (distance > 0.1) {
+              const force = (mouse.radius - distance) / mouse.radius;
+              const pushX = (dx / distance) * force * 5;
+              const pushY = (dy / distance) * force * 5;
+              
+              p.x -= pushX;
+              p.y -= pushY;
+            }
           }
         }
 
@@ -92,23 +95,23 @@ const NetworkCanvas = () => {
 
       // Draw lines
       for (let i = 0; i < numParticles; i++) {
+        const p1 = particles[i];
         for (let j = i + 1; j < numParticles; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distSq = dx * dx + dy * dy;
 
-          if (dist < 180) {
+          if (distSq < 32400) { // 180 * 180
+            const dist = Math.sqrt(distSq);
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
             
-            // Linear gradient line between the two particle colors
-            const grad = ctx.createLinearGradient(particles[i].x, particles[i].y, particles[j].x, particles[j].y);
-            grad.addColorStop(0, `rgba(${particles[i].color.r}, ${particles[i].color.g}, ${particles[i].color.b}, ${0.8 - dist / 180})`);
-            grad.addColorStop(1, `rgba(${particles[j].color.r}, ${particles[j].color.g}, ${particles[j].color.b}, ${0.8 - dist / 180})`);
-            
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = (1 - dist / 180) * 2;
+            // Optimization: avoid createLinearGradient and use simplified opacity
+            const alpha = 0.6 - (dist / 180) * 0.6;
+            ctx.strokeStyle = `rgba(${p1.color.r}, ${p1.color.g}, ${p1.color.b}, ${alpha})`;
+            ctx.lineWidth = (1 - dist / 180) * 1.5;
             ctx.stroke();
           }
         }
@@ -116,16 +119,21 @@ const NetworkCanvas = () => {
 
       // Draw lines to mouse
       if (mouse.x != null && mouse.y != null) {
+        const radiusSq = mouse.radius * mouse.radius;
         for (let i = 0; i < numParticles; i++) {
-          const dx = particles[i].x - mouse.x;
-          const dy = particles[i].y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const p = particles[i];
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const distSq = dx * dx + dy * dy;
 
-          if (dist < mouse.radius) {
+          if (distSq < radiusSq) {
+            const dist = Math.sqrt(distSq);
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.moveTo(p.x, p.y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(${particles[i].color.r}, ${particles[i].color.g}, ${particles[i].color.b}, ${0.5 - dist / mouse.radius})`;
+            
+            const alpha = 0.5 - (dist / mouse.radius) * 0.5;
+            ctx.strokeStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${alpha})`;
             ctx.lineWidth = (1 - dist / mouse.radius);
             ctx.stroke();
           }
