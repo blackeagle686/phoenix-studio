@@ -248,6 +248,15 @@ h6 {
   color: #fff;
 }
 
+.btn-check:checked + .btn-outline-mint,
+.btn-check:active + .btn-outline-mint,
+.btn-outline-mint:active,
+.btn-outline-mint.active {
+  background-color: var(--accent-mint) !important;
+  border-color: var(--accent-mint) !important;
+  color: #080810 !important;
+}
+
 .stat-block h2 {
   font-size: 8rem;
   font-weight: 400;
