@@ -375,9 +375,9 @@ function WorkspaceEditor() {
       {/* Background visual layers */}
       <div className="ambient-bg"></div>
 
-      {/* Main Navbar */}
+      {/* Top Navbar / Controls */}
       <nav
-        className="navbar navbar-expand-lg glass-panel py-2 px-4 position-absolute"
+        className="navbar navbar-expand-lg navbar-dark glass-panel py-2 px-3 position-absolute"
         style={{
           top: '15px',
           left: '15px',
@@ -388,103 +388,113 @@ function WorkspaceEditor() {
         }}
       >
         <div className="container-fluid d-flex justify-content-between align-items-center">
-          <a className="navbar-brand d-flex align-items-center text-decoration-none" href="#">
-            <button className="btn btn-link text-mint p-0 me-3" onClick={() => navigate('/dashboard')} title="Back to Dashboard">
+          
+          {/* Left Brand Area */}
+          <div className="d-flex align-items-center flex-grow-1 flex-lg-grow-0 overflow-hidden me-3">
+            <button className="btn btn-link text-mint p-0 me-2" onClick={() => navigate('/dashboard')} title="Back to Dashboard">
               <i className="bi bi-arrow-left fs-4"></i>
             </button>
-            <i className="bi bi-circle-fill text-mint me-2 fs-5"></i>
+            <i className="bi bi-circle-fill text-mint me-2 fs-6 d-none d-sm-inline"></i>
             <span
+              className="d-none d-md-inline"
               style={{
                 fontFamily: 'var(--font-title)',
                 fontWeight: 700,
-                fontSize: '1.4rem',
+                fontSize: '1.2rem',
                 letterSpacing: '1px',
                 color: 'white',
               }}
             >
-              PHOENIX-AI <span className="text-mint">STUDIO</span>
+              PHOENIX-AI <span className="text-mint d-none d-lg-inline">STUDIO</span>
             </span>
-            <span className="ms-3 text-secondary">|</span>
-            <span className="ms-3 text-light fw-semibold me-4">{workspaceName}</span>
-            
-            <div className="btn-group" role="group">
-              <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked={workspaceMode === 'chatbot'} onChange={() => setWorkspaceMode('chatbot')} />
-              <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio1"><i className="bi bi-chat-left-dots-fill me-1"></i> ChatBot</label>
+            <span className="ms-2 ms-md-3 text-secondary d-none d-md-inline">|</span>
+            <span className="ms-2 ms-md-3 text-light fw-semibold text-truncate" style={{ maxWidth: '150px' }}>{workspaceName}</span>
+          </div>
 
-              <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={workspaceMode === 'agent'} onChange={() => setWorkspaceMode('agent')} />
-              <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio2"><i className="bi bi-cpu-fill me-1"></i> Agent</label>
+          {/* Mobile Toggler */}
+          <button className="navbar-toggler shadow-none border-0 ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#workspaceNavbar">
+            <span className="navbar-toggler-icon" style={{ width: '1.2em', height: '1.2em' }}></span>
+          </button>
+
+          {/* Collapsible Right Controls */}
+          <div className="collapse navbar-collapse justify-content-end" id="workspaceNavbar">
+            <div className="d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0">
+              
+              {/* Mode Toggle */}
+              <div className="btn-group me-lg-3" role="group">
+                <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked={workspaceMode === 'chatbot'} onChange={() => setWorkspaceMode('chatbot')} />
+                <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio1"><i className="bi bi-chat-left-dots-fill me-1"></i> ChatBot</label>
+
+                <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={workspaceMode === 'agent'} onChange={() => setWorkspaceMode('agent')} />
+                <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio2"><i className="bi bi-cpu-fill me-1"></i> Agent</label>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="d-flex flex-wrap gap-2">
+                <button
+                  className="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
+                  style={{ borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.2)' }}
+                  onClick={handleSave}
+                  disabled={isSaving}
+                >
+                  {isSaving ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-cloud-arrow-up text-primary"></i>}
+                  Save
+                </button>
+                
+                <button
+                  className={`btn btn-sm ${showCodeDrawer && drawerTab === 'code' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
+                  style={{
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: showCodeDrawer && drawerTab === 'code' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
+                  }}
+                  onClick={() => {
+                    if (showCodeDrawer && drawerTab === 'code') setShowCodeDrawer(false);
+                    else {
+                      setShowCodeDrawer(true);
+                      setDrawerTab('code');
+                    }
+                  }}
+                >
+                  <i className="bi bi-code-square"></i> Show Code
+                </button>
+
+                <button
+                  className={`btn btn-sm ${showCodeDrawer && drawerTab === 'run' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
+                  style={{
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    background: showCodeDrawer && drawerTab === 'run' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
+                  }}
+                  onClick={() => {
+                    if (showCodeDrawer && drawerTab === 'run') setShowCodeDrawer(false);
+                    else {
+                      setShowCodeDrawer(true);
+                      setDrawerTab('run');
+                    }
+                  }}
+                >
+                  <i className="bi bi-play-fill text-success"></i> Run Flow
+                </button>
+              </div>
+
+              <button
+                className="btn btn-mint d-flex align-items-center justify-content-center gap-2 mt-2 mt-lg-0"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  padding: '6px 16px',
+                  borderRadius: '8px'
+                }}
+                onClick={() => setShowExportModal(true)}
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Building...</>
+                ) : (
+                  <><i className="bi bi-download"></i> Export</>
+                )}
+              </button>
             </div>
-          </a>
-
-          <div className="d-flex align-items-center gap-3">
-            <button
-              className="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
-              style={{ borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.2)' }}
-              onClick={handleSave}
-              disabled={isSaving}
-            >
-              {isSaving ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-cloud-arrow-up text-primary"></i>}
-              Save
-            </button>
-            <button
-              className={`btn btn-sm ${showCodeDrawer && drawerTab === 'code' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
-              style={{
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                background: showCodeDrawer && drawerTab === 'code' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
-              }}
-              onClick={() => {
-                if (showCodeDrawer && drawerTab === 'code') setShowCodeDrawer(false);
-                else {
-                  setShowCodeDrawer(true);
-                  setDrawerTab('code');
-                }
-              }}
-            >
-              <i className="bi bi-code-square"></i>
-              Show Code
-            </button>
-
-            <button
-              className={`btn btn-sm ${showCodeDrawer && drawerTab === 'run' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
-              style={{
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                background: showCodeDrawer && drawerTab === 'run' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
-              }}
-              onClick={() => {
-                if (showCodeDrawer && drawerTab === 'run') setShowCodeDrawer(false);
-                else {
-                  setShowCodeDrawer(true);
-                  setDrawerTab('run');
-                }
-              }}
-            >
-              <i className="bi bi-play-fill text-success"></i>
-              Run Flow
-            </button>
-
-            <button
-              className="btn btn-mint d-flex align-items-center gap-2"
-              style={{
-                fontFamily: 'var(--font-body)',
-                padding: '8px 20px',
-              }}
-              onClick={() => setShowExportModal(true)}
-              disabled={isGenerating}
-            >
-              {isGenerating ? (
-                <>
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Building...
-                </>
-              ) : (
-                <>
-                  <i className="bi bi-download"></i>
-                  Download Agent
-                </>
-              )}
-            </button>
           </div>
         </div>
       </nav>
