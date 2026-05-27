@@ -9,46 +9,51 @@ def generate_code(graph: dict) -> str:
     nodes = graph.get("nodes", [])
     edges = graph.get("edges", [])
 
-    # Find agent node
+    # Find core nodes
     agent_node = next((n for n in nodes if n.get("type") == "agent"), None)
-    agent_name = "PhoenixAgent"
-    session_id = "default"
-    if agent_node:
-        agent_data = agent_node.get("data", {})
-        agent_name = agent_data.get("name") or agent_name
-        session_id = agent_data.get("session_id") or session_id
+    chatbot_node = next((n for n in nodes if n.get("type") == "chatbot"), None)
 
-    # Identify connections to the agent
+    # Determine main target node
+    target_core_node = chatbot_node if chatbot_node else agent_node
+    
+    if not target_core_node:
+        return "# No Core Node (Agent or ChatBot) found in graph."
+
+    target_id = target_core_node.get("id")
+    target_data = target_core_node.get("data", {})
+
+    # Identify connected sources
     connected_sources = set()
-    if agent_node:
-        agent_id = agent_node.get("id")
-        for edge in edges:
-            if edge.get("target") == agent_id:
-                connected_sources.add(edge.get("source"))
+    for edge in edges:
+        if edge.get("target") == target_id:
+            connected_sources.add(edge.get("source"))
 
-    # For user-friendliness, if no nodes are connected via edges, 
-    # we fall back to scanning all nodes present on the canvas.
     scan_all = len(connected_sources) == 0
 
+    # Base variables
     use_openai_llm = False
     use_local_llm = False
     use_hybrid_memory = False
     openai_llm_data = None
     local_llm_data = None
-    
     default_tools = []
     custom_tools = []
+    
+    # Multimodal variables
+    rag_data = None
+    openai_vlm_data = None
+    local_vlm_data = None
+    tts_enabled = False
+    stt_enabled = False
 
     for node in nodes:
         node_id = node.get("id")
         node_type = node.get("type")
         node_data = node.get("data", {})
 
-        # Skip the agent node itself
-        if node_type == "agent":
+        if node_id == target_id:
             continue
 
-        # Check if connected or if we scan all
         if node_id in connected_sources or scan_all:
             if node_type == "openai_llm":
                 use_openai_llm = True
@@ -78,19 +83,60 @@ def generate_code(graph: dict) -> str:
                         "    return f\"Processed {param}\""
                     )
                 })
+            elif node_type == "rag":
+                rag_data = {
+                    "path": node_data.get("path") or "./data",
+                    "chunk_size": node_data.get("chunk_size") or 500,
+                    "chunk_overlap": node_data.get("chunk_overlap") or 50
+                }
+            elif node_type == "openai_vlm":
+                openai_vlm_data = {
+                    "model": node_data.get("model") or "gpt-4o",
+                    "api_key": node_data.get("api_key") or "your-api-key-here"
+                }
+            elif node_type == "local_vlm":
+                local_vlm_data = {
+                    "model": node_data.get("model") or "Qwen/Qwen2-VL-7B-Instruct"
+                }
+            elif node_type == "tts_node":
+                tts_enabled = True
+            elif node_type == "stt_node":
+                stt_enabled = True
 
-    # Render template
-    template = jinja_env.get_template("agent.py.jinja")
-    rendered_code = template.render(
-        agent_name=agent_name,
-        session_id=session_id,
-        use_openai_llm=use_openai_llm,
-        use_local_llm=use_local_llm,
-        use_hybrid_memory=use_hybrid_memory,
-        openai_llm=openai_llm_data,
-        local_llm=local_llm_data,
-        default_tools=default_tools,
-        custom_tools=custom_tools
-    )
+    # Override TTS/STT if set explicitly on chatbot node
+    if chatbot_node:
+        if target_data.get("tts_enabled"): tts_enabled = True
+        if target_data.get("stt_enabled"): stt_enabled = True
+
+    if chatbot_node:
+        template = jinja_env.get_template("chatbot.py.jinja")
+        rendered_code = template.render(
+            is_local=use_local_llm or not use_openai_llm,
+            vlm_enabled=bool(openai_vlm_data or local_vlm_data),
+            tts_enabled=tts_enabled,
+            stt_enabled=stt_enabled,
+            session_id=target_data.get("session_id") or "default",
+            system_prompt=target_data.get("system_prompt") or "You are a helpful assistant.",
+            security_mode=target_data.get("security_mode") or "none",
+            memory_enabled=use_hybrid_memory,
+            rag=rag_data,
+            openai_llm=openai_llm_data,
+            local_llm=local_llm_data,
+            openai_vlm=openai_vlm_data,
+            local_vlm=local_vlm_data
+        )
+    else:
+        template = jinja_env.get_template("agent.py.jinja")
+        rendered_code = template.render(
+            agent_name=target_data.get("name") or "PhoenixAgent",
+            session_id=target_data.get("session_id") or "default",
+            use_openai_llm=use_openai_llm,
+            use_local_llm=use_local_llm,
+            use_hybrid_memory=use_hybrid_memory,
+            openai_llm=openai_llm_data,
+            local_llm=local_llm_data,
+            default_tools=default_tools,
+            custom_tools=custom_tools
+        )
 
     return rendered_code
