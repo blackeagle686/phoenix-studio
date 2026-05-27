@@ -59,6 +59,54 @@ export const CustomNode = ({ data, type, selected }) => {
       showOutputHandle = true; // Connects to agent
       desc = `Name: ${data.name || 'custom_fn'}`;
       break;
+    case 'chatbot':
+      title = 'ChatBot Core';
+      icon = 'bi-chat-left-dots-fill';
+      colorVar = '--accent-cyan';
+      showInputHandle = true; // Inputs from LLM, VLM, Memory, Tools, RAG, TTS, STT
+      showOutputHandle = false;
+      desc = `Session: ${data.session_id || 'default_session'}`;
+      break;
+    case 'rag':
+      title = 'RAG Pipeline';
+      icon = 'bi-database-fill-gear';
+      colorVar = '--accent-purple';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = `Chunk Size: ${data.chunk_size || 500}`;
+      break;
+    case 'openai_vlm':
+      title = 'OpenAI VLM';
+      icon = 'bi-eye-fill';
+      colorVar = '--accent-purple';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = `Model: ${data.model || 'gpt-4o'}`;
+      break;
+    case 'local_vlm':
+      title = 'Local VLM';
+      icon = 'bi-eye-fill';
+      colorVar = '--accent-blue';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = `Model: ${data.model || 'Qwen2-VL'}`;
+      break;
+    case 'tts_node':
+      title = 'Text-to-Speech (TTS)';
+      icon = 'bi-megaphone-fill';
+      colorVar = '--accent-pink';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = 'Audio output enabled';
+      break;
+    case 'stt_node':
+      title = 'Speech-to-Text (STT)';
+      icon = 'bi-mic-fill';
+      colorVar = '--accent-pink';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = 'Audio input enabled';
+      break;
     default:
       break;
   }
