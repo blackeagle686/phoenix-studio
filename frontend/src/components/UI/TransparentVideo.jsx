@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const TransparentVideo = ({ src, className, style, tolerance = 80 }) => {
+const TransparentVideo = ({ src, className, style, tolerance = 30 }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -66,9 +66,11 @@ const TransparentVideo = ({ src, className, style, tolerance = 80 }) => {
       animationFrameId = requestAnimationFrame(computeFrame);
     };
 
-    video.addEventListener('play', () => {
-      computeFrame();
-    });
+    // Force play in case autoplay was blocked or missed the event
+    video.play().catch(e => console.log("Autoplay blocked:", e));
+    
+    // Start loop immediately
+    computeFrame();
 
     return () => {
       if (animationFrameId) {
@@ -86,7 +88,6 @@ const TransparentVideo = ({ src, className, style, tolerance = 80 }) => {
         loop
         muted
         playsInline
-        crossOrigin="anonymous"
         style={{ display: 'none' }}
       />
       <canvas
