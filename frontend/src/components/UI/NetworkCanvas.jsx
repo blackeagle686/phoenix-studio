@@ -16,9 +16,9 @@ const NetworkCanvas = () => {
     const particles = [];
     const numParticles = Math.min(100, Math.floor((width * height) / 10000));
     
-    // Use the mint green color from CSS variables, or fallback to standard hex
-    const particleColor = 'rgba(74, 222, 128, 0.4)'; // --accent-mint with opacity
-    const lineColor = 'rgba(74, 222, 128, 0.15)';
+    // Use the new turquoise/mint color
+    const particleColor = 'rgba(114, 239, 221, 0.4)'; // #72efdd with opacity
+    const lineColor = 'rgba(114, 239, 221, 0.15)';
 
     for (let i = 0; i < numParticles; i++) {
       particles.push({
