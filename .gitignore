@@ -5,3 +5,8 @@ node_modules/
 database.sqlite
 database.sqlite-journal
 .db3
+.env
+dist/
+*.zip
+*.pyc
+.DS_Store
