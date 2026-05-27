@@ -13,7 +13,7 @@ def package_project(graph: dict) -> io.BytesIO:
 
     # 2. Extract configuration
     template_type = graph.get("template_type", "raw")
-    primary_color = graph.get("primary_color", "#00f2fe")
+    gradient_colors = graph.get("gradient_colors", ["#ff00cc", "#333399"])
     theme_mode = graph.get("theme_mode", "dark")
     
     # 3. Extract API keys for .env
@@ -56,7 +56,7 @@ def package_project(graph: dict) -> io.BytesIO:
             html_template_name = "full_screen.html.jinja" if template_type == "full_screen" else "widget.html.jinja"
             html_template = jinja_env.get_template(html_template_name)
             index_html_content = html_template.render(
-                primary_color=primary_color,
+                gradient_colors=gradient_colors,
                 theme_mode=theme_mode
             )
             zip_file.writestr("frontend/index.html", index_html_content)
@@ -68,6 +68,9 @@ def package_project(graph: dict) -> io.BytesIO:
                 "fastapi>=0.100.0\n"
                 "uvicorn>=0.23.0\n"
                 "python-multipart>=0.0.6\n"
+                "sqlalchemy>=2.0.0\n"
+                "passlib[bcrypt]>=1.7.4\n"
+                "pyjwt>=2.8.0\n"
                 "openai>=1.0.0\n"
                 "python-dotenv>=1.0.0\n"
             )
