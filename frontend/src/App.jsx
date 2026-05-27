@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import WorkspaceEditor from './pages/WorkspaceEditor';
+import GuidePage from './pages/GuidePage';
+import AboutPage from './pages/AboutPage';
 import './App.css';
 
 // Protected Route Component
@@ -45,6 +47,8 @@ function AppRoutes() {
       <Route path="/" element={<PublicOnlyRoute><LandingPage /></PublicOnlyRoute>} />
       <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
       <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+      <Route path="/guide" element={<PublicOnlyRoute><GuidePage /></PublicOnlyRoute>} />
+      <Route path="/about" element={<PublicOnlyRoute><AboutPage /></PublicOnlyRoute>} />
       
       <Route 
         path="/dashboard" 
