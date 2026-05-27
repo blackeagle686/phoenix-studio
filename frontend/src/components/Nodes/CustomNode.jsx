@@ -121,7 +121,7 @@ export const CustomNode = ({ data, type, selected }) => {
       colorVar = '--accent-green';
       showInputHandle = false;
       showOutputHandle = true;
-      desc = `${data.url || 'None'}`;
+      desc = data.url ? data.url.split('/').pop() : 'No Repo';
       break;
     case 'data_folder':
       title = 'Data Folder';
@@ -129,7 +129,7 @@ export const CustomNode = ({ data, type, selected }) => {
       colorVar = '--accent-green';
       showInputHandle = false;
       showOutputHandle = true;
-      desc = `${data.path || './data'}`;
+      desc = `Path: ${data.path || './data'}`;
       break;
     case 'web_data_api':
       title = 'Web Data API';
@@ -137,7 +137,11 @@ export const CustomNode = ({ data, type, selected }) => {
       colorVar = '--accent-green';
       showInputHandle = false;
       showOutputHandle = true;
-      desc = `${data.url || 'None'}`;
+      try {
+        desc = data.url ? new URL(data.url).hostname : 'No API URL';
+      } catch (e) {
+        desc = data.url || 'Invalid URL';
+      }
       break;
     default:
       break;
