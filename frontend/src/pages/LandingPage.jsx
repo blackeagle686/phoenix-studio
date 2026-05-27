@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import NetworkCanvas from '../components/UI/NetworkCanvas';
+import BirdCanvas from '../components/UI/BirdCanvas';
+import TransparentVideo from '../components/UI/TransparentVideo';
 import Navbar from '../components/UI/Navbar';
 import Footer from '../components/UI/Footer';
 import heroVideo from '../assets/phx-cool-move.mp4';
@@ -32,14 +33,11 @@ function LandingPage() {
         <NetworkCanvas />
         <div className="container-fluid px-5 position-relative z-1 d-flex flex-column align-items-center text-center" style={{ maxWidth: '1400px' }}>
           <div className="position-absolute w-100 h-100 rounded-circle" style={{ background: 'radial-gradient(circle, rgba(114,239,221,0.15) 0%, rgba(0,0,0,0) 70%)', filter: 'blur(40px)', zIndex: 0, top: '10%' }}></div>
-          <video 
+          <TransparentVideo 
             src={heroVideo} 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
             className="hero-image-3d position-relative z-1 mb-4" 
-            style={{ width: '100%', maxWidth: '500px', objectFit: 'contain', mixBlendMode: 'screen' }} 
+            style={{ width: '100%', maxWidth: '500px' }} 
+            tolerance={80}
           />
           <div className="fw-bolder fst-italic position-relative z-1 fade-up-section is-visible" style={{
             fontSize: 'clamp(3rem, 6vw, 6rem)',
