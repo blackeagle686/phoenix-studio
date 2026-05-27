@@ -322,6 +322,58 @@
         switchView('view-landing');
     }
 
+    {% if is_preview %}
+    // --- PREVIEW MODE MOCKS ---
+    async function handleLogin() {
+        token = "preview_token";
+        username = document.getElementById('loginUsername').value || "PreviewUser";
+        localStorage.setItem('ai_token', token);
+        localStorage.setItem('ai_user', username);
+        document.getElementById('usernameDisplay').textContent = username;
+        switchView('view-chat');
+        loadHistory();
+    }
+    
+    async function handleRegister() {
+        token = "preview_token";
+        username = document.getElementById('regUsername').value || "NewPreviewUser";
+        localStorage.setItem('ai_token', token);
+        localStorage.setItem('ai_user', username);
+        document.getElementById('usernameDisplay').textContent = username;
+        switchView('view-chat');
+        loadHistory();
+    }
+    
+    async function loadHistory() {
+        const list = document.getElementById('historyList');
+        const chat = document.getElementById('chatContainer');
+        list.innerHTML = `<div class="history-item"><i class="bi bi-chat-left-text me-2"></i> Preview Session...</div>`;
+        chat.innerHTML = '';
+        appendMessage('bot', 'Welcome to the Live Preview! The ChatBot backend is not connected here, but you can see how it looks.');
+    }
+
+    async function sendMessage() {
+        const text = textarea.value.trim();
+        if (!text && !currentFile) return;
+
+        appendMessage('user', text || (currentFile ? `[Attached: ${currentFile.name}]` : ''));
+        textarea.value = '';
+        textarea.style.height = 'auto';
+        clearAttachment();
+
+        const container = document.getElementById('chatContainer');
+        const typing = document.createElement('div');
+        typing.className = 'message msg-bot';
+        typing.innerHTML = `<div class="bubble text-muted"><span class="spinner-grow spinner-grow-sm"></span></div>`;
+        container.appendChild(typing);
+        container.scrollTo(0, container.scrollHeight);
+
+        setTimeout(() => {
+            container.removeChild(typing);
+            appendMessage('bot', `This is a simulated response in Live Preview. When you export and run the app, your Phoenix AI agent will reply here!`);
+        }, 1000);
+    }
+    {% else %}
     async function handleLogin() {
         const u = document.getElementById('loginUsername').value;
         const p = document.getElementById('loginPassword').value;
@@ -400,6 +452,7 @@
             }
         } catch (e) { console.error(e); }
     }
+    {% endif %}
 
     function startNewChat() {
         // Technically history is all one session in this simple demo. 
@@ -500,6 +553,7 @@
         container.scrollTo(0, container.scrollHeight);
     }
 
+    {% if not is_preview %}
     async function sendMessage() {
         const text = textarea.value.trim();
         if (!text && !currentFile) return;
@@ -544,6 +598,7 @@
             appendMessage('bot', 'Connection Error.');
         }
     }
+    {% endif %}
 </script>
 </body>
 </html>
