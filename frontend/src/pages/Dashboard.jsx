@@ -8,6 +8,7 @@ function Dashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
   const [newWorkspaceDesc, setNewWorkspaceDesc] = useState('');
+  const [newWorkspaceType, setNewWorkspaceType] = useState('ai_agent');
   const [isCreating, setIsCreating] = useState(false);
   const { token, logout, user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -42,13 +43,14 @@ function Dashboard() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}` 
         },
-        body: JSON.stringify({ name: newWorkspaceName, description: newWorkspaceDesc })
+        body: JSON.stringify({ name: newWorkspaceName, description: newWorkspaceDesc, workspace_type: newWorkspaceType })
       });
       if (response.ok) {
         const data = await response.json();
         setShowCreateModal(false);
         setNewWorkspaceName('');
         setNewWorkspaceDesc('');
+        setNewWorkspaceType('ai_agent');
         navigate(`/workspace/${data.id}`);
       }
     } catch (err) {
@@ -150,16 +152,26 @@ function Dashboard() {
                     e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
-                  <div className="d-flex justify-content-between align-items-start mb-4">
-                    <div className="d-flex align-items-center gap-3">
-                      <div className="rounded p-2 bg-dark" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
-                        <i className="bi bi-cpu text-mint fs-5"></i>
+                    <div className="d-flex justify-content-between align-items-start mb-4">
+                      <div className="d-flex align-items-center gap-3">
+                        <div className="rounded p-2 bg-dark" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
+                          <i className="bi bi-cpu text-mint fs-5"></i>
+                        </div>
+                        <div>
+                          <h4 className="fw-bold m-0 text-white text-truncate" style={{ fontFamily: 'var(--font-title)', maxWidth: '180px' }}>
+                            {ws.name}
+                          </h4>
+                          <span className="badge bg-dark border border-secondary text-muted mt-1" style={{ fontSize: '0.7rem' }}>
+                            {ws.workspace_type === 'ai_chatbot' ? 'AI Chatbot' : 
+                             ws.workspace_type === 'multi_agent' ? 'Multi Agents' : 
+                             ws.workspace_type === 'rag_system' ? 'RAG System' : 
+                             ws.workspace_type === 'computer_vision' ? 'Computer Vision' :
+                             ws.workspace_type === 'vlm' ? 'VLM' :
+                             ws.workspace_type === 'iot' ? 'Smart Agent (IoT)' : 'AI Agent'}
+                          </span>
+                        </div>
                       </div>
-                      <h4 className="fw-bold m-0 text-white text-truncate" style={{ fontFamily: 'var(--font-title)', maxWidth: '180px' }}>
-                        {ws.name}
-                      </h4>
-                    </div>
-                    <button 
+                      <button 
                       className="btn btn-sm btn-link text-danger p-0 m-0 opacity-75" 
                       style={{ zIndex: 2, transition: 'opacity 0.2s' }} 
                       onClick={(e) => deleteWorkspace(ws.id, e)}
@@ -219,6 +231,24 @@ function Dashboard() {
                   autoFocus
                   required
                 />
+              </div>
+
+              <div className="mb-4">
+                <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Workspace Type</label>
+                <select 
+                  className="form-select bg-transparent text-white shadow-none" 
+                  style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: '8px', cursor: 'pointer' }}
+                  value={newWorkspaceType}
+                  onChange={(e) => setNewWorkspaceType(e.target.value)}
+                >
+                  <option value="ai_agent" style={{ background: '#111' }}>AI Agent</option>
+                  <option value="ai_chatbot" style={{ background: '#111' }}>AI Chatbot</option>
+                  <option value="multi_agent" style={{ background: '#111' }}>AI Multi Agents</option>
+                  <option value="rag_system" style={{ background: '#111' }}>RAG System</option>
+                  <option value="computer_vision" style={{ background: '#111' }}>Computer Vision Models</option>
+                  <option value="vlm" style={{ background: '#111' }}>VLMs</option>
+                  <option value="iot" style={{ background: '#111' }}>Smart Agents (IoT)</option>
+                </select>
               </div>
 
               <div className="mb-5">
