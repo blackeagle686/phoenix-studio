@@ -374,7 +374,15 @@ function WorkspaceEditor() {
               PHOENIX <span className="text-info glow-cyan">STUDIO</span>
             </span>
             <span className="ms-3 text-secondary">|</span>
-            <span className="ms-3 text-light fw-semibold">{workspaceName}</span>
+            <span className="ms-3 text-light fw-semibold me-4">{workspaceName}</span>
+            
+            <div className="btn-group" role="group">
+              <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked={workspaceMode === 'chatbot'} onChange={() => setWorkspaceMode('chatbot')} />
+              <label className="btn btn-sm btn-outline-info" htmlFor="btnradio1"><i className="bi bi-chat-left-dots-fill me-1"></i> ChatBot</label>
+
+              <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={workspaceMode === 'agent'} onChange={() => setWorkspaceMode('agent')} />
+              <label className="btn btn-sm btn-outline-info" htmlFor="btnradio2"><i className="bi bi-cpu-fill me-1"></i> Agent</label>
+            </div>
           </a>
 
           <div className="d-flex align-items-center gap-3">
