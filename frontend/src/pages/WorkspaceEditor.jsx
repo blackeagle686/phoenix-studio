@@ -29,7 +29,11 @@ const nodeTypes = {
   local_vlm: CustomNode,
   tts_node: CustomNode,
   stt_node: CustomNode,
-  data_source: CustomNode
+  data_source: CustomNode,
+  api_export: CustomNode,
+  github_repo: CustomNode,
+  data_folder: CustomNode,
+  web_data_api: CustomNode
 };
 
 // Initial nodes
