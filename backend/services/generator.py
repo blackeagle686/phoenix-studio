@@ -9,22 +9,35 @@ def generate_code(graph: dict) -> str:
     nodes = graph.get("nodes", [])
     edges = graph.get("edges", [])
 
-    # Find core nodes
-    agent_node = next((n for n in nodes if n.get("type") == "agent"), None)
-    chatbot_node = next((n for n in nodes if n.get("type") == "chatbot"), None)
-
-    # Determine main target node
-    target_core_node = chatbot_node if chatbot_node else agent_node
-    
-    if not target_core_node:
-        return "# No Core Node (Agent or ChatBot) found in graph."
-
-    target_id = target_core_node.get("id")
-    target_data = target_core_node.get("data", {})
-
-    # Find specialized nodes
+    # Find specialized nodes early
     rag_node = next((n for n in nodes if n.get("type") == "rag"), None)
     api_export_node = next((n for n in nodes if n.get("type") == "api_export"), None)
+    vlm_node = next((n for n in nodes if n.get("type") in ["openai_vlm", "local_vlm"]), None)
+
+    # Multi-Agent Detection
+    agent_nodes = [n for n in nodes if n.get("type") == "agent"]
+    chatbot_node = next((n for n in nodes if n.get("type") == "chatbot"), None)
+
+    use_multi_agent = len(agent_nodes) > 1
+
+    if use_multi_agent:
+        target_core_node = None 
+        target_id = None
+        target_data = {}
+    else:
+        # Determine main target node
+        target_core_node = chatbot_node if chatbot_node else (agent_nodes[0] if agent_nodes else None)
+        
+        # Implicit ChatBot fallback for RAG or VLM
+        if not target_core_node and (rag_node or vlm_node):
+            target_core_node = {"id": "implicit_chatbot", "type": "chatbot", "data": {"name": "ImplicitBot", "session_id": "default"}}
+            chatbot_node = target_core_node
+
+        if not target_core_node:
+            return "# No Core Node (Agent, ChatBot, RAG, or VLM) found in graph.", False, ""
+
+        target_id = target_core_node.get("id")
+        target_data = target_core_node.get("data", {})
 
     # Identify connected sources to the main node
     connected_sources = set()
@@ -74,14 +87,15 @@ def generate_code(graph: dict) -> str:
         if node_id == target_id:
             continue
 
-        if node_id in connected_sources or scan_all:
+        if node_id in connected_sources or scan_all or use_multi_agent:
             if node_type == "openai_llm":
                 use_openai_llm = True
-                openai_llm_data = {
-                    "model": node_data.get("model") or "gpt-4o",
-                    "api_key": node_data.get("api_key") or "your-api-key-here",
-                    "base_url": node_data.get("base_url") or ""
-                }
+                if not openai_llm_data: # only take first
+                    openai_llm_data = {
+                        "model": node_data.get("model") or "gpt-4o",
+                        "api_key": node_data.get("api_key") or "your-api-key-here",
+                        "base_url": node_data.get("base_url") or ""
+                    }
             elif node_type == "local_llm":
                 use_local_llm = True
                 local_llm_data = {
@@ -149,7 +163,25 @@ def generate_code(graph: dict) -> str:
         if target_data.get("tts_enabled"): tts_enabled = True
         if target_data.get("stt_enabled"): stt_enabled = True
 
-    if chatbot_node:
+    if use_multi_agent:
+        template = jinja_env.get_template("multi_agent.py.jinja")
+        agents_data = []
+        for a_node in agent_nodes:
+            a_data = a_node.get("data", {})
+            agents_data.append({
+                "name": a_data.get("name") or "Agent",
+                "llm_type": "openai" if use_openai_llm else "local",
+                "model": openai_llm_data["model"] if use_openai_llm and openai_llm_data else "gpt-4o",
+                "api_key": openai_llm_data["api_key"] if use_openai_llm and openai_llm_data else "",
+                "base_url": openai_llm_data["base_url"] if use_openai_llm and openai_llm_data else ""
+            })
+        rendered_code = template.render(
+            team_name="PhoenixTeam",
+            shared_memory=use_hybrid_memory,
+            agents=agents_data,
+            session_id="default"
+        )
+    elif chatbot_node:
         template = jinja_env.get_template("chatbot.py.jinja")
         rendered_code = template.render(
             is_local=use_local_llm or not use_openai_llm,
