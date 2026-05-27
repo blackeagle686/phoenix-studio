@@ -99,6 +99,13 @@ async def run_agent_graph(graph: Dict[str, Any], user_message: str, session_id: 
                         tts_enabled = True
                     elif node_type == "stt_node":
                         stt_enabled = True
+                    elif node_type == "data_source":
+                        if "data_sources" not in locals():
+                            data_sources = []
+                        data_sources.append(node_data.get("path") or "./data")
+
+            if rag_data and "data_sources" in locals() and data_sources:
+                rag_data["path"] = data_sources if len(data_sources) > 1 else data_sources[0]
 
             if chatbot_node:
                 print("--- Initializing ChatBot from Graph ---")
