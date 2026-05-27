@@ -70,7 +70,7 @@ function start() {
     echo "Celery worker started."
     
     # Start Ngrok
-    nohup ngrok http 8000 --log stdout --log-format logfmt > "$LOGS_DIR/ngrok.log" 2>&1 &
+    nohup ngrok http 8010 --log stdout --log-format logfmt > "$LOGS_DIR/ngrok.log" 2>&1 &
     echo $! > "$LOGS_DIR/ngrok.pid"
     echo "Ngrok started. Use './deploy.sh logs ngrok' to see the forwarding URL."
 }
