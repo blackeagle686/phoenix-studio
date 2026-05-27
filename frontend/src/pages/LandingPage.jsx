@@ -188,10 +188,10 @@ function LandingPage() {
               <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[01]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
-                  <i className="bi bi-hdd-network" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
+                  <i className="bi bi-diagram-3" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
                 </div>
-                <h4 className="text-white mb-3">Context Memory</h4>
-                <p className="text-muted small mb-0">Agents learn what matters across sessions.</p>
+                <h4 className="text-white mb-3">Multi-Agent Teams</h4>
+                <p className="text-muted small mb-0">Orchestrate cooperative teams of specialized agents.</p>
               </div>
             </div>
 
@@ -200,10 +200,10 @@ function LandingPage() {
               <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[02]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
-                  <i className="bi bi-lightning-charge" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
+                  <i className="bi bi-eye" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
                 </div>
-                <h4 className="text-white mb-3">Toolchain Mastery</h4>
-                <p className="text-muted small mb-0">Plug-and-play with your real workflows.</p>
+                <h4 className="text-white mb-3">Computer Vision</h4>
+                <p className="text-muted small mb-0">Equip agents with VLM models to see and analyze visual data.</p>
               </div>
             </div>
 
@@ -212,10 +212,10 @@ function LandingPage() {
               <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[03]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
-                  <i className="bi bi-gear-wide-connected" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
+                  <i className="bi bi-database-check" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
                 </div>
-                <h4 className="text-white mb-3">Symbolic Control</h4>
-                <p className="text-muted small mb-0">Rule the agents, steer the logic.</p>
+                <h4 className="text-white mb-3">RAG Systems</h4>
+                <p className="text-muted small mb-0">Ground agent intelligence with real-time vector retrieval.</p>
               </div>
             </div>
 
@@ -224,10 +224,10 @@ function LandingPage() {
               <div className="feature-card d-flex flex-column h-100" style={{ minHeight: '400px' }}>
                 <span className="text-muted mb-4">[04]</span>
                 <div className="flex-grow-1 d-flex align-items-center justify-content-center opacity-50 my-4">
-                  <i className="bi bi-braces" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
+                  <i className="bi bi-router" style={{ fontSize: '8rem', color: 'rgba(255,255,255,0.1)' }}></i>
                 </div>
-                <h4 className="text-white mb-3">Dynamic APIs</h4>
-                <p className="text-muted small mb-0">Connect, extend, and deploy anywhere.</p>
+                <h4 className="text-white mb-3">IoT & Hardware</h4>
+                <p className="text-muted small mb-0">Deploy smart agents directly to embedded devices and sensors.</p>
               </div>
             </div>
           </div>
