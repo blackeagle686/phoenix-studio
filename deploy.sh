@@ -60,7 +60,7 @@ function start() {
     
     # Start Backend
     cd "$PROJECT_DIR"
-    nohup uvicorn backend.main:app --host 0.0.0.0 --port 8000 > "$LOGS_DIR/backend.log" 2>&1 &
+    nohup uvicorn backend.main:app --host 0.0.0.0 --port 8010 > "$LOGS_DIR/backend.log" 2>&1 &
     echo $! > "$LOGS_DIR/backend.pid"
     echo "Backend started."
 
