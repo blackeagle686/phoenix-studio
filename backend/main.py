@@ -1,12 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.api.routes import router as api_router
-from backend.api.auth import router as auth_router
-from backend.api.workspaces import router as workspaces_router
-from backend.database import engine, Base
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
+from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from backend.core.rate_limit import limiter
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -17,7 +14,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
