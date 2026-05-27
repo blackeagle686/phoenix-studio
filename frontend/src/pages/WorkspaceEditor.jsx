@@ -63,6 +63,7 @@ function WorkspaceEditor() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [workspaceName, setWorkspaceName] = useState('Untitled Workspace');
+  const [workspaceMode, setWorkspaceMode] = useState('chatbot'); // 'chatbot' or 'agent'
   const [isSaving, setIsSaving] = useState(false);
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [globalCode, setGlobalCode] = useState('');
