@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
 import Navbar from '../components/UI/Navbar';
@@ -6,6 +6,22 @@ import Footer from '../components/UI/Footer';
 import heroImg from '../assets/phx-rym-removebg-preview.png';
 function LandingPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    const sections = document.querySelectorAll('.fade-up-section');
+    sections.forEach(sec => observer.observe(sec));
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div style={{ backgroundColor: '#050505', minHeight: '100vh', overflowX: 'hidden' }}>
@@ -53,7 +69,7 @@ function LandingPage() {
       </section>
 
       {/* Logos and Stats Section */}
-      <section className="py-5" style={{ backgroundColor: '#050505' }}>
+      <section className="py-5 fade-up-section" style={{ backgroundColor: '#050505' }}>
         <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
           <p className="text-center text-muted mb-5" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>Trusted by 8,000+ users from</p>
           <div className="d-flex justify-content-between align-items-center flex-wrap gap-4 mb-5 opacity-50" style={{ filter: 'grayscale(100%) brightness(200%)' }}>
@@ -121,7 +137,7 @@ function LandingPage() {
       </section>
 
       {/* Manifesto Section */}
-      <section className="py-5 my-5">
+      <section className="py-5 my-5 fade-up-section">
         <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
           <div className="row">
             <div className="col-12 col-lg-10">
@@ -146,7 +162,7 @@ function LandingPage() {
       </section>
 
       {/* Pillars Section */}
-      <section className="py-5 mb-5">
+      <section className="py-5 mb-5 fade-up-section">
         <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
           <p className="text-mint text-uppercase fw-bold mb-3" style={{ letterSpacing: '1px', fontSize: '0.8rem' }}>OUR PILLARS</p>
           <div className="d-flex justify-content-between align-items-end mb-5">
@@ -212,7 +228,7 @@ function LandingPage() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-5 text-center" style={{ backgroundColor: '#0a0a0d', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section className="py-5 text-center fade-up-section" style={{ backgroundColor: '#0a0a0d', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="container py-5">
           <h2 className="text-white mb-4">Test the mind of our AI agent</h2>
           <p className="text-muted mb-5">Test how our agents think and operate within real tools, without the noise or gimmicks.</p>
