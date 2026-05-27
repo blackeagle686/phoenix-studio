@@ -107,6 +107,14 @@ export const CustomNode = ({ data, type, selected }) => {
       showOutputHandle = true;
       desc = 'Audio input enabled';
       break;
+    case 'data_source':
+      title = 'Data Source';
+      icon = 'bi-cloud-arrow-down-fill';
+      colorVar = '--accent-green';
+      showInputHandle = false;
+      showOutputHandle = true;
+      desc = `Type: ${data.source_type || 'Local Path'}`;
+      break;
     default:
       break;
   }
