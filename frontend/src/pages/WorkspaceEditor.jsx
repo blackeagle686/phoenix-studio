@@ -76,6 +76,12 @@ function WorkspaceEditor() {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
   const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
 
+  // Export Modal State
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportTemplate, setExportTemplate] = useState('raw'); // 'raw', 'full_screen', 'widget'
+  const [exportPrimaryColor, setExportPrimaryColor] = useState('#00f2fe');
+  const [exportTheme, setExportTheme] = useState('dark'); // 'dark' or 'light'
+
   // Retrieve selected node object
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);
 
@@ -231,21 +237,30 @@ function WorkspaceEditor() {
   const handleDownload = async () => {
     setIsGenerating(true);
     try {
+      const payload = {
+        nodes,
+        edges,
+        template_type: exportTemplate,
+        primary_color: exportPrimaryColor,
+        theme_mode: exportTheme
+      };
+      
       const response = await fetch('http://localhost:8000/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nodes, edges })
+        body: JSON.stringify(payload)
       });
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `${selectedNode?.data?.name || 'phoenix_agent'}.zip`;
+        link.download = `${selectedNode?.data?.name || 'phoenix_app'}.zip`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
+        setShowExportModal(false);
       } else {
         alert('Failed to package project archive.');
       }
@@ -384,7 +399,7 @@ function WorkspaceEditor() {
                 padding: '8px 20px',
                 boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)',
               }}
-              onClick={handleDownload}
+              onClick={() => setShowExportModal(true)}
               disabled={isGenerating}
             >
               {isGenerating ? (
@@ -570,6 +585,96 @@ function WorkspaceEditor() {
           )}
         </div>
       </div>
+
+      {/* Export Modal */}
+      {showExportModal && (
+        <div 
+          className="position-absolute w-100 h-100 d-flex justify-content-center align-items-center" 
+          style={{ top: 0, left: 0, zIndex: 1050, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)' }}
+        >
+          <div className="glass-panel p-4" style={{ width: '600px', borderRadius: '15px' }}>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h4 className="text-white m-0">Export Web App</h4>
+              <button className="btn-close btn-close-white" onClick={() => setShowExportModal(false)}></button>
+            </div>
+            
+            <div className="mb-4">
+              <label className="form-label text-info fw-bold">Select Template</label>
+              <div className="d-flex gap-3">
+                <div 
+                  className={`card text-white flex-fill cursor-pointer ${exportTemplate === 'full_screen' ? 'border-info bg-primary' : 'bg-dark border-secondary'}`}
+                  style={{ cursor: 'pointer', transition: 'all 0.2s' }}
+                  onClick={() => setExportTemplate('full_screen')}
+                >
+                  <div className="card-body text-center py-4">
+                    <i className="bi bi-window-fullscreen fs-1 mb-2"></i>
+                    <h6>Full Screen Chat</h6>
+                    <small className="text-muted d-block mt-2">Like ChatGPT</small>
+                  </div>
+                </div>
+                <div 
+                  className={`card text-white flex-fill cursor-pointer ${exportTemplate === 'widget' ? 'border-info bg-primary' : 'bg-dark border-secondary'}`}
+                  style={{ cursor: 'pointer', transition: 'all 0.2s' }}
+                  onClick={() => setExportTemplate('widget')}
+                >
+                  <div className="card-body text-center py-4">
+                    <i className="bi bi-chat-square-dots-fill fs-1 mb-2"></i>
+                    <h6>Floating Widget</h6>
+                    <small className="text-muted d-block mt-2">Like Intercom</small>
+                  </div>
+                </div>
+                <div 
+                  className={`card text-white flex-fill cursor-pointer ${exportTemplate === 'raw' ? 'border-info bg-primary' : 'bg-dark border-secondary'}`}
+                  style={{ cursor: 'pointer', transition: 'all 0.2s' }}
+                  onClick={() => setExportTemplate('raw')}
+                >
+                  <div className="card-body text-center py-4">
+                    <i className="bi bi-filetype-py fs-1 mb-2"></i>
+                    <h6>Raw Python</h6>
+                    <small className="text-muted d-block mt-2">SDK Script Only</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {exportTemplate !== 'raw' && (
+              <div className="row mb-4">
+                <div className="col-6">
+                  <label className="form-label text-info fw-bold">Theme Mode</label>
+                  <select 
+                    className="form-select bg-dark border-secondary text-white" 
+                    value={exportTheme} 
+                    onChange={(e) => setExportTheme(e.target.value)}
+                  >
+                    <option value="dark">Dark Mode</option>
+                    <option value="light">Light Mode</option>
+                  </select>
+                </div>
+                <div className="col-6">
+                  <label className="form-label text-info fw-bold">Primary Color</label>
+                  <div className="d-flex align-items-center gap-2">
+                    <input 
+                      type="color" 
+                      className="form-control form-control-color bg-dark border-secondary p-1" 
+                      value={exportPrimaryColor} 
+                      title="Choose your color"
+                      onChange={(e) => setExportPrimaryColor(e.target.value)}
+                    />
+                    <span className="text-white font-monospace">{exportPrimaryColor}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top border-secondary">
+              <button className="btn btn-outline-secondary text-white" onClick={() => setShowExportModal(false)}>Cancel</button>
+              <button className="btn btn-info glow-cyan px-4" onClick={handleDownload} disabled={isGenerating}>
+                {isGenerating ? <span className="spinner-border spinner-border-sm"></span> : 'Export ZIP'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
