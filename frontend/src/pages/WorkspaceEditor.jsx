@@ -79,7 +79,7 @@ function WorkspaceEditor() {
   const [runLogs, setRunLogs] = useState('');
   const [runResponse, setRunResponse] = useState('');
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
+  const [showPropertiesModal, setShowPropertiesModal] = useState(false);
 
   // Export Modal State
   const [showExportModal, setShowExportModal] = useState(false);
@@ -142,6 +142,7 @@ function WorkspaceEditor() {
   // Track select events
   const onNodeClick = useCallback((event, node) => {
     setSelectedNodeId(node.id);
+    setShowPropertiesModal(true);
   }, []);
 
   const onPaneClick = useCallback(() => {
