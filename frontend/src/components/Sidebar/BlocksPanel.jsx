@@ -3,6 +3,7 @@ import React from 'react';
 const blockCategories = [
   {
     title: 'Core Engine',
+    mode: 'agent',
     items: [
       {
         type: 'agent',
@@ -16,6 +17,7 @@ const blockCategories = [
   },
   {
     title: 'ChatBot Framework',
+    mode: 'chatbot',
     items: [
       {
         type: 'chatbot',
@@ -31,23 +33,15 @@ const blockCategories = [
         icon: 'bi-database-fill-gear',
         color: 'var(--accent-purple)',
         desc: 'Document ingestion configuration.',
-        defaultData: { path: './data', chunk_size: 500, chunk_overlap: 50 }
+        defaultData: { chunk_size: 500, chunk_overlap: 50 }
       },
       {
-        type: 'openai_vlm',
-        name: 'OpenAI VLM',
-        icon: 'bi-eye-fill',
-        color: 'var(--accent-purple)',
-        desc: 'GPT-4o Vision or similar.',
-        defaultData: { model: 'gpt-4o', api_key: '' }
-      },
-      {
-        type: 'local_vlm',
-        name: 'Local VLM',
-        icon: 'bi-eye-fill',
+        type: 'api_export',
+        name: 'API Export',
+        icon: 'bi-cloud-arrow-up-fill',
         color: 'var(--accent-blue)',
-        desc: 'Local Vision Model (Qwen2-VL).',
-        defaultData: { model: 'Qwen/Qwen2-VL-7B-Instruct' }
+        desc: 'Export ChatBot as headless API.',
+        defaultData: { api_key: 'my_secure_api_key' }
       },
       {
         type: 'tts_node',
@@ -64,23 +58,46 @@ const blockCategories = [
         color: 'var(--accent-pink)',
         desc: 'Audio Input Configuration.',
         defaultData: { enabled: true }
+      }
+    ]
+  },
+  {
+    title: 'Data Sources',
+    mode: 'chatbot',
+    items: [
+      {
+        type: 'github_repo',
+        name: 'GitHub Repo',
+        icon: 'bi-github',
+        color: 'var(--accent-green)',
+        desc: 'Ingest GitHub repository.',
+        defaultData: { url: 'https://github.com/blackeagle686/phx-quantum' }
       },
       {
-        type: 'data_source',
-        name: 'Data Source',
-        icon: 'bi-cloud-arrow-down-fill',
+        type: 'data_folder',
+        name: 'Data Folder',
+        icon: 'bi-folder-fill',
         color: 'var(--accent-green)',
-        desc: 'Load Local, GitHub, or API data.',
-        defaultData: { source_type: 'Local Path', path: './data' }
+        desc: 'Ingest local folder.',
+        defaultData: { path: './data' }
+      },
+      {
+        type: 'web_data_api',
+        name: 'Web Data API',
+        icon: 'bi-globe2',
+        color: 'var(--accent-green)',
+        desc: 'Ingest JSON from API.',
+        defaultData: { url: 'https://api.example.com/data' }
       }
     ]
   },
   {
     title: 'Cognitive Models',
+    mode: 'shared',
     items: [
       {
         type: 'openai_llm',
-        name: 'OpenAI LLM',
+        name: 'LLM Provider',
         icon: 'bi-cloud-lightning-fill',
         color: 'var(--accent-purple)',
         desc: 'GPT-4o or remote endpoints.',
@@ -93,11 +110,28 @@ const blockCategories = [
         color: 'var(--accent-blue)',
         desc: 'Local Qwen models.',
         defaultData: { model: 'Qwen/Qwen2-1.5B-Instruct' }
+      },
+      {
+        type: 'openai_vlm',
+        name: 'OpenAI VLM',
+        icon: 'bi-eye-fill',
+        color: 'var(--accent-purple)',
+        desc: 'GPT-4o Vision or similar.',
+        defaultData: { model: 'gpt-4o', api_key: '' }
+      },
+      {
+        type: 'local_vlm',
+        name: 'Local VLM',
+        icon: 'bi-eye-fill',
+        color: 'var(--accent-blue)',
+        desc: 'Local Vision Model.',
+        defaultData: { model: 'Qwen/Qwen2-VL-7B-Instruct' }
       }
     ]
   },
   {
     title: 'Memory Storage',
+    mode: 'agent',
     items: [
       {
         type: 'hybrid_memory',
@@ -110,7 +144,8 @@ const blockCategories = [
     ]
   },
   {
-    title: 'Default & Custom Tools',
+    title: 'Tools',
+    mode: 'agent',
     items: [
       {
         type: 'default_tool',
@@ -143,7 +178,7 @@ const blockCategories = [
   }
 ];
 
-export const BlocksPanel = ({ onAddNode }) => {
+export const BlocksPanel = ({ onAddNode, workspaceMode = 'chatbot' }) => {
   return (
     <div 
       className="glass-panel p-3 h-100 d-flex flex-column"
@@ -157,7 +192,9 @@ export const BlocksPanel = ({ onAddNode }) => {
         <i className="bi bi-grid-fill text-info glow-cyan"></i> Blocks Panel
       </h5>
       
-      {blockCategories.map((cat, idx) => (
+      {blockCategories
+        .filter(cat => cat.mode === 'shared' || cat.mode === workspaceMode)
+        .map((cat, idx) => (
         <div key={idx} className="mb-4 text-start">
           <span 
             className="text-uppercase font-title text-muted fw-bold d-block mb-2" 
