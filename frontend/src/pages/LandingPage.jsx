@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
 import Navbar from '../components/UI/Navbar';
 import Footer from '../components/UI/Footer';
+import heroImg from '../assets/phx-rym-removebg-preview.png';
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -13,8 +14,8 @@ function LandingPage() {
       <section className="position-relative vh-100 d-flex flex-column justify-content-center" style={{ paddingTop: '80px' }}>
         <NetworkCanvas />
         <div className="container-fluid px-5 position-relative z-1" style={{ maxWidth: '1400px' }}>
-          <div className="row">
-            <div className="col-12 col-lg-8">
+          <div className="row align-items-center">
+            <div className="col-12 col-lg-7">
               <h1 className="hero-text mb-4">
                 BUILD AGENTS<br />THAT THINK LIKE<br />HUMANS
               </h1>
@@ -29,6 +30,10 @@ function LandingPage() {
                   EXPLORE S. ENGINE
                 </button>
               </div>
+            </div>
+            <div className="col-12 col-lg-5 d-none d-lg-flex justify-content-center position-relative">
+              <div className="position-absolute w-100 h-100 rounded-circle" style={{ background: 'radial-gradient(circle, rgba(114,239,221,0.15) 0%, rgba(0,0,0,0) 70%)', filter: 'blur(40px)', zIndex: 0, top: '10%' }}></div>
+              <img src={heroImg} alt="Phoenix AI Agent" className="hero-image-3d position-relative z-1" style={{ width: '130%', maxWidth: '800px', objectFit: 'contain', marginLeft: '50px' }} />
             </div>
           </div>
         </div>
