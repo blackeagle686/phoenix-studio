@@ -132,7 +132,13 @@ async def run_agent_graph(graph: Dict[str, Any], user_message: str, session_id: 
                     builder.with_rag(
                         data_to_insight_path=rag_data.get("path", "./data"),
                         chunk_size=rag_data.get("chunk_size", 500),
-                        chunk_overlap=rag_data.get("chunk_overlap", 50)
+                        chunk_overlap=rag_data.get("chunk_overlap", 50),
+                        reranking=rag_data.get("reranking", False),
+                        fast_rag=rag_data.get("fast_rag", False),
+                        hybrid_search=rag_data.get("hybrid_search", False),
+                        cag=rag_data.get("cag", False),
+                        threshold=rag_data.get("threshold", 0.5),
+                        device=rag_data.get("device", "cpu")
                     )
                     
                 if openai_llm_data:
