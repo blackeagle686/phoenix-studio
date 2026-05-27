@@ -549,32 +549,44 @@ function WorkspaceEditor() {
         <div className="d-flex justify-content-between align-items-center px-4 py-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
           <span className="fw-semibold text-white d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', fontSize: '0.95rem' }}>
             {drawerTab === 'code' ? (
-              <><i className="bi bi-file-earmark-code text-mint"></i> generated_project / main.py</>
+              <><i className="bi bi-file-earmark-code text-mint"></i> Python Project Source</>
             ) : (
               <><i className="bi bi-terminal-fill text-mint"></i> Live Execution Console</>
             )}
           </span>
-          {drawerTab === 'code' && (
-            <button 
-              className="btn btn-sm btn-outline-mint"
-              style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '6px' }}
-              onClick={() => {
-                navigator.clipboard.writeText(globalCode);
-                alert('Code copied to clipboard!');
-              }}
-            >
-              Copy Code
-            </button>
-          )}
         </div>
         
         {/* Drawer Content */}
-        <div className="flex-grow-1 p-0 overflow-hidden d-flex" style={{ background: drawerTab === 'run' ? 'linear-gradient(135deg, rgba(8,8,16,1) 0%, rgba(105,48,195,0.15) 50%, rgba(114,239,221,0.1) 100%)' : '#07070e' }}>
+        <div className="flex-grow-1 p-0 overflow-hidden d-flex" style={{ background: 'linear-gradient(135deg, rgba(8,8,16,1) 0%, rgba(105,48,195,0.15) 50%, rgba(114,239,221,0.1) 100%)' }}>
           {drawerTab === 'code' ? (
-            <div className="p-3 w-100 h-100 overflow-auto">
-              <pre className="m-0 font-monospace text-mint" style={{ fontSize: '0.85rem', lineHeight: '1.5' }}>
-                {globalCode || '# Assemble the graph to generate code preview'}
-              </pre>
+            <div className="d-flex w-100 h-100 p-4">
+              <div className="w-100 h-100 d-flex flex-column text-start glass-panel overflow-hidden" style={{ borderRadius: '16px', backgroundColor: 'rgba(5, 5, 5, 0.8)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                 <div className="px-4 py-3 border-bottom d-flex justify-content-between align-items-center" style={{ borderColor: 'rgba(255,255,255,0.05)', backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                   <div className="d-flex align-items-center gap-3">
+                     <div className="d-flex gap-1">
+                       <div className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: '#ff5f56' }}></div>
+                       <div className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: '#ffbd2e' }}></div>
+                       <div className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: '#27c93f' }}></div>
+                     </div>
+                     <span className="text-muted font-monospace" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}><i className="bi bi-filetype-py text-mint me-2"></i>main.py</span>
+                   </div>
+                   <button 
+                     className="btn btn-sm btn-outline-mint d-flex align-items-center gap-2"
+                     style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: '6px' }}
+                     onClick={() => {
+                       navigator.clipboard.writeText(globalCode);
+                       alert('Code copied to clipboard!');
+                     }}
+                   >
+                     <i className="bi bi-clipboard"></i> Copy
+                   </button>
+                 </div>
+                 <div className="flex-grow-1 overflow-auto p-4 m-0 position-relative">
+                   <pre className="m-0 font-monospace text-light" style={{ fontSize: '0.9rem', lineHeight: '1.6', opacity: 0.9 }}>
+                     {globalCode || '# Assemble the graph to generate code preview'}
+                   </pre>
+                 </div>
+              </div>
             </div>
           ) : (
             <div className="d-flex w-100 h-100 p-4 gap-4">
