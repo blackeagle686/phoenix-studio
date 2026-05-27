@@ -11,7 +11,7 @@ class GraphPayload(BaseModel):
     nodes: List[Dict[str, Any]]
     edges: List[Dict[str, Any]]
     template_type: Optional[str] = "raw"
-    primary_color: Optional[str] = "#00f2fe"
+    gradient_colors: Optional[List[str]] = ["#ff00cc", "#333399"]
     theme_mode: Optional[str] = "dark"
 
 @router.get("/status")
@@ -28,7 +28,7 @@ async def preview_code(payload: GraphPayload):
 
 class TemplatePreviewPayload(BaseModel):
     template_type: str
-    primary_color: str
+    gradient_colors: List[str]
     theme_mode: str
 
 @router.post("/preview_template")
@@ -40,7 +40,7 @@ async def preview_template(payload: TemplatePreviewPayload):
         html_template_name = "full_screen.html.jinja" if payload.template_type == "full_screen" else "widget.html.jinja"
         html_template = jinja_env.get_template(html_template_name)
         index_html_content = html_template.render(
-            primary_color=payload.primary_color,
+            gradient_colors=payload.gradient_colors,
             theme_mode=payload.theme_mode
         )
         return {"html": index_html_content}
