@@ -15,6 +15,59 @@ const blockCategories = [
     ]
   },
   {
+    title: 'ChatBot Framework',
+    items: [
+      {
+        type: 'chatbot',
+        name: 'ChatBot Core',
+        icon: 'bi-chat-left-dots-fill',
+        color: 'var(--accent-cyan)',
+        desc: 'Main chatbot orchestrator.',
+        defaultData: { session_id: 'default', system_prompt: 'You are a helpful assistant.', security_mode: 'standard', tts_enabled: false, stt_enabled: false }
+      },
+      {
+        type: 'rag',
+        name: 'RAG Pipeline',
+        icon: 'bi-database-fill-gear',
+        color: 'var(--accent-purple)',
+        desc: 'Document ingestion configuration.',
+        defaultData: { path: './data', chunk_size: 500, chunk_overlap: 50 }
+      },
+      {
+        type: 'openai_vlm',
+        name: 'OpenAI VLM',
+        icon: 'bi-eye-fill',
+        color: 'var(--accent-purple)',
+        desc: 'GPT-4o Vision or similar.',
+        defaultData: { model: 'gpt-4o', api_key: '' }
+      },
+      {
+        type: 'local_vlm',
+        name: 'Local VLM',
+        icon: 'bi-eye-fill',
+        color: 'var(--accent-blue)',
+        desc: 'Local Vision Model (Qwen2-VL).',
+        defaultData: { model: 'Qwen/Qwen2-VL-7B-Instruct' }
+      },
+      {
+        type: 'tts_node',
+        name: 'Text-to-Speech',
+        icon: 'bi-megaphone-fill',
+        color: 'var(--accent-pink)',
+        desc: 'Audio Output Configuration.',
+        defaultData: { enabled: true }
+      },
+      {
+        type: 'stt_node',
+        name: 'Speech-to-Text',
+        icon: 'bi-mic-fill',
+        color: 'var(--accent-pink)',
+        desc: 'Audio Input Configuration.',
+        defaultData: { enabled: true }
+      }
+    ]
+  },
+  {
     title: 'Cognitive Models',
     items: [
       {
