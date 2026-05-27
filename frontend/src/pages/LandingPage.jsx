@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import BirdCanvas from '../components/UI/BirdCanvas';
 import TransparentVideo from '../components/UI/TransparentVideo';
 import Navbar from '../components/UI/Navbar';
 import Footer from '../components/UI/Footer';
