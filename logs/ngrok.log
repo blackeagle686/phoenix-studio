@@ -7,3 +7,5 @@ t=2026-05-27T23:49:57+0300 lvl=warn msg="failed to check for update" obj=updater
 t=2026-05-27T23:50:02+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
 t=2026-05-27T23:50:02+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
 t=2026-05-27T23:50:04+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
+t=2026-05-27T23:50:06+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
+t=2026-05-27T23:50:10+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to send authentication request: failed to fetch CRL. errors encountered: asn1: structure error: length too large"
