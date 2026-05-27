@@ -12,17 +12,28 @@
   --primary-glow: rgba(0, 242, 254, 0.15);
   --secondary-glow: rgba(161, 140, 209, 0.15);
 
-  --accent-cyan: #00f2fe;
-  --accent-purple: #9b51e0;
-  --accent-blue: #4facfe;
-  --accent-pink: #f093fb;
-  --accent-green: #00ff87;
-  --accent-mint: #4ade80;
-  /* PHOENIX-AI green style */
+  /* User Palette */
+  --palette-1: #7400b8;
+  --palette-2: #6930c3;
+  --palette-3: #5e60ce;
+  --palette-4: #5390d9;
+  --palette-5: #4ea8de;
+  --palette-6: #48bfe3;
+  --palette-7: #56cfe1;
+  --palette-8: #64dfdf;
+  --palette-9: #72efdd;
+  --palette-10: #80ffdb;
 
-  --text-primary: #f5f6fa;
-  --text-muted: #8e90a6;
-  --text-dim: #5c5d73;
+  --accent-cyan: var(--palette-6);
+  --accent-purple: var(--palette-2);
+  --accent-blue: var(--palette-4);
+  --accent-pink: #f093fb;
+  --accent-green: var(--palette-10);
+  --accent-mint: var(--palette-9); /* Using the vibrant turquoise/mint from palette */
+
+  --text-primary: #ffffff;
+  --text-muted: #b0b2c3; /* Brightened for dark mode readability */
+  --text-dim: #7a7c93;
 
   --border-glow: rgba(0, 242, 254, 0.3);
   --border-muted: rgba(255, 255, 255, 0.05);
@@ -160,6 +171,12 @@ h6 {
   color: var(--accent-mint) !important;
 }
 
+.text-gradient {
+  background: linear-gradient(90deg, var(--palette-6), var(--palette-10));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .bg-mint {
   background-color: var(--accent-mint) !important;
 }
@@ -196,15 +213,16 @@ h6 {
 }
 
 .btn-mint {
-  background-color: var(--accent-mint);
-  color: #000;
+  background: linear-gradient(135deg, var(--palette-7), var(--palette-10));
+  color: #080810 !important;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   border: none;
   border-radius: 4px;
   padding: 12px 24px;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(114, 239, 221, 0.2);
 }
 
 .btn-mint:hover {
