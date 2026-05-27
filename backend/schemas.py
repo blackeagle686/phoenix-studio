@@ -16,9 +16,26 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    first_name: str
+    last_name: str
+    email: str
+    location: Optional[str] = None
+    phone_number: Optional[str] = None
+
+class UserUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[str] = None
+    location: Optional[str] = None
+    phone_number: Optional[str] = None
 
 class UserResponse(UserBase):
     id: int
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    location: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[str] = None
     
     class Config:
         from_attributes = True
