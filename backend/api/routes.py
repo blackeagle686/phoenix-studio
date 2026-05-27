@@ -3,7 +3,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 from backend.services.generator import generate_code
-from backend.services.packager import package_project
+from backend.services.packager import package_project, jinja_env
 
 router = APIRouter()
 
@@ -25,6 +25,27 @@ async def preview_code(payload: GraphPayload):
         return {"code": code}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
+
+class TemplatePreviewPayload(BaseModel):
+    template_type: str
+    primary_color: str
+    theme_mode: str
+
+@router.post("/preview_template")
+async def preview_template(payload: TemplatePreviewPayload):
+    try:
+        if payload.template_type == "raw":
+            return {"html": "<h3>Raw Python Template has no visual UI.</h3>"}
+            
+        html_template_name = "full_screen.html.jinja" if payload.template_type == "full_screen" else "widget.html.jinja"
+        html_template = jinja_env.get_template(html_template_name)
+        index_html_content = html_template.render(
+            primary_color=payload.primary_color,
+            theme_mode=payload.theme_mode
+        )
+        return {"html": index_html_content}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Template preview failed: {str(e)}")
 
 @router.post("/generate")
 async def generate_project(payload: GraphPayload):
