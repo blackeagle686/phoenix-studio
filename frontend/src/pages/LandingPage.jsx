@@ -153,7 +153,7 @@ function LandingPage() {
             <div className="col-12 col-lg-6 mb-5 mb-lg-0 pe-lg-5">
               <div className="position-relative">
                 <div className="position-absolute w-100 h-100 rounded-4" style={{ background: 'linear-gradient(135deg, rgba(114,239,221,0.2) 0%, rgba(155,81,224,0.1) 100%)', filter: 'blur(30px)', zIndex: 0 }}></div>
-                <img src={flowExampleImg} alt="Workflow Example" className="img-fluid rounded-4 position-relative z-1" style={{ border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }} />
+                <img src={flowExampleImg} alt="Workflow Example" className="img-fluid rounded-4 position-relative z-1 hover-scale-img" style={{ border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }} />
               </div>
             </div>
             <div className="col-12 col-lg-6 ps-lg-4">

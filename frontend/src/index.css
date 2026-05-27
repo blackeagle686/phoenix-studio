@@ -107,3 +107,16 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Image Hover Scale Animation */
+.hover-scale-img {
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease !important;
+  will-change: transform, box-shadow;
+  cursor: pointer;
+}
+
+.hover-scale-img:hover {
+  transform: scale(1.06) perspective(1000px) translateZ(20px);
+  box-shadow: 0 30px 60px rgba(114, 239, 221, 0.25) !important;
+  z-index: 10;
+}
