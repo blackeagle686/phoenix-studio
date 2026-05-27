@@ -13,3 +13,4 @@ redis
 torch 
 sentence-transformers
 phx-ashborn
+chromadb

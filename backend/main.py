@@ -4,6 +4,9 @@ from backend.api.routes import router as api_router
 from backend.api.auth import router as auth_router
 from backend.api.workspaces import router as workspaces_router
 from backend.database import engine, Base
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -13,6 +16,10 @@ app = FastAPI(
     description="Backend API for visual agent code generation and management",
     version="1.0.0"
 )
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Configure CORS for local development
 app.add_middleware(
