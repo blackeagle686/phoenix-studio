@@ -1,0 +1,87 @@
+import asyncio
+{% if use_openai_llm %}from phoenix.services.llm.openai import OpenAILLM
+{% endif %}{% if use_local_llm %}from phoenix.services.llm.local import LocalLLM
+{% endif %}{% if use_hybrid_memory %}from phoenix.framework.agent.memory.hybrid import HybridMemory
+{% endif %}from phoenix.framework.agent import Agent
+
+# Tool Imports
+{% for tool in default_tools %}
+{% if tool.type == 'web_search' %}from phoenix.framework.agent.tools.search import WebSearchTool
+{% elif tool.type == 'command' %}from phoenix.framework.agent.tools.code import CommandExecutionTool
+{% endif %}
+{% endfor %}
+{% if custom_tools %}from phoenix.framework.agent.tools.base import tool
+{% endif %}
+
+# Custom Tools Definitions
+{% for tool in custom_tools %}
+{{ tool.code }}
+{% endfor %}
+
+async def main():
+    print("Initializing Agent components...")
+    
+    # Initialize LLM
+    {% if openai_llm %}
+    llm = OpenAILLM(
+        model="{{ openai_llm.model }}",
+        api_key="{{ openai_llm.api_key }}"{% if openai_llm.base_url %},
+        base_url="{{ openai_llm.base_url }}"{% endif %}
+    )
+    {% elif local_llm %}
+    llm = LocalLLM()
+    {% else %}
+    # Fallback to default OpenAILLM
+    llm = None
+    {% endif %}
+
+    # Initialize Memory
+    {% if use_hybrid_memory %}
+    memory = HybridMemory()
+    {% else %}
+    memory = None
+    {% endif %}
+
+    # Initialize Agent Core
+    agent = Agent(
+        llm=llm,
+        memory=memory
+    )
+
+    # Register Tools
+    {% for tool in default_tools %}
+    {% if tool.type == 'web_search' %}
+    agent.register_tool(WebSearchTool())
+    {% elif tool.type == 'command' %}
+    agent.register_tool(CommandExecutionTool())
+    {% endif %}
+    {% endfor %}
+    
+    {% for tool in custom_tools %}
+    agent.register_tool({{ tool.name }})
+    {% endfor %}
+
+    print("\n🔥 Agent '{{ agent_name }}' is ready! Type 'exit' to quit.")
+    
+    session_id = "{{ session_id }}"
+    while True:
+        try:
+            # Inline input check
+            user_input = input("\nYou: ")
+            if user_input.strip().lower() == "exit":
+                print("Exiting. Goodbye!")
+                break
+            if not user_input.strip():
+                continue
+                
+            print("Agent is thinking...")
+            response = await agent.run(user_input, session_id=session_id)
+            print(f"\nAgent: {response}")
+        except KeyboardInterrupt:
+            print("\nExiting. Goodbye!")
+            break
+        except Exception as e:
+            print(f"\nError: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
