@@ -68,7 +68,12 @@ function App() {
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [globalCode, setGlobalCode] = useState('');
   const [showCodeDrawer, setShowCodeDrawer] = useState(true);
+  const [drawerTab, setDrawerTab] = useState('code'); // 'code' or 'run'
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [runMessage, setRunMessage] = useState('What is the weather in New York?');
+  const [runLogs, setRunLogs] = useState('');
+  const [runResponse, setRunResponse] = useState('');
 
   // Retrieve selected node object
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);
@@ -202,6 +207,35 @@ function App() {
     }
   };
 
+  const handleRun = async () => {
+    if (!runMessage.trim()) return;
+    setIsExecuting(true);
+    setRunLogs('Running...\n');
+    setRunResponse('');
+    try {
+      const response = await fetch('http://localhost:8000/api/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          graph: { nodes, edges },
+          message: runMessage,
+          session_id: selectedNode?.data?.session_id || 'default'
+        })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setRunLogs(data.logs);
+        setRunResponse(data.response);
+      } else {
+        setRunLogs(`Error: HTTP ${response.status}`);
+      }
+    } catch (err) {
+      setRunLogs(`Request Failed: ${err.message}`);
+    } finally {
+      setIsExecuting(false);
+    }
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       {/* Background visual layers */}
@@ -237,17 +271,41 @@ function App() {
 
           <div className="d-flex align-items-center gap-3">
             <button
-              className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+              className={`btn btn-sm ${showCodeDrawer && drawerTab === 'code' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
               style={{
                 borderRadius: '8px',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: 'var(--text-primary)',
+                background: showCodeDrawer && drawerTab === 'code' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
               }}
-              onClick={() => setShowCodeDrawer(!showCodeDrawer)}
+              onClick={() => {
+                if (showCodeDrawer && drawerTab === 'code') setShowCodeDrawer(false);
+                else {
+                  setShowCodeDrawer(true);
+                  setDrawerTab('code');
+                }
+              }}
             >
-              <i className={`bi ${showCodeDrawer ? 'bi-eye-slash-fill' : 'bi-eye-fill'}`}></i>
-              {showCodeDrawer ? 'Hide Code' : 'Show Code'}
+              <i className="bi bi-code-square"></i>
+              Show Code
+            </button>
+
+            <button
+              className={`btn btn-sm ${showCodeDrawer && drawerTab === 'run' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
+              style={{
+                borderRadius: '8px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: showCodeDrawer && drawerTab === 'run' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
+              }}
+              onClick={() => {
+                if (showCodeDrawer && drawerTab === 'run') setShowCodeDrawer(false);
+                else {
+                  setShowCodeDrawer(true);
+                  setDrawerTab('run');
+                }
+              }}
+            >
+              <i className="bi bi-play-fill text-success"></i>
+              Run Flow
             </button>
 
             <button
@@ -346,28 +404,68 @@ function App() {
         {/* Header of Drawer */}
         <div className="d-flex justify-content-between align-items-center px-4 py-2" style={{ borderBottom: '1px solid var(--glass-border)' }}>
           <span className="fw-semibold text-white d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', fontSize: '0.95rem' }}>
-            <i className="bi bi-file-earmark-code text-info glow-cyan"></i> generated_project / main.py
+            {drawerTab === 'code' ? (
+              <><i className="bi bi-file-earmark-code text-info glow-cyan"></i> generated_project / main.py</>
+            ) : (
+              <><i className="bi bi-terminal-fill text-success glow-green"></i> Live Execution Console</>
+            )}
           </span>
-          <button 
-            className="btn btn-sm btn-outline-info"
-            style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '6px' }}
-            onClick={() => {
-              navigator.clipboard.writeText(globalCode);
-              alert('Code copied to clipboard!');
-            }}
-          >
-            Copy Code
-          </button>
+          {drawerTab === 'code' && (
+            <button 
+              className="btn btn-sm btn-outline-info"
+              style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '6px' }}
+              onClick={() => {
+                navigator.clipboard.writeText(globalCode);
+                alert('Code copied to clipboard!');
+              }}
+            >
+              Copy Code
+            </button>
+          )}
         </div>
         
-        {/* Code Content */}
-        <div className="flex-grow-1 p-3 overflow-auto" style={{ background: '#07070e' }}>
-          <pre 
-            className="m-0 font-monospace text-info"
-            style={{ fontSize: '0.8rem', lineHeight: '1.4' }}
-          >
-            {globalCode || '# Assemble the graph to generate code preview'}
-          </pre>
+        {/* Drawer Content */}
+        <div className="flex-grow-1 p-0 overflow-hidden d-flex" style={{ background: '#07070e' }}>
+          {drawerTab === 'code' ? (
+            <div className="p-3 w-100 h-100 overflow-auto">
+              <pre className="m-0 font-monospace text-info" style={{ fontSize: '0.8rem', lineHeight: '1.4' }}>
+                {globalCode || '# Assemble the graph to generate code preview'}
+              </pre>
+            </div>
+          ) : (
+            <div className="d-flex w-100 h-100">
+               {/* Left: Chat input & Response */}
+               <div className="d-flex flex-column border-end border-secondary w-50 p-3 h-100">
+                  <div className="d-flex gap-2 mb-3">
+                     <input 
+                       type="text" 
+                       className="form-control bg-dark border-secondary text-white" 
+                       placeholder="Enter message for agent..."
+                       value={runMessage}
+                       onChange={e => setRunMessage(e.target.value)}
+                       onKeyDown={e => { if(e.key === 'Enter') handleRun(); }}
+                     />
+                     <button className="btn btn-success d-flex align-items-center" onClick={handleRun} disabled={isExecuting}>
+                       {isExecuting ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-send-fill"></i>}
+                     </button>
+                  </div>
+                  <div className="flex-grow-1 overflow-auto bg-dark p-2 rounded border border-secondary text-white text-start" style={{fontSize: '0.85rem'}}>
+                     {runResponse ? (
+                       <div><strong className="text-info">Agent:</strong><br/><pre style={{whiteSpace: 'pre-wrap', fontFamily: 'inherit'}}>{runResponse}</pre></div>
+                     ) : (
+                       <span className="text-muted">Agent response will appear here...</span>
+                     )}
+                  </div>
+               </div>
+               {/* Right: Logs */}
+               <div className="w-50 p-3 h-100 d-flex flex-column text-start">
+                 <span className="text-muted mb-2 fw-bold" style={{fontSize: '0.75rem'}}>Execution Logs</span>
+                 <pre className="flex-grow-1 overflow-auto bg-dark p-2 rounded border border-secondary text-success font-monospace" style={{fontSize: '0.75rem'}}>
+                    {runLogs || 'Waiting for execution...'}
+                 </pre>
+               </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
