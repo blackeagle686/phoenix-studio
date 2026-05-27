@@ -34,3 +34,21 @@ async def generate_project(payload: GraphPayload):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Packaging failed: {str(e)}")
+
+class RunPayload(BaseModel):
+    graph: GraphPayload
+    message: str
+    session_id: Optional[str] = "default"
+
+@router.post("/run")
+async def run_flow(payload: RunPayload):
+    try:
+        from backend.services.runner import run_agent_graph
+        result = await run_agent_graph(
+            graph=payload.graph.model_dump(),
+            user_message=payload.message,
+            session_id=payload.session_id
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Run failed: {str(e)}")
