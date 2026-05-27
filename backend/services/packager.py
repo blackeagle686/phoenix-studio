@@ -9,7 +9,7 @@ jinja_env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
 def package_project(graph: dict) -> io.BytesIO:
     # 1. Generate core logic
-    bot_py_content = generate_code(graph)
+    bot_py_content, export_as_api, api_export_key = generate_code(graph)
 
     # 2. Extract configuration
     template_type = graph.get("template_type", "raw")
@@ -49,7 +49,10 @@ def package_project(graph: dict) -> io.BytesIO:
             
             # backend/server.py
             server_template = jinja_env.get_template("fastapi_server.py.jinja")
-            server_py_content = server_template.render()
+            server_py_content = server_template.render(
+                export_as_api=export_as_api,
+                api_export_key=api_export_key
+            )
             zip_file.writestr("backend/server.py", server_py_content)
             
             # frontend/index.html
