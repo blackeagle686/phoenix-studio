@@ -9,6 +9,11 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+    first_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
+    location = Column(String, nullable=True)
+    phone_number = Column(String, nullable=True)
+    email = Column(String, unique=True, index=True, nullable=True)
 
     workspaces = relationship("Workspace", back_populates="owner")
 
