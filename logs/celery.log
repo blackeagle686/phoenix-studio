@@ -1,0 +1,139 @@
+ 
+ -------------- celery@tlk-Vostro-3500 v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Linux-6.17.0-23-generic-x86_64-with-glibc2.39 2026-05-27 23:42:59
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         phoenix_tasks:0x7b1bc8d99790
+- ** ---------- .> transport:   redis://localhost:6379/0
+- ** ---------- .> results:     redis://localhost:6379/0
+- *** --- * --- .> concurrency: 8 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . cleanup_stale_sessions
+  . process_agent_training
+
+[2026-05-27 23:43:01,624: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2026-05-27 23:43:02,112: INFO/MainProcess] mingle: searching for neighbors
+[2026-05-27 23:43:04,079: INFO/MainProcess] mingle: all alone
+[2026-05-27 23:43:06,471: INFO/MainProcess] celery@tlk-Vostro-3500 ready.
+[2026-05-27 23:43:06,503: ERROR/MainProcess] Received unregistered task of type 'infra.celery.tasks.send_webhook_task'.
+The message has been ignored and discarded.
+
+Did you remember to import the module containing this task?
+Or maybe you're using relative imports?
+
+Please see
+https://docs.celeryq.dev/en/latest/internals/protocol.html
+for more information.
+
+The full contents of the message body was:
+b'[[{"userId": "user-lost-456", "postId": 1001, "matchedResults": [{"userId": "user-found-123", "postId": 1002, "confidenceScore": 0.85}]}], {}, {"callbacks": null, "errbacks": null, "chain": null, "chord": null}]' (211b)
+
+The full contents of the message headers:
+{'lang': 'py', 'task': 'infra.celery.tasks.send_webhook_task', 'id': '363b3b18-e95f-4ac0-ac80-44aeeb5c49ee', 'shadow': None, 'eta': None, 'expires': None, 'group': None, 'group_index': None, 'retries': 0, 'timelimit': [None, None], 'root_id': '363b3b18-e95f-4ac0-ac80-44aeeb5c49ee', 'parent_id': None, 'argsrepr': "({'userId': 'user-lost-456', 'postId': 1001, 'matchedResults': [{...}]},)", 'kwargsrepr': '{}', 'origin': 'gen55221@tlk-Vostro-3500', 'ignore_result': False, 'replaced_task_nesting': 0, 'stamped_headers': None, 'stamps': {}}
+
+The delivery info for this task is:
+{'exchange': '', 'routing_key': 'celery'}
+Traceback (most recent call last):
+  File "/home/tlk/Documents/Projects/my_AItools/phoenix-studio/venv/lib/python3.12/site-packages/celery/worker/consumer/consumer.py", line 668, in on_task_received
+    strategy = strategies[type_]
+               ~~~~~~~~~~^^^^^^^
+KeyError: 'infra.celery.tasks.send_webhook_task'
+[2026-05-27 23:43:07,029: ERROR/MainProcess] Received unregistered task of type 'infra.celery.tasks.send_webhook_task'.
+The message has been ignored and discarded.
+
+Did you remember to import the module containing this task?
+Or maybe you're using relative imports?
+
+Please see
+https://docs.celeryq.dev/en/latest/internals/protocol.html
+for more information.
+
+The full contents of the message body was:
+b'[[{"userId": "user-lost-456", "postId": 1001, "matchedResults": [{"userId": "user-found-123", "postId": 1002, "confidenceScore": 0.85}]}], {}, {"callbacks": null, "errbacks": null, "chain": null, "chord": null}]' (211b)
+
+The full contents of the message headers:
+{'lang': 'py', 'task': 'infra.celery.tasks.send_webhook_task', 'id': '3923877d-55fb-4cd8-9964-6f542884d41e', 'shadow': None, 'eta': None, 'expires': None, 'group': None, 'group_index': None, 'retries': 0, 'timelimit': [None, None], 'root_id': '3923877d-55fb-4cd8-9964-6f542884d41e', 'parent_id': None, 'argsrepr': "({'userId': 'user-lost-456', 'postId': 1001, 'matchedResults': [{...}]},)", 'kwargsrepr': '{}', 'origin': 'gen60905@tlk-Vostro-3500', 'ignore_result': False, 'replaced_task_nesting': 0, 'stamped_headers': None, 'stamps': {}}
+
+The delivery info for this task is:
+{'exchange': '', 'routing_key': 'celery'}
+Traceback (most recent call last):
+  File "/home/tlk/Documents/Projects/my_AItools/phoenix-studio/venv/lib/python3.12/site-packages/celery/worker/consumer/consumer.py", line 668, in on_task_received
+    strategy = strategies[type_]
+               ~~~~~~~~~~^^^^^^^
+KeyError: 'infra.celery.tasks.send_webhook_task'
+[2026-05-27 23:43:07,042: ERROR/MainProcess] Received unregistered task of type 'infra.celery.tasks.send_webhook_task'.
+The message has been ignored and discarded.
+
+Did you remember to import the module containing this task?
+Or maybe you're using relative imports?
+
+Please see
+https://docs.celeryq.dev/en/latest/internals/protocol.html
+for more information.
+
+The full contents of the message body was:
+b'[[{"userId": "user-lost-456", "postId": 1001, "matchedResults": [{"userId": "user-found-123", "postId": 1002, "confidenceScore": 0.85}]}], {}, {"callbacks": null, "errbacks": null, "chain": null, "chord": null}]' (211b)
+
+The full contents of the message headers:
+{'lang': 'py', 'task': 'infra.celery.tasks.send_webhook_task', 'id': '5a5f6c06-1003-402c-91d7-e614384041c0', 'shadow': None, 'eta': None, 'expires': None, 'group': None, 'group_index': None, 'retries': 0, 'timelimit': [None, None], 'root_id': '5a5f6c06-1003-402c-91d7-e614384041c0', 'parent_id': None, 'argsrepr': "({'userId': 'user-lost-456', 'postId': 1001, 'matchedResults': [{...}]},)", 'kwargsrepr': '{}', 'origin': 'gen60982@tlk-Vostro-3500', 'ignore_result': False, 'replaced_task_nesting': 0, 'stamped_headers': None, 'stamps': {}}
+
+The delivery info for this task is:
+{'exchange': '', 'routing_key': 'celery'}
+Traceback (most recent call last):
+  File "/home/tlk/Documents/Projects/my_AItools/phoenix-studio/venv/lib/python3.12/site-packages/celery/worker/consumer/consumer.py", line 668, in on_task_received
+    strategy = strategies[type_]
+               ~~~~~~~~~~^^^^^^^
+KeyError: 'infra.celery.tasks.send_webhook_task'
+[2026-05-27 23:43:07,045: ERROR/MainProcess] Received unregistered task of type 'infra.celery.tasks.send_webhook_task'.
+The message has been ignored and discarded.
+
+Did you remember to import the module containing this task?
+Or maybe you're using relative imports?
+
+Please see
+https://docs.celeryq.dev/en/latest/internals/protocol.html
+for more information.
+
+The full contents of the message body was:
+b'[[{"userId": "user-lost-456", "postId": 1001, "matchedResults": [{"userId": "user-found-123", "postId": 1002, "confidenceScore": 0.85}]}], {}, {"callbacks": null, "errbacks": null, "chain": null, "chord": null}]' (211b)
+
+The full contents of the message headers:
+{'lang': 'py', 'task': 'infra.celery.tasks.send_webhook_task', 'id': '036e3c2d-5e8c-4707-a919-833f652fc36f', 'shadow': None, 'eta': None, 'expires': None, 'group': None, 'group_index': None, 'retries': 0, 'timelimit': [None, None], 'root_id': '036e3c2d-5e8c-4707-a919-833f652fc36f', 'parent_id': None, 'argsrepr': "({'userId': 'user-lost-456', 'postId': 1001, 'matchedResults': [{...}]},)", 'kwargsrepr': '{}', 'origin': 'gen62158@tlk-Vostro-3500', 'ignore_result': False, 'replaced_task_nesting': 0, 'stamped_headers': None, 'stamps': {}}
+
+The delivery info for this task is:
+{'exchange': '', 'routing_key': 'celery'}
+Traceback (most recent call last):
+  File "/home/tlk/Documents/Projects/my_AItools/phoenix-studio/venv/lib/python3.12/site-packages/celery/worker/consumer/consumer.py", line 668, in on_task_received
+    strategy = strategies[type_]
+               ~~~~~~~~~~^^^^^^^
+KeyError: 'infra.celery.tasks.send_webhook_task'
+[2026-05-27 23:43:07,049: ERROR/MainProcess] Received unregistered task of type 'infra.celery.tasks.send_webhook_task'.
+The message has been ignored and discarded.
+
+Did you remember to import the module containing this task?
+Or maybe you're using relative imports?
+
+Please see
+https://docs.celeryq.dev/en/latest/internals/protocol.html
+for more information.
+
+The full contents of the message body was:
+b'[[{"userId": "user-lost-456", "postId": 1001, "matchedResults": [{"userId": "user-found-123", "postId": 1002, "confidenceScore": 0.85}]}], {}, {"callbacks": null, "errbacks": null, "chain": null, "chord": null}]' (211b)
+
+The full contents of the message headers:
+{'lang': 'py', 'task': 'infra.celery.tasks.send_webhook_task', 'id': '46f15abb-1114-474a-ad48-c09b9b87b105', 'shadow': None, 'eta': None, 'expires': None, 'group': None, 'group_index': None, 'retries': 0, 'timelimit': [None, None], 'root_id': '46f15abb-1114-474a-ad48-c09b9b87b105', 'parent_id': None, 'argsrepr': "({'userId': 'user-lost-456', 'postId': 1001, 'matchedResults': [{...}]},)", 'kwargsrepr': '{}', 'origin': 'gen62369@tlk-Vostro-3500', 'ignore_result': False, 'replaced_task_nesting': 0, 'stamped_headers': None, 'stamps': {}}
+
+The delivery info for this task is:
+{'exchange': '', 'routing_key': 'celery'}
+Traceback (most recent call last):
+  File "/home/tlk/Documents/Projects/my_AItools/phoenix-studio/venv/lib/python3.12/site-packages/celery/worker/consumer/consumer.py", line 668, in on_task_received
+    strategy = strategies[type_]
+               ~~~~~~~~~~^^^^^^^
+KeyError: 'infra.celery.tasks.send_webhook_task'
