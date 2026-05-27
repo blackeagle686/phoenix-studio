@@ -64,6 +64,14 @@ const blockCategories = [
         color: 'var(--accent-pink)',
         desc: 'Audio Input Configuration.',
         defaultData: { enabled: true }
+      },
+      {
+        type: 'data_source',
+        name: 'Data Source',
+        icon: 'bi-cloud-arrow-down-fill',
+        color: 'var(--accent-green)',
+        desc: 'Load Local, GitHub, or API data.',
+        defaultData: { source_type: 'Local Path', path: './data' }
       }
     ]
   },
