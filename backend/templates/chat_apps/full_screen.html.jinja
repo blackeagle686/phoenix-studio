@@ -3,21 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Assistant</title>
+    <title>AI Chat Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
         :root {
-            --primary-color: {{ primary_color }};
+            --gradient-bg: linear-gradient(135deg, {{ gradient_colors | join(', ') }});
+            --glass-bg: rgba(var(--bs-body-bg-rgb), 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
         body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             height: 100vh;
+            margin: 0;
+            background: var(--gradient-bg);
+            background-size: 400% 400%;
+            animation: gradientAnim 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @keyframes gradientAnim {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Glassmorphism App Container */
+        .app-container {
+            width: 95vw;
+            height: 90vh;
+            background-color: var(--bs-body-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Views */
+        .view-section {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+        .view-section.active { display: flex; }
+
+        /* Landing & Auth Views */
+        .center-box {
+            margin: auto;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            padding: 2rem;
+        }
+        .gradient-text {
+            background: var(--gradient-bg);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+        .btn-gradient {
+            background: var(--gradient-bg);
+            border: none;
+            color: white;
+            transition: opacity 0.2s;
+        }
+        .btn-gradient:hover { opacity: 0.9; color: white; }
+
+        /* Chat UI */
+        .sidebar {
+            width: 300px;
+            background-color: var(--bs-tertiary-bg);
+            border-right: 1px solid var(--bs-border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        .chat-area {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             background-color: var(--bs-body-bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .chat-container {
+        
+        .history-item {
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            background: var(--bs-secondary-bg);
+            transition: background 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.9rem;
+        }
+        .history-item:hover { background: var(--bs-border-color); }
+        
+        /* Messages */
+        .messages-container {
             flex-grow: 1;
             overflow-y: auto;
             padding: 2rem 10%;
@@ -32,34 +119,30 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .message-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 1.2rem;
-            color: white;
-        }
-        .user-icon { background-color: #6c757d; }
-        .bot-icon { background-color: var(--primary-color); }
         
-        .message-content {
-            background-color: var(--bs-tertiary-bg);
+        .message.msg-user { flex-direction: row-reverse; }
+        .bubble {
             padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
+            border-radius: 1.2rem;
             max-width: 80%;
             line-height: 1.6;
         }
-        
+        .msg-user .bubble {
+            background: var(--gradient-bg);
+            color: white;
+            border-bottom-right-radius: 0.2rem;
+        }
+        .msg-bot .bubble {
+            background-color: var(--bs-tertiary-bg);
+            border-bottom-left-radius: 0.2rem;
+        }
+
+        /* Input Area */
         .input-area {
             padding: 1.5rem 10%;
-            background-color: var(--bs-body-bg);
             border-top: 1px solid var(--bs-border-color);
+            background: var(--bs-body-bg);
         }
-        
         .input-box {
             background-color: var(--bs-tertiary-bg);
             border: 1px solid var(--bs-border-color);
@@ -69,7 +152,6 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
         .input-box textarea {
             border: none;
             background: transparent;
@@ -79,40 +161,12 @@
             padding: 0.5rem;
             max-height: 150px;
         }
+        .input-box textarea:focus { outline: none; }
         
-        .input-box textarea:focus {
-            outline: none;
-            box-shadow: none;
-        }
+        .btn-action { background: transparent; border: none; color: var(--bs-secondary-color); font-size: 1.2rem; transition: 0.2s; }
+        .btn-action:hover { color: var(--bs-body-color); }
+        .btn-send { background: var(--gradient-bg); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
         
-        .btn-action {
-            background: transparent;
-            border: none;
-            color: var(--bs-secondary-color);
-            font-size: 1.2rem;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.2s;
-        }
-        .btn-action:hover {
-            background-color: var(--bs-secondary-bg);
-            color: var(--primary-color);
-        }
-        .btn-send {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.2s;
-        }
-        .btn-send:hover { opacity: 0.8; color: white; }
-        
-        /* Attachment Preview */
         .attachment-preview {
             display: none;
             margin-bottom: 0.5rem;
@@ -123,147 +177,301 @@
             gap: 0.5rem;
             font-size: 0.9rem;
         }
-        .attachment-preview img {
-            max-width: 50px;
-            border-radius: 4px;
-        }
-        .attachment-preview .remove-btn {
-            margin-left: auto;
-            cursor: pointer;
-            color: var(--bs-danger);
-        }
-        .recording-pulse {
-            animation: pulse 1.5s infinite;
-            color: #dc3545 !important;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
+        
+        .recording-pulse { animation: pulse 1.5s infinite; color: #dc3545 !important; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div class="chat-container" id="chatContainer">
-        <div class="text-center my-4 text-muted">
-            <h4>How can I help you today?</h4>
+<div class="app-container">
+
+    <!-- View: Landing -->
+    <div id="view-landing" class="view-section active flex-column justify-content-center">
+        <div class="center-box">
+            <i class="bi bi-robot fs-1 gradient-text mb-3"></i>
+            <h1 class="display-5 fw-bold gradient-text">AI Platform</h1>
+            <p class="text-muted lead mb-4">Empowering your workflows with next-gen intelligence.</p>
+            <div class="d-grid gap-2">
+                <button class="btn btn-gradient btn-lg rounded-pill" onclick="switchView('view-login')">Login</button>
+                <button class="btn btn-outline-secondary btn-lg rounded-pill" onclick="switchView('view-register')">Register</button>
+            </div>
         </div>
     </div>
 
-    <div class="input-area">
-        <div class="attachment-preview" id="attachmentPreview">
-            <div id="previewIcon"></div>
-            <span id="previewName"></span>
-            <i class="bi bi-x-circle remove-btn" onclick="clearAttachment()"></i>
-        </div>
-        
-        <div class="input-box">
-            <button class="btn-action" title="Upload Image/File" onclick="document.getElementById('fileInput').click()">
-                <i class="bi bi-paperclip"></i>
-            </button>
-            <input type="file" id="fileInput" class="d-none" onchange="handleFileSelect(event)">
-            
-            <button class="btn-action" id="recordBtn" title="Voice Record" onclick="toggleRecording()">
-                <i class="bi bi-mic"></i>
-            </button>
-
-            <textarea id="messageInput" rows="1" placeholder="Message the AI..."></textarea>
-            
-            <button class="btn-send" onclick="sendMessage()">
-                <i class="bi bi-send-fill"></i>
-            </button>
+    <!-- View: Login -->
+    <div id="view-login" class="view-section flex-column justify-content-center">
+        <div class="center-box">
+            <h3 class="fw-bold mb-4">Welcome Back</h3>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="loginUsername" placeholder="Username">
+                <label>Username</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="loginPassword" placeholder="Password">
+                <label>Password</label>
+            </div>
+            <button class="btn btn-gradient w-100 rounded-pill mb-3 py-2" onclick="handleLogin()">Login</button>
+            <button class="btn btn-link text-muted" onclick="switchView('view-landing')">Back to Home</button>
         </div>
     </div>
+
+    <!-- View: Register -->
+    <div id="view-register" class="view-section flex-column justify-content-center">
+        <div class="center-box">
+            <h3 class="fw-bold mb-4">Create Account</h3>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="regUsername" placeholder="Username">
+                <label>Username</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="regPassword" placeholder="Password">
+                <label>Password</label>
+            </div>
+            <button class="btn btn-gradient w-100 rounded-pill mb-3 py-2" onclick="handleRegister()">Register</button>
+            <button class="btn btn-link text-muted" onclick="switchView('view-landing')">Back to Home</button>
+        </div>
+    </div>
+
+    <!-- View: Chat -->
+    <div id="view-chat" class="view-section">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="m-0 fw-bold gradient-text">AI Studio</h5>
+                <button class="btn btn-sm btn-outline-secondary border-0" onclick="logout()" title="Logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            </div>
+            
+            <button class="btn btn-gradient w-100 mb-4 rounded-pill" onclick="startNewChat()">
+                <i class="bi bi-plus-lg me-2"></i> New Chat
+            </button>
+            
+            <h6 class="text-muted small text-uppercase fw-bold mb-3">History</h6>
+            <div id="historyList" class="flex-grow-1 overflow-y-auto pe-2">
+                <div class="text-center text-muted small mt-4">Loading history...</div>
+            </div>
+            
+            <div class="mt-auto pt-3 border-top border-secondary text-center">
+                <span class="badge bg-secondary rounded-pill" id="usernameDisplay">User</span>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="messages-container" id="chatContainer">
+                <div class="text-center my-5 text-muted">
+                    <i class="bi bi-robot fs-1 gradient-text mb-3"></i>
+                    <h4>How can I help you today?</h4>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="attachment-preview" id="attachmentPreview">
+                    <div id="previewIcon"></div>
+                    <span id="previewName"></span>
+                    <i class="bi bi-x-circle text-danger ms-auto cursor-pointer" onclick="clearAttachment()"></i>
+                </div>
+                
+                <div class="input-box">
+                    <button class="btn-action" title="Upload" onclick="document.getElementById('fileInput').click()">
+                        <i class="bi bi-paperclip"></i>
+                    </button>
+                    <input type="file" id="fileInput" class="d-none" onchange="handleFileSelect(event)">
+                    
+                    <button class="btn-action" id="recordBtn" title="Voice" onclick="toggleRecording()">
+                        <i class="bi bi-mic"></i>
+                    </button>
+
+                    <textarea id="messageInput" rows="1" placeholder="Message AI..."></textarea>
+                    
+                    <button class="btn-send" onclick="sendMessage()">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <script>
+    let token = localStorage.getItem('ai_token');
+    let username = localStorage.getItem('ai_user');
+
+    // UI Routing
+    function switchView(viewId) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+    }
+
+    // Init
+    if (token) {
+        switchView('view-chat');
+        document.getElementById('usernameDisplay').textContent = username;
+        loadHistory();
+    } else {
+        switchView('view-landing');
+    }
+
+    function logout() {
+        localStorage.removeItem('ai_token');
+        localStorage.removeItem('ai_user');
+        token = null;
+        switchView('view-landing');
+    }
+
+    async function handleLogin() {
+        const u = document.getElementById('loginUsername').value;
+        const p = document.getElementById('loginPassword').value;
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                token = data.access_token;
+                username = data.username;
+                localStorage.setItem('ai_token', token);
+                localStorage.setItem('ai_user', username);
+                document.getElementById('usernameDisplay').textContent = username;
+                switchView('view-chat');
+                loadHistory();
+            } else { alert(data.detail); }
+        } catch (e) { alert("Login failed"); }
+    }
+
+    async function handleRegister() {
+        const u = document.getElementById('regUsername').value;
+        const p = document.getElementById('regPassword').value;
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                token = data.access_token;
+                username = data.username;
+                localStorage.setItem('ai_token', token);
+                localStorage.setItem('ai_user', username);
+                document.getElementById('usernameDisplay').textContent = username;
+                switchView('view-chat');
+                loadHistory();
+            } else { alert(data.detail); }
+        } catch (e) { alert("Registration failed"); }
+    }
+
+    async function loadHistory() {
+        try {
+            const res = await fetch('/api/history', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            const list = document.getElementById('historyList');
+            const chat = document.getElementById('chatContainer');
+            
+            if (data.history && data.history.length > 0) {
+                list.innerHTML = '';
+                chat.innerHTML = '';
+                // Group by day for history list (simplified: just show user messages in sidebar)
+                const userMsgs = data.history.filter(m => m.role === 'user').reverse();
+                userMsgs.forEach(m => {
+                    list.innerHTML += `<div class="history-item"><i class="bi bi-chat-left-text me-2"></i> ${m.content.substring(0, 25)}...</div>`;
+                });
+                if(userMsgs.length === 0) list.innerHTML = `<div class="text-center text-muted small mt-4">No past chats</div>`;
+                
+                // Render chat
+                data.history.forEach(m => {
+                    appendMessage(m.role, m.content);
+                });
+            } else {
+                list.innerHTML = `<div class="text-center text-muted small mt-4">No past chats</div>`;
+                chat.innerHTML = `
+                    <div class="text-center my-5 text-muted">
+                        <i class="bi bi-robot fs-1 gradient-text mb-3"></i>
+                        <h4>How can I help you today?</h4>
+                    </div>
+                `;
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    function startNewChat() {
+        // Technically history is all one session in this simple demo. 
+        // In a real app we'd create a new session_id. 
+        document.getElementById('chatContainer').innerHTML = `
+            <div class="text-center my-5 text-muted">
+                <i class="bi bi-robot fs-1 gradient-text mb-3"></i>
+                <h4>Started a new chat segment.</h4>
+            </div>
+        `;
+    }
+
+    // --- Chat Logic ---
     let currentFile = null;
     let mediaRecorder = null;
     let audioChunks = [];
     let isRecording = false;
 
-    // Auto-resize textarea
     const textarea = document.getElementById('messageInput');
     textarea.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
     });
-    
-    // Enter to send
     textarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
     });
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
         if (!file) return;
         currentFile = file;
-        
-        const preview = document.getElementById('attachmentPreview');
         const icon = document.getElementById('previewIcon');
-        const name = document.getElementById('previewName');
-        
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                icon.innerHTML = `<img src="${e.target.result}" alt="preview">`;
-            }
+            reader.onload = e => icon.innerHTML = `<img src="${e.target.result}" style="max-width:40px; border-radius:4px;">`;
             reader.readAsDataURL(file);
         } else {
             icon.innerHTML = `<i class="bi bi-file-earmark-text"></i>`;
         }
-        
-        name.textContent = file.name;
-        preview.style.display = 'flex';
+        document.getElementById('previewName').textContent = file.name;
+        document.getElementById('attachmentPreview').style.display = 'flex';
     }
 
     function clearAttachment() {
         currentFile = null;
         document.getElementById('fileInput').value = '';
         document.getElementById('attachmentPreview').style.display = 'none';
-        
-        // Also clear any recorded audio
         audioChunks = [];
     }
 
     async function toggleRecording() {
         const btn = document.getElementById('recordBtn');
         const icon = btn.querySelector('i');
-        
         if (!isRecording) {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
-                
-                mediaRecorder.ondataavailable = e => {
-                    audioChunks.push(e.data);
-                };
-                
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
                 mediaRecorder.onstop = () => {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                     currentFile = new File([audioBlob], "recording.webm", { type: 'audio/webm' });
-                    
-                    const preview = document.getElementById('attachmentPreview');
                     document.getElementById('previewIcon').innerHTML = `<i class="bi bi-mic-fill text-danger"></i>`;
-                    document.getElementById('previewName').textContent = "Voice Recording (Ready to send)";
-                    preview.style.display = 'flex';
-                    
-                    // Stop tracks to release mic
-                    stream.getTracks().forEach(track => track.stop());
+                    document.getElementById('previewName').textContent = "Voice Recording";
+                    document.getElementById('attachmentPreview').style.display = 'flex';
+                    stream.getTracks().forEach(t => t.stop());
                 };
-                
                 audioChunks = [];
                 mediaRecorder.start();
                 isRecording = true;
                 btn.classList.add('recording-pulse');
                 icon.className = 'bi bi-stop-fill';
-                
-            } catch (err) {
-                alert("Microphone access denied or not available.");
-            }
+            } catch (err) { alert("Microphone access denied."); }
         } else {
             mediaRecorder.stop();
             isRecording = false;
@@ -274,44 +482,20 @@
 
     function playTTS(text) {
         if ('speechSynthesis' in window) {
-            // Strip markdown before speaking
-            const cleanText = text.replace(/[*#_`]/g, '');
-            const utterance = new SpeechSynthesisUtterance(cleanText);
+            const utterance = new SpeechSynthesisUtterance(text.replace(/[*#_`]/g, ''));
             window.speechSynthesis.speak(utterance);
         }
     }
 
-    function appendMessage(role, content, attachmentHtml = '') {
+    function appendMessage(role, content) {
         const container = document.getElementById('chatContainer');
         const div = document.createElement('div');
-        div.className = 'message';
+        div.className = `message ${role === 'user' ? 'msg-user' : 'msg-bot'}`;
         
-        const isUser = role === 'user';
-        const iconClass = isUser ? 'user-icon' : 'bot-icon';
-        const iconName = isUser ? 'bi-person' : 'bi-robot';
-        const name = isUser ? 'You' : 'AI Assistant';
-        
-        // Very basic markdown formatting for display
-        let formattedContent = content
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>');
-            
-        let ttsBtn = '';
-        if (!isUser) {
-            ttsBtn = `<button class="btn btn-sm btn-link text-muted p-0 ms-2" onclick="playTTS(this.dataset.text)" data-text="${content.replace(/"/g, '&quot;')}"><i class="bi bi-volume-up"></i> Play</button>`;
-        }
+        let tts = role === 'bot' ? `<button class="btn btn-sm btn-link text-muted p-0 ms-2" onclick="playTTS(this.dataset.text)" data-text="${content.replace(/"/g, '&quot;')}"><i class="bi bi-volume-up"></i></button>` : '';
+        let fmt = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
 
-        div.innerHTML = `
-            <div class="message-icon ${iconClass}"><i class="bi ${iconName}"></i></div>
-            <div class="message-content">
-                <div class="fw-bold mb-1" style="font-size: 0.85rem; color: var(--bs-secondary-color)">
-                    ${name} ${ttsBtn}
-                </div>
-                ${attachmentHtml}
-                <div>${formattedContent}</div>
-            </div>
-        `;
-        
+        div.innerHTML = `<div class="bubble">${fmt} ${tts}</div>`;
         container.appendChild(div);
         container.scrollTo(0, container.scrollHeight);
     }
@@ -320,69 +504,46 @@
         const text = textarea.value.trim();
         if (!text && !currentFile) return;
 
-        // UI updates
-        let attachmentHtml = '';
-        if (currentFile) {
-            attachmentHtml = `<div class="mb-2 text-info small"><i class="bi bi-paperclip"></i> Attached: ${currentFile.name}</div>`;
-        }
-        
-        appendMessage('user', text || '(Audio/File Message)', attachmentHtml);
-        
+        appendMessage('user', text || (currentFile ? `[Attached: ${currentFile.name}]` : ''));
         textarea.value = '';
         textarea.style.height = 'auto';
         
-        // Prepare FormData for FastAPI backend
         const formData = new FormData();
         if (text) formData.append('text', text);
-        
         if (currentFile) {
-            if (currentFile.type.startsWith('audio/')) {
-                formData.append('audio', currentFile);
-            } else {
-                formData.append('image', currentFile); // Treats all non-audio as image for this demo
-            }
+            if (currentFile.type.startsWith('audio/')) formData.append('audio', currentFile);
+            else formData.append('image', currentFile);
         }
-        
         clearAttachment();
 
-        // Show typing indicator
         const container = document.getElementById('chatContainer');
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'message typing-indicator';
-        typingDiv.innerHTML = `
-            <div class="message-icon bot-icon"><i class="bi bi-robot"></i></div>
-            <div class="message-content text-muted">
-                <div class="spinner-grow spinner-grow-sm" role="status"></div>
-                <div class="spinner-grow spinner-grow-sm" role="status"></div>
-                <div class="spinner-grow spinner-grow-sm" role="status"></div>
-            </div>
-        `;
-        container.appendChild(typingDiv);
+        const typing = document.createElement('div');
+        typing.className = 'message msg-bot';
+        typing.innerHTML = `<div class="bubble text-muted"><span class="spinner-grow spinner-grow-sm"></span></div>`;
+        container.appendChild(typing);
         container.scrollTo(0, container.scrollHeight);
 
         try {
-            const response = await fetch('/api/chat', {
+            const res = await fetch('/api/chat', {
                 method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
             });
-            const data = await response.json();
+            const data = await res.json();
+            container.removeChild(typing);
             
-            // Remove typing indicator
-            container.removeChild(typingDiv);
-            
+            if (res.status === 401) { logout(); return; }
             if (data.status === 'success') {
-                const botResponse = typeof data.response === 'string' ? data.response : JSON.stringify(data.response);
-                appendMessage('assistant', botResponse);
-            } else {
-                appendMessage('assistant', `Error: ${data.message}`);
-            }
+                const bRes = typeof data.response === 'string' ? data.response : JSON.stringify(data.response);
+                appendMessage('bot', bRes);
+                // Also update history list in sidebar
+                loadHistory(); 
+            } else { appendMessage('bot', `Error: ${data.message}`); }
         } catch (err) {
-            container.removeChild(typingDiv);
-            appendMessage('assistant', `Connection Error: Could not reach the server.`);
+            container.removeChild(typing);
+            appendMessage('bot', 'Connection Error.');
         }
     }
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
