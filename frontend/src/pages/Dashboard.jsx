@@ -201,7 +201,9 @@ function Dashboard() {
         </div>
       </div>
 
-      <Footer />
+      <div className="position-relative" style={{ zIndex: 10 }}>
+        <Footer />
+      </div>
 
       {/* Create Workspace Modal */}
       {showCreateModal && (
