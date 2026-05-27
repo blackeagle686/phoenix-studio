@@ -199,7 +199,7 @@ export const BlocksPanel = ({ onAddNode, workspaceMode = 'chatbot' }) => {
         <p className="text-muted small m-0 mt-2">Click to add logic nodes to canvas.</p>
       </div>
       
-      <div className="p-3 flex-grow-1 overflow-auto" style={{ paddingBottom: '100px' }}>
+      <div className="p-3 pe-4 flex-grow-1 overflow-auto" style={{ paddingBottom: '100px' }}>
         {blockCategories
           .filter(cat => cat.mode === 'shared' || cat.mode === workspaceMode)
           .map((cat, idx) => (
