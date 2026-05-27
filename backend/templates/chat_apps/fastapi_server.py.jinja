@@ -1,15 +1,90 @@
 import os
 import io
-import mimetypes
-from fastapi import FastAPI, Request, File, UploadFile, Form
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+import time
+import jwt
+from fastapi import FastAPI, Request, File, UploadFile, Form, Depends, HTTPException, status
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional
+from typing import Optional, List
+from pydantic import BaseModel
+from datetime import datetime, timedelta
+
+# Database imports
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from passlib.context import CryptContext
+
+# Bot import
 from bot import builder  # Generated bot.py
 
-app = FastAPI(title="Phoenix AI Chat App")
+# --- Database Setup ---
+DATABASE_URL = "sqlite:///./chat_app.db"
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
-# Disable CORS restrictions for local app usage
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    role = Column(String) # 'user' or 'bot'
+    content = Column(Text)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+Base.metadata.create_all(bind=engine)
+
+# --- Security Setup ---
+SECRET_KEY = "phoenix_super_secret_key_change_in_production"
+ALGORITHM = "HS256"
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(days=7)
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+async def get_current_user(request: Request, db: Session = Depends(get_db)):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    token = auth_header.split(" ")[1]
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+        
+    user = db.query(User).filter(User.id == int(user_id)).first()
+    if user is None:
+        raise HTTPException(status_code=401, detail="User not found")
+    return user
+
+# --- FastAPI App ---
+app = FastAPI(title="Phoenix AI Full-Stack Chat App")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,7 +93,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the ChatBot instance from the generated builder
 bot = builder.build()
 
 @app.on_event("startup")
@@ -33,29 +107,75 @@ async def serve_frontend():
     with open(index_path, "r", encoding="utf-8") as f:
         return f.read()
 
+# --- Auth Endpoints ---
+class AuthSchema(BaseModel):
+    username: str
+    password: str
+
+@app.post("/api/auth/register")
+def register(user_data: AuthSchema, db: Session = Depends(get_db)):
+    if db.query(User).filter(User.username == user_data.username).first():
+        raise HTTPException(status_code=400, detail="Username already registered")
+    
+    new_user = User(
+        username=user_data.username,
+        hashed_password=get_password_hash(user_data.password)
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    
+    access_token = create_access_token(data={"sub": str(new_user.id)})
+    return {"access_token": access_token, "token_type": "bearer", "username": new_user.username}
+
+@app.post("/api/auth/login")
+def login(user_data: AuthSchema, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == user_data.username).first()
+    if not user or not verify_password(user_data.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    
+    access_token = create_access_token(data={"sub": str(user.id)})
+    return {"access_token": access_token, "token_type": "bearer", "username": user.username}
+
+# --- Chat Endpoints ---
+@app.get("/api/history")
+def get_history(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    messages = db.query(ChatMessage).filter(ChatMessage.user_id == current_user.id).order_by(ChatMessage.timestamp.asc()).all()
+    return {"history": [{"role": m.role, "content": m.content, "timestamp": m.timestamp} for m in messages]}
+
 @app.post("/api/chat")
 async def chat_endpoint(
     text: Optional[str] = Form(None),
     image: Optional[UploadFile] = File(None),
-    audio: Optional[UploadFile] = File(None)
+    audio: Optional[UploadFile] = File(None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     try:
         image_path = None
         audio_path = None
         
-        # Save uploaded image temporarily if provided
+        # Save user message to DB
+        user_content = text or ""
+        if image: user_content += f" [Attached Image: {image.filename}]"
+        if audio: user_content += f" [Attached Audio: {audio.filename}]"
+        
+        user_msg = ChatMessage(user_id=current_user.id, role="user", content=user_content)
+        db.add(user_msg)
+        db.commit()
+        
         if image and image.filename:
             image_path = os.path.join("/tmp", image.filename)
             with open(image_path, "wb") as f:
-                content = await image.read()
-                f.write(content)
+                f.write(await image.read())
                 
-        # Save uploaded audio temporarily if provided
         if audio and audio.filename:
             audio_path = os.path.join("/tmp", audio.filename)
             with open(audio_path, "wb") as f:
-                content = await audio.read()
-                f.write(content)
+                f.write(await audio.read())
+
+        # Set bot session based on user to isolate memory
+        bot.set_session(f"user_{current_user.id}")
 
         # Send to Phoenix ChatBot
         response = await bot.chat(
@@ -64,11 +184,14 @@ async def chat_endpoint(
             audio_path=audio_path
         )
         
-        # Cleanup temp files
-        if image_path and os.path.exists(image_path):
-            os.remove(image_path)
-        if audio_path and os.path.exists(audio_path):
-            os.remove(audio_path)
+        # Save bot response to DB
+        bot_response_text = str(response) if not isinstance(response, dict) else str(response.get("text", response))
+        bot_msg = ChatMessage(user_id=current_user.id, role="bot", content=bot_response_text)
+        db.add(bot_msg)
+        db.commit()
+        
+        if image_path and os.path.exists(image_path): os.remove(image_path)
+        if audio_path and os.path.exists(audio_path): os.remove(audio_path)
             
         return JSONResponse({"status": "success", "response": response})
         
