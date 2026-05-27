@@ -10,4 +10,3 @@ passlib
 slowapi
 celery
 redis
-sentence-transformers
