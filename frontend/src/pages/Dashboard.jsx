@@ -96,6 +96,9 @@ function Dashboard() {
             <span className="text-muted d-none d-md-inline" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
               OPERATOR: <strong className="text-white ms-1">{user?.username}</strong>
             </span>
+            <button className="btn btn-outline-secondary btn-sm px-3" style={{ borderRadius: '6px', fontSize: '0.85rem', letterSpacing: '0.5px' }} onClick={() => navigate('/profile')}>
+              PROFILE
+            </button>
             <button className="btn btn-outline-danger btn-sm px-3" style={{ borderRadius: '6px', fontSize: '0.85rem', letterSpacing: '0.5px' }} onClick={logout}>
               LOGOUT
             </button>
