@@ -10,10 +10,10 @@ import ReactFlow, {
   addEdge,
   MarkerType
 } from 'reactflow';
-import CustomNode from './components/Nodes/CustomNode';
-import BlocksPanel from './components/Sidebar/BlocksPanel';
-import PropertiesPanel from './components/Sidebar/PropertiesPanel';
-import './App.css';
+import CustomNode from '../components/Nodes/CustomNode';
+import BlocksPanel from '../components/Sidebar/BlocksPanel';
+import PropertiesPanel from '../components/Sidebar/PropertiesPanel';
+import '../App.css';
 
 // Map custom node types to React Flow
 const nodeTypes = {
