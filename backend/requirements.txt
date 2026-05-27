@@ -10,3 +10,6 @@ passlib
 slowapi
 celery
 redis
+torch 
+sentence-transformers
+python-dotenv
