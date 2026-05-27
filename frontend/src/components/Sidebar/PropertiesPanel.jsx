@@ -63,6 +63,8 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
         return `# TTS Node enabled -> Passed to ChatBot constructor`;
       case 'stt_node':
         return `# STT Node enabled -> Passed to ChatBot constructor`;
+      case 'data_source':
+        return `# Data Source Config\n# Connected to RAG Pipeline\npath = "${data.path || './data'}"`;
       default:
         return `# Standard node representation`;
     }
@@ -402,6 +404,38 @@ export const PropertiesPanel = ({ selectedNode, onUpdateNode, onDeleteNode }) =>
         {(type === 'tts_node' || type === 'stt_node') && (
           <div className="mb-4">
             <span className="text-muted d-block mb-2" style={{ fontSize: '0.8rem' }}>Enable this feature on the ChatBot core.</span>
+          </div>
+        )}
+
+        {type === 'data_source' && (
+          <div className="d-flex flex-column gap-3 mb-4">
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>Source Type</label>
+              <select 
+                className="form-select bg-dark border-secondary text-white"
+                value={data.source_type || 'Local Path'} 
+                onChange={(e) => handleChange('source_type', e.target.value)}
+              >
+                <option value="Local Path">Local Path</option>
+                <option value="GitHub Repo">GitHub Repo</option>
+                <option value="API Endpoint">API Endpoint</option>
+              </select>
+            </div>
+            <div>
+              <label className="form-label text-muted fw-semibold" style={{ fontSize: '0.8rem' }}>URL / Path</label>
+              <input 
+                type="text" 
+                className="form-control bg-dark border-secondary text-white"
+                placeholder={data.source_type === 'GitHub Repo' ? 'https://github.com/user/repo' : (data.source_type === 'API Endpoint' ? 'https://api.example.com/data' : './data')}
+                value={data.path || ''} 
+                onChange={(e) => handleChange('path', e.target.value)} 
+              />
+            </div>
+            <div className="mt-2">
+              <span className="text-muted d-block" style={{ fontSize: '0.75rem' }}>
+                Connect this node to your RAG Pipeline to inject knowledge.
+              </span>
+            </div>
           </div>
         )}
       </div>
