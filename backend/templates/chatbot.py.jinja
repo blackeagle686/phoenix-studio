@@ -23,7 +23,7 @@ builder.with_memory()
 
 {% if rag %}
 builder.with_rag(
-    data_to_insight_path="{{ rag.path }}", 
+    data_to_insight_path={{ rag.path | tojson }}, 
     chunk_size={{ rag.chunk_size }}, 
     chunk_overlap={{ rag.chunk_overlap }},
     reranking={{ 'True' if rag.reranking else 'False' }},
