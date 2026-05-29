@@ -1,18 +1,13 @@
-112923:C 28 May 2026 00:04:22.938 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
-112923:C 28 May 2026 00:04:22.938 # Redis version=7.0.15, bits=64, commit=00000000, modified=0, pid=112923, just started
-112923:C 28 May 2026 00:04:22.938 # Configuration loaded
-112923:M 28 May 2026 00:04:22.939 * monotonic clock: POSIX clock_gettime
-112923:M 28 May 2026 00:04:22.940 * Running mode=standalone, port=6385.
-112923:M 28 May 2026 00:04:22.940 # Server initialized
-112923:M 28 May 2026 00:04:22.940 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
-112923:M 28 May 2026 00:04:22.941 * Loading RDB produced by version 7.0.15
-112923:M 28 May 2026 00:04:22.941 * RDB age 114 seconds
-112923:M 28 May 2026 00:04:22.941 * RDB memory usage when created 1.25 Mb
-112923:M 28 May 2026 00:04:22.941 * Done loading RDB, keys loaded: 3, keys expired: 0.
-112923:M 28 May 2026 00:04:22.941 * DB loaded from disk: 0.000 seconds
-112923:M 28 May 2026 00:04:22.941 * Ready to accept connections
-112923:signal-handler (1779917058) Received SIGTERM scheduling shutdown...
-112923:M 28 May 2026 00:24:18.672 # User requested shutdown...
-112923:M 28 May 2026 00:24:18.672 * Saving the final RDB snapshot before exiting.
-112923:M 28 May 2026 00:24:18.801 * DB saved on disk
-112923:M 28 May 2026 00:24:18.801 # Redis is now ready to exit, bye bye...
+10803:C 29 May 2026 12:10:45.226 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+10803:C 29 May 2026 12:10:45.226 # Redis version=7.0.15, bits=64, commit=00000000, modified=0, pid=10803, just started
+10803:C 29 May 2026 12:10:45.226 # Configuration loaded
+10803:M 29 May 2026 12:10:45.227 * monotonic clock: POSIX clock_gettime
+10803:M 29 May 2026 12:10:45.228 * Running mode=standalone, port=6385.
+10803:M 29 May 2026 12:10:45.228 # Server initialized
+10803:M 29 May 2026 12:10:45.228 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+10803:M 29 May 2026 12:10:45.312 * Loading RDB produced by version 7.0.15
+10803:M 29 May 2026 12:10:45.312 * RDB age 128787 seconds
+10803:M 29 May 2026 12:10:45.312 * RDB memory usage when created 1.25 Mb
+10803:M 29 May 2026 12:10:45.312 * Done loading RDB, keys loaded: 3, keys expired: 0.
+10803:M 29 May 2026 12:10:45.312 * DB loaded from disk: 0.084 seconds
+10803:M 29 May 2026 12:10:45.312 * Ready to accept connections
