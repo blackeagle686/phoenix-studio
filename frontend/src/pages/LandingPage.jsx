@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
-import Navbar from '../components/UI/Navbar';frontend/src/assets/phx-std-net-nobg.png
+import Navbar from '../components/UI/Navbar';frontend/src/assets/
 import Footer from '../components/UI/Footer';
-import heroImg from '../assets/phx-rym-removebg-preview.png';
+import heroImg from '../assets/phx-std-net-nobg.png';
 import flowExampleImg from '../assets/flow-example.png';
 function LandingPage() {
   const navigate = useNavigate();

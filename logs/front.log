@@ -112,3 +112,131 @@
 12:48:54 PM [vite] hmr invalidate /src/context/AuthContext.jsx Could not Fast Refresh ("AuthContext" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
 12:48:54 PM [vite] hmr update /src/App.jsx, /src/pages/ProfileSettings.jsx, /src/pages/Login.jsx, /src/pages/Register.jsx, /src/pages/Dashboard.jsx, /src/pages/WorkspaceEditor.jsx
 1:33:24 PM [vite] hmr update /src/pages/LandingPage.jsx
+1:33:30 PM [vite] hmr update /src/pages/LandingPage.jsx
+1:33:30 PM [vite] Internal server error: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/LandingPage.jsx: `import` can only be used in `import()` or `import.meta`. (5:0)
+
+  3 | import NetworkCanvas from '../components/UI/NetworkCanvas';
+  4 | import Navbar from '../components/UI/Navbar';frontend/src/assets/
+> 5 | import Footer from '../components/UI/Footer';
+    | ^
+  6 | import heroImg from '../assets/phx-rym-removebg-preview.png';
+  7 | import flowExampleImg from '../assets/flow-example.png';
+  8 | function LandingPage() {
+  Plugin: vite:react-babel
+  File: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/LandingPage.jsx:5:0
+  3  |  import NetworkCanvas from '../components/UI/NetworkCanvas';
+  4  |  import Navbar from '../components/UI/Navbar';frontend/src/assets/
+  5  |  import Footer from '../components/UI/Footer';
+     |  ^
+  6  |  import heroImg from '../assets/phx-rym-removebg-preview.png';
+  7  |  import flowExampleImg from '../assets/flow-example.png';
+      at constructor (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:6616:19)
+      at JSXParserMixin.parseExprAtom (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11316:16)
+      at JSXParserMixin.parseExprAtom (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4776:20)
+      at JSXParserMixin.parseExprSubscripts (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11098:23)
+      at JSXParserMixin.parseUpdate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11083:21)
+      at JSXParserMixin.parseMaybeUnary (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11063:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10916:61)
+      at JSXParserMixin.parseExprOpBaseRightExpr (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11003:34)
+      at JSXParserMixin.parseExprOpRightExpr (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10998:21)
+      at JSXParserMixin.parseExprOp (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10964:27)
+      at JSXParserMixin.parseExprOp (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10970:21)
+      at JSXParserMixin.parseExprOp (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10970:21)
+      at JSXParserMixin.parseExprOps (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10925:17)
+      at JSXParserMixin.parseMaybeConditional (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10898:23)
+      at JSXParserMixin.parseMaybeAssign (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10848:21)
+      at JSXParserMixin.parseExpressionBase (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10801:23)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10797:39
+      at JSXParserMixin.allowInAnd (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12438:16)
+      at JSXParserMixin.parseExpression (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10797:17)
+      at JSXParserMixin.parseStatementContent (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12912:23)
+      at JSXParserMixin.parseStatementLike (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12784:17)
+      at JSXParserMixin.parseModuleItem (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12761:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13333:36)
+      at JSXParserMixin.parseBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13326:10)
+      at JSXParserMixin.parseProgram (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12639:10)
+      at JSXParserMixin.parseTopLevel (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12629:25)
+      at JSXParserMixin.parse (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14505:25)
+      at parse (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14539:38)
+      at parser (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:51:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:261:32)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:189:28
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:113:33
+      at step (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:287:14)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
+1:33:34 PM [vite] hmr update /src/pages/LandingPage.jsx
+1:33:34 PM [vite] Internal server error: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/LandingPage.jsx: `import` can only be used in `import()` or `import.meta`. (5:0)
+
+  3 | import NetworkCanvas from '../components/UI/NetworkCanvas';
+  4 | import Navbar from '../components/UI/Navbar';frontend/src/assets/
+> 5 | import Footer from '../components/UI/Footer';
+    | ^
+  6 | import heroImg from '../assets/phx-std-net-nobg.png';
+  7 | import flowExampleImg from '../assets/flow-example.png';
+  8 | function LandingPage() {
+  Plugin: vite:react-babel
+  File: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/LandingPage.jsx:5:0
+  3  |  import NetworkCanvas from '../components/UI/NetworkCanvas';
+  4  |  import Navbar from '../components/UI/Navbar';frontend/src/assets/
+  5  |  import Footer from '../components/UI/Footer';
+     |  ^
+  6  |  import heroImg from '../assets/phx-std-net-nobg.png';
+  7  |  import flowExampleImg from '../assets/flow-example.png';
+      at constructor (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:6616:19)
+      at JSXParserMixin.parseExprAtom (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11316:16)
+      at JSXParserMixin.parseExprAtom (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4776:20)
+      at JSXParserMixin.parseExprSubscripts (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11098:23)
+      at JSXParserMixin.parseUpdate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11083:21)
+      at JSXParserMixin.parseMaybeUnary (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11063:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10916:61)
+      at JSXParserMixin.parseExprOpBaseRightExpr (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11003:34)
+      at JSXParserMixin.parseExprOpRightExpr (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10998:21)
+      at JSXParserMixin.parseExprOp (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10964:27)
+      at JSXParserMixin.parseExprOp (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10970:21)
+      at JSXParserMixin.parseExprOp (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10970:21)
+      at JSXParserMixin.parseExprOps (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10925:17)
+      at JSXParserMixin.parseMaybeConditional (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10898:23)
+      at JSXParserMixin.parseMaybeAssign (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10848:21)
+      at JSXParserMixin.parseExpressionBase (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10801:23)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10797:39
+      at JSXParserMixin.allowInAnd (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12438:16)
+      at JSXParserMixin.parseExpression (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10797:17)
+      at JSXParserMixin.parseStatementContent (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12912:23)
+      at JSXParserMixin.parseStatementLike (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12784:17)
+      at JSXParserMixin.parseModuleItem (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12761:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13333:36)
+      at JSXParserMixin.parseBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13326:10)
+      at JSXParserMixin.parseProgram (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12639:10)
+      at JSXParserMixin.parseTopLevel (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12629:25)
+      at JSXParserMixin.parse (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14505:25)
+      at parse (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14539:38)
+      at parser (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:51:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:261:32)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:189:28
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:113:33
+      at step (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:287:14)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
