@@ -1,6 +1,6 @@
 import React from 'react';
 
-// create_node this will used in the near future to 
+// create_node this will used in the near future that 
 
 const blockCategories = [
   {
