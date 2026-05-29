@@ -41,7 +41,7 @@ function ProfileSettings() {
     setMessage({ type: '', text: '' });
     
     try {
-      const response = await fetch('http://localhost:8000/api/auth/me', {
+      const response = await fetch(baseurl + '/auth/me', {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
