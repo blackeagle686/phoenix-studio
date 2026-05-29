@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: phoenix_postgres
+    environment:
+      POSTGRES_USER: phoenix
+      POSTGRES_PASSWORD: phoenix_secure_pass
+      POSTGRES_DB: studio
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U phoenix -d studio"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: phoenix_redis
+    command: redis-server --port 6385
+    ports:
+      - "6385:6385"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6385", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: phoenix_backend
+    environment:
+      DATABASE_URL: postgresql://phoenix:phoenix_secure_pass@db:5432/studio
+      JWT_SECRET_KEY: prod_secret_key_please_change_in_real_deployment
+      REDIS_URL: redis://redis:6385/0
+      CORS_ORIGINS: "*"
+    ports:
+      - "8010:8010"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: phoenix_celery
+    command: celery -A backend.core.celery_app worker --loglevel=info
+    environment:
+      DATABASE_URL: postgresql://phoenix:phoenix_secure_pass@db:5432/studio
+      REDIS_URL: redis://redis:6385/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: phoenix_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
