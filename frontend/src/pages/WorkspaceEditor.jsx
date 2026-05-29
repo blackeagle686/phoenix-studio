@@ -308,7 +308,7 @@ function WorkspaceEditor() {
   useEffect(() => {
     const fetchPreview = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/preview', {
+        const response = await fetch(baseurl + '/preview', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nodes, edges })
@@ -339,7 +339,7 @@ function WorkspaceEditor() {
         theme_mode: exportTheme
       };
       
-      const response = await fetch('http://localhost:8000/api/preview_template', {
+      const response = await fetch(baseurl + '/preview_template', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
