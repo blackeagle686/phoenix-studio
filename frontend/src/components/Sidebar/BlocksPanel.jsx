@@ -7,7 +7,7 @@ const blockCategories = [
     items: [
       {
         type: 'agent',
-        name: 'Agent Core',
+        name: 'Phoenix Agent Basic',
         icon: 'bi-cpu-fill',
         color: 'var(--accent-cyan)',
         desc: 'Main agent loop block.',
