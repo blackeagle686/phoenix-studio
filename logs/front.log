@@ -612,3 +612,4 @@
 2:17:09 PM [vite] hmr invalidate /src/components/Sidebar/BlocksPanel.jsx Could not Fast Refresh ("createNode" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
 2:17:09 PM [vite] hmr update /src/pages/WorkspaceEditor.jsx
 2:18:52 PM [vite] hmr update /src/pages/WorkspaceEditor.jsx
+2:19:03 PM [vite] hmr update /src/pages/WorkspaceEditor.jsx
