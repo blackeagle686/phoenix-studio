@@ -240,7 +240,7 @@ function LandingPage() {
                   color: '#e2e8f0',
                   textWrap: 'balance'
                 }}>
-                  We're <strong style={{color: red}}>not</strong> building flashy demos. <br className="d-none d-md-block" />
+                  We're <strong style={{color: 'red'}}>not</strong> building flashy demos. <br className="d-none d-md-block" />
                   We're building <strong style={{
                     fontWeight: '700',
                     background: 'linear-gradient(135deg, var(--palette-9) 0%, var(--palette-6) 100%)',
