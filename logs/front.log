@@ -7,3 +7,6 @@
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
+12:22:18 PM [vite] hmr update /src/context/AuthContext.jsx
+12:22:19 PM [vite] hmr invalidate /src/context/AuthContext.jsx Could not Fast Refresh (new export)
+12:22:19 PM [vite] hmr update /src/App.jsx, /src/pages/ProfileSettings.jsx, /src/pages/Login.jsx, /src/pages/Register.jsx, /src/pages/Dashboard.jsx, /src/pages/WorkspaceEditor.jsx
