@@ -1,0 +1,24 @@
+ 
+ -------------- celery@tlk-Vostro-3500 v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Linux-6.17.0-23-generic-x86_64-with-glibc2.39 2026-05-29 17:59:50
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         phoenix_tasks:0x725d0679e4e0
+- ** ---------- .> transport:   redis://localhost:6385/0
+- ** ---------- .> results:     redis://localhost:6385/0
+- *** --- * --- .> concurrency: 8 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . cleanup_stale_sessions
+  . process_agent_training
+
+[2026-05-29 17:59:52,583: INFO/MainProcess] Connected to redis://localhost:6385/0
+[2026-05-29 17:59:53,071: INFO/MainProcess] mingle: searching for neighbors
+[2026-05-29 17:59:54,962: INFO/MainProcess] mingle: all alone
+[2026-05-29 17:59:57,130: INFO/MainProcess] celery@tlk-Vostro-3500 ready.
