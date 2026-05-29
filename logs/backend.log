@@ -26,3 +26,12 @@ INFO:     127.0.0.1:50432 - "POST /api/preview HTTP/1.1" 200 OK
 INFO:     127.0.0.1:50432 - "POST /api/preview HTTP/1.1" 200 OK
 INFO:     127.0.0.1:36666 - "GET /api/workspaces/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:36666 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46918 - "POST /api/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46918 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46934 - "OPTIONS /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46918 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46934 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46934 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46934 - "OPTIONS /api/workspaces/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46934 - "GET /api/workspaces/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46934 - "GET /api/workspaces/2 HTTP/1.1" 200 OK
