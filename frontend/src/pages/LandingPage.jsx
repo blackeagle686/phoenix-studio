@@ -241,7 +241,7 @@ function LandingPage() {
                 WebkitTextFillColor: 'transparent'
               }}>
                 We're not building flashy demos. We're building <br />
-                engineering agents that think like humans,<br />
+                engineering agents that think like humans,
                 and work better with them.
               </h2>
             </div>
