@@ -1,7 +1,14 @@
 import React from 'react';
 
 // create_node this will used in the near future that we will add an agent that hanlde with users prompts to create custome nodes or edit
-const 
+const createNode = (type, data) => {
+  return {
+    id: Date.now().toString(),
+    type,
+    position: { x: 0, y: 0 },
+    data
+  };
+};
 
 const blockCategories = [
   {
