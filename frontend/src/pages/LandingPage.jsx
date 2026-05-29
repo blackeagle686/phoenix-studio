@@ -230,7 +230,16 @@ function LandingPage() {
         <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
           <div className="row">
             <div className="col-12 col-lg-10">
-              <h2 className="manifesto-text mb-5">
+              <h2 className="manifesto-text mb-5" style={{
+                fontFamily: 'var(--font-title)',
+                fontWeight: '800',
+                fontSize: 'clamp(2.2rem, 4.5vw, 4.2rem)',
+                lineHeight: '1.15',
+                letterSpacing: '-0.04em',
+                background: 'linear-gradient(135deg, #ffffff 30%, var(--palette-9) 70%, var(--palette-6) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
                 We're not building flashy demos. We're<br />
                 engineering agents that think like humans,<br />
                 and work better with them.
@@ -240,15 +249,15 @@ function LandingPage() {
           <div className="row mt-5 align-items-center">
             <div className="col-12 col-lg-6 mb-5 mb-lg-0 pe-lg-5">
               <div className="position-relative">
-                <div className="position-absolute w-100 h-100 rounded-4" style={{ background: 'linear-gradient(135deg, rgba(114,239,221,0.2) 0%, rgba(155,81,224,0.1) 100%)', filter: 'blur(30px)', zIndex: 0 }}></div>
-                <img src={flowExampleImg} alt="Workflow Example" className="img-fluid rounded-4 position-relative z-1 hover-scale-img" style={{ border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }} />
+                <div className="position-absolute w-100 h-100 rounded-4" style={{ background: 'linear-gradient(135deg, rgba(114,239,221,0.2) 0%, rgba(155,81,224,0.15) 100%)', filter: 'blur(30px)', zIndex: 0 }}></div>
+                <img src={flowExampleImg} alt="Workflow Example" className="img-fluid rounded-4 position-relative z-1 hover-scale-img" style={{ border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 20px 40px rgba(0,0,0,0.6)' }} />
               </div>
             </div>
             <div className="col-12 col-lg-6 ps-lg-4">
-              <p className="text-light mb-4" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
-                At <span className="text-mint">PHOENIX-AI</span>, we believe intelligence isn't just about generating answers—it's about understanding context, reasoning through complexity, and acting with intent.
+              <p className="text-light mb-4" style={{ fontSize: '1.15rem', lineHeight: '1.8', fontFamily: 'var(--font-body)' }}>
+                At <span className="text-mint fw-bold">PHOENIX-AI</span>, we believe intelligence isn't just about generating answers—it's about understanding context, reasoning through complexity, and acting with intent.
               </p>
-              <p className="text-light opacity-75" style={{ fontSize: '1.1rem', lineHeight: '1.7' }}>
+              <p className="text-muted opacity-80" style={{ fontSize: '1.1rem', lineHeight: '1.8', fontFamily: 'var(--font-body)' }}>
                 True AI should be controllable, predictable in behavior, steerable by design, and fully auditable in every step. It must be context-aware, able to learn from interactions and adapt over time. And it has to be tool-native, seamlessly operating within real environments, not isolated sandboxes.
               </p>
             </div>
