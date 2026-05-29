@@ -13,3 +13,6 @@
 10803:M 29 May 2026 12:10:45.312 * Ready to accept connections
 10803:M 29 May 2026 13:20:22.291 * 1 changes in 3600 seconds. Saving...
 10803:M 29 May 2026 13:20:22.468 * Background saving started by pid 15647
+15647:C 29 May 2026 13:20:24.326 * DB saved on disk
+15647:C 29 May 2026 13:20:24.328 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+10803:M 29 May 2026 13:20:24.374 * Background saving terminated with success
