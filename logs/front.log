@@ -242,3 +242,4 @@
       at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
 1:33:37 PM [vite] hmr update /src/pages/LandingPage.jsx
 1:36:25 PM [vite] hmr update /src/pages/LandingPage.jsx
+1:41:51 PM [vite] hmr update /src/pages/LandingPage.jsx
