@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
-import Navbar from '../components/UI/Navbar';
+import Navbar from '../components/UI/Navbar';frontend/src/assets/phx-std-net-nobg.png
 import Footer from '../components/UI/Footer';
 import heroImg from '../assets/phx-rym-removebg-preview.png';
 import flowExampleImg from '../assets/flow-example.png';
