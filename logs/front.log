@@ -393,3 +393,71 @@
       at JSXParserMixin.parseBlock (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
       at JSXParserMixin.parseFunctionBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12117:24)
       at JSXParserMixin.parseFunctionBodyAndFinish (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12103:10)
+1:57:48 PM [vite] hmr update /src/pages/LandingPage.jsx
+1:57:48 PM [vite] Internal server error: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/LandingPage.jsx: Unexpected token, expected "}" (243:44)
+
+  241 |                   textWrap: 'balance'
+  242 |                 }}>
+> 243 |                   We're <strong style={color: red;}>not</strong> building flashy demos. <br className="d-none d-md-block" />
+      |                                             ^
+  244 |                   We're building <strong style={{
+  245 |                     fontWeight: '700',
+  246 |                     background: 'linear-gradient(135deg, var(--palette-9) 0%, var(--palette-6) 100%)',
+  Plugin: vite:react-babel
+  File: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/LandingPage.jsx:243:44
+  241|                    textWrap: 'balance'
+  242|                  }}>
+  243|                    We're <strong style={color: red;}>not</strong> building flashy demos. <br className="d-none d-md-block" />
+     |                                              ^
+  244|                    We're building <strong style={{
+  245|                      fontWeight: '700',
+      at constructor (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:6616:19)
+      at JSXParserMixin.unexpected (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:6636:16)
+      at JSXParserMixin.expect (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:6916:12)
+      at JSXParserMixin.jsxParseExpressionContainer (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4649:10)
+      at JSXParserMixin.jsxParseAttributeValue (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4616:21)
+      at JSXParserMixin.jsxParseAttribute (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4665:38)
+      at JSXParserMixin.jsxParseOpeningElementAfterName (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4679:28)
+      at JSXParserMixin.jsxParseOpeningElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4674:17)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4698:33)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4710:32)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4710:32)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4710:32)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4710:32)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4710:32)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4710:32)
+      at JSXParserMixin.jsxParseElementAt (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4710:32)
+      at JSXParserMixin.jsxParseElement (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4761:17)
+      at JSXParserMixin.parseExprAtom (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4771:19)
+      at JSXParserMixin.parseExprSubscripts (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11098:23)
+      at JSXParserMixin.parseUpdate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11083:21)
+      at JSXParserMixin.parseMaybeUnary (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11063:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10916:61)
+      at JSXParserMixin.parseExprOps (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10921:23)
+      at JSXParserMixin.parseMaybeConditional (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10898:23)
+      at JSXParserMixin.parseMaybeAssign (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10848:21)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10817:39
+      at JSXParserMixin.allowInAnd (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12443:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10817:17)
+      at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12510:17)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11692:28)
+      at JSXParserMixin.parseExprAtom (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11348:23)
+      at JSXParserMixin.parseExprAtom (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:4776:20)
+      at JSXParserMixin.parseExprSubscripts (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11098:23)
+      at JSXParserMixin.parseUpdate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11083:21)
+      at JSXParserMixin.parseMaybeUnary (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11063:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10916:61)
+      at JSXParserMixin.parseExprOps (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10921:23)
+      at JSXParserMixin.parseMaybeConditional (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10898:23)
+      at JSXParserMixin.parseMaybeAssign (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10848:21)
+      at JSXParserMixin.parseExpressionBase (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10801:23)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10797:39
+      at JSXParserMixin.allowInAnd (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12438:16)
+      at JSXParserMixin.parseExpression (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:10797:17)
+      at JSXParserMixin.parseReturnStatement (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13159:28)
+      at JSXParserMixin.parseStatementContent (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12815:21)
+      at JSXParserMixin.parseStatementLike (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12784:17)
+      at JSXParserMixin.parseStatementListItem (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12764:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13333:61)
+      at JSXParserMixin.parseBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13326:10)
