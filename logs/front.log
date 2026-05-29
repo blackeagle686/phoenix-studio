@@ -240,3 +240,4 @@
       at step (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:287:14)
       at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:273:13
       at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
+1:33:37 PM [vite] hmr update /src/pages/LandingPage.jsx
