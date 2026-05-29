@@ -15,6 +15,8 @@ import BlocksPanel from '../components/Sidebar/BlocksPanel';
 import PropertiesPanel from '../components/Sidebar/PropertiesPanel';
 import '../App.css';
 
+import { baseurl } from '../context/AuthContext'; 
+
 // Map custom node types to React Flow
 const nodeTypes = {
   agent: CustomNode,
