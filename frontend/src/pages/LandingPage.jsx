@@ -27,59 +27,69 @@ function LandingPage() {
   return (
     <div style={{ backgroundColor: '#050505', minHeight: '100vh', overflowX: 'hidden' }}>
       <Navbar />
-      {/* Hero Section 1: Logo & Image */}
-      <section className="position-relative vh-100 d-flex flex-column align-items-center justify-content-center" style={{ paddingTop: '80px' }}>
+      {/* Merged Hero Section */}
+      <section className="position-relative min-vh-100 d-flex align-items-center" style={{ paddingTop: '100px', paddingBottom: '80px', backgroundColor: '#050505' }}>
         <NetworkCanvas />
-        <div className="container-fluid px-5 position-relative z-1 d-flex flex-column align-items-center text-center" style={{ maxWidth: '1400px' }}>
-          <div className="position-absolute w-100 h-100 rounded-circle" style={{ background: 'radial-gradient(circle, rgba(114,239,221,0.15) 0%, rgba(0,0,0,0) 70%)', filter: 'blur(40px)', zIndex: 0, top: '10%' }}></div>
-          <img src={heroImg} alt="Phoenix AI Agent" className="hero-image-3d position-relative z-1 mb-4" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }} />
-          <div className="fw-bolder fst-italic position-relative z-1 fade-up-section is-visible" style={{
-            fontSize: 'clamp(3rem, 6vw, 6rem)',
-            letterSpacing: '10px',
-            background: 'linear-gradient(135deg, rgba(114,239,221,1) 0%, rgba(155,81,224,0.8) 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            whiteSpace: 'nowrap',
-            userSelect: 'none'
-          }}>
-            PHOENIX-AI
-          </div>
-
-          <div
-            className="position-absolute bottom-0 mb-5 d-flex flex-column align-items-center justify-content-center text-muted"
-            style={{ transform: 'translateY(120px)', animation: 'float3d 3s ease-in-out infinite', cursor: 'pointer' }}
-            onClick={() => document.getElementById('explore-section').scrollIntoView({ behavior: 'smooth' })}
-          >
-            <span style={{ fontSize: '0.8rem', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '10px' }}>Scroll to Explore</span>
-            <i className="bi bi-chevron-down fs-4 text-mint"></i>
-          </div>
-        </div>
-        <div className="position-absolute bottom-0 w-100" style={{ height: '200px', background: 'linear-gradient(to bottom, transparent, #050505)' }}></div>
-      </section>
-
-      {/* Hero Section 2: Intro */}
-      <section id="explore-section" className="py-5 fade-up-section" style={{ backgroundColor: '#050505', minHeight: '60vh', display: 'flex', alignItems: 'center' }}>
-        <div className="container-fluid px-5 text-center" style={{ maxWidth: '1000px' }}>
-          <h1 className="hero-text mb-4" style={{ fontSize: 'clamp(2.5rem, 4vw, 4.5rem)' }}>
-            BUILD AGENTS THAT<br />THINK LIKE HUMANS
-          </h1>
-          <p className="text-light opacity-75 mb-5 mx-auto" style={{ fontSize: '1.2rem', maxWidth: '600px', lineHeight: '1.6' }}>
-            Synthetically trained. Symbolically steered. Deploy AI agents that adapt, act, and learn.
-          </p>
-          <div className="d-flex gap-3 flex-wrap justify-content-center">
-            <button className="btn btn-mint d-flex align-items-center gap-2 px-4 py-3" onClick={() => navigate('/register')}>
-              TRY AGENT LIVE <i className="bi bi-arrow-up-right"></i>
-            </button>
-            <button className="btn btn-outline-mint px-4 py-3" onClick={() => navigate('/login')}>
-              EXPLORE S. ENGINE
-            </button>
+        <div className="container-fluid px-5 position-relative z-1" style={{ maxWidth: '1400px' }}>
+          <div className="row align-items-center">
+            
+            {/* Left Column: Title, Headline, Description, CTAs */}
+            <div className="col-lg-7 text-start fade-up-section is-visible">
+              <div className="fw-bold mb-3" style={{
+                fontSize: 'clamp(2.8rem, 5vw, 4.8rem)',
+                letterSpacing: '4px',
+                fontFamily: 'var(--font-title)',
+                background: 'linear-gradient(135deg, rgba(114,239,221,1) 0%, rgba(155,81,224,0.8) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                userSelect: 'none'
+              }}>
+                PHOENIX-AI
+              </div>
+              
+              <h1 className="hero-text text-start mb-4" style={{ fontSize: 'clamp(2rem, 3.5vw, 3.8rem)', textTransform: 'uppercase', lineHeight: '1.1' }}>
+                BUILD AGENTS THAT<br />THINK LIKE HUMANS
+              </h1>
+              
+              <p className="text-light opacity-75 mb-5" style={{ fontSize: '1.15rem', maxWidth: '600px', lineHeight: '1.6', fontFamily: 'var(--font-body)' }}>
+                Synthetically trained. Symbolically steered. Deploy AI agents that adapt, act, and learn.
+              </p>
+              
+              <div className="d-flex gap-3 flex-wrap">
+                <button className="btn btn-mint d-flex align-items-center gap-2 px-4 py-3" onClick={() => navigate('/register')}>
+                  TRY AGENT LIVE <i className="bi bi-arrow-up-right"></i>
+                </button>
+                <button className="btn btn-outline-mint px-4 py-3" onClick={() => navigate('/login')}>
+                  EXPLORE S. ENGINE
+                </button>
+              </div>
+            </div>
+            
+            {/* Right Column: 3D Hero Image */}
+            <div className="col-lg-5 text-center text-lg-end mt-5 mt-lg-0 position-relative">
+              <div className="position-absolute w-100 h-100 rounded-circle start-50 top-50 translate-middle" style={{ background: 'radial-gradient(circle, rgba(114,239,221,0.15) 0%, rgba(0,0,0,0) 70%)', filter: 'blur(50px)', zIndex: 0, width: '400px', height: '400px' }}></div>
+              <img src={heroImg} alt="Phoenix AI Agent" className="hero-image-3d position-relative z-1 img-fluid" style={{ maxWidth: '480px', objectFit: 'contain' }} />
+            </div>
+            
           </div>
         </div>
+        
+        {/* Scroll indicator pointing to the next section */}
+        <div
+          className="position-absolute bottom-0 start-50 translate-middle-x mb-4 d-none d-lg-flex flex-column align-items-center justify-content-center text-muted"
+          style={{ cursor: 'pointer', zIndex: 2, transform: 'translateY(-20px)', animation: 'float3d 3s ease-in-out infinite' }}
+          onClick={() => document.getElementById('logos-section').scrollIntoView({ behavior: 'smooth' })}
+        >
+          <span style={{ fontSize: '0.75rem', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>Scroll to Explore</span>
+          <i className="bi bi-chevron-down fs-5 text-mint"></i>
+        </div>
+        
+        <div className="position-absolute bottom-0 w-100" style={{ height: '100px', background: 'linear-gradient(to bottom, transparent, #050505)' }}></div>
       </section>
-
-      {/* Logos and Stats Section */}
-      <section className="py-5 fade-up-section" style={{ backgroundColor: '#050505' }}>
-        <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
+ 
+       {/* Logos and Stats Section */}
+       <section id="logos-section" className="py-5 fade-up-section" style={{ backgroundColor: '#050505' }}>
+         <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
           <p className="text-center text-muted mb-5" style={{ fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase' }}>Powering next-generation solutions across</p>
           <div className="d-flex justify-content-between align-items-center flex-wrap gap-4 mb-5 opacity-75">
             <span className="fs-5 fw-bold d-flex align-items-center gap-2"><i className="bi bi-robot fs-4 text-mint"></i> Robotics</span>
