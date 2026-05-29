@@ -1,12 +1,27 @@
 import React from 'react';
 
-// create_node this will used in the near future that we will add an agent that hanlde with users prompts to create custome nodes or edit
-const createNode = (type, data) => {
+/**
+ * createNode: Utility function intended for future integration with an AI Agent.
+ * It allows the agent to process user prompts and dynamically generate or edit custom nodes on the canvas.
+ */
+export const createNode = (type, data = {}, position = null) => {
+  const timestamp = Date.now().toString();
+  
+  // Default to a randomized offset near the center to avoid nodes stacking on top of each other
+  const defaultPosition = { 
+    x: 250 + Math.random() * 100, 
+    y: 150 + Math.random() * 100 
+  };
+
   return {
-    id: Date.now().toString(),
-    type,
-    position: { x: 0, y: 0 },
-    data
+    id: `${type}-${timestamp}`,
+    type: type,
+    position: position || defaultPosition,
+    data: {
+      ...data,
+      _generated_at: timestamp,
+      _is_custom_agent_node: true
+    }
   };
 };
 
