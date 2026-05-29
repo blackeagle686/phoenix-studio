@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
 import Footer from '../components/UI/Footer';
-import 
+import { baseurl } from '../context/AuthContext';
 
 
 function Dashboard() {
@@ -22,7 +22,7 @@ function Dashboard() {
 
   const fetchWorkspaces = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/workspaces/', {
+      const response = await fetch(baseurl + '/workspaces/', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -40,7 +40,7 @@ function Dashboard() {
     
     setIsCreating(true);
     try {
-      const response = await fetch('http://localhost:8000/api/workspaces/', {
+      const response = await fetch(baseurl + '/workspaces/', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

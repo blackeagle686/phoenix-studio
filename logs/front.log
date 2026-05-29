@@ -30,3 +30,58 @@
 12:23:45 PM [vite] hmr update /src/App.jsx, /src/pages/ProfileSettings.jsx, /src/pages/Login.jsx, /src/pages/Register.jsx, /src/pages/Dashboard.jsx, /src/pages/WorkspaceEditor.jsx
 12:23:52 PM [vite] hmr update /src/pages/Dashboard.jsx
 12:23:57 PM [vite] hmr update /src/pages/Dashboard.jsx
+12:23:58 PM [vite] Internal server error: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/Dashboard.jsx: Unexpected keyword 'function'. (9:0)
+
+   7 |
+   8 |
+>  9 | function Dashboard() {
+     | ^
+  10 |   const [workspaces, setWorkspaces] = useState([]);
+  11 |   const [showCreateModal, setShowCreateModal] = useState(false);
+  12 |   const [newWorkspaceName, setNewWorkspaceName] = useState('');
+  Plugin: vite:react-babel
+  File: /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/src/pages/Dashboard.jsx:9:0
+  7  |  
+  8  |  
+  9  |  function Dashboard() {
+     |  ^
+  10 |    const [workspaces, setWorkspaces] = useState([]);
+  11 |    const [showCreateModal, setShowCreateModal] = useState(false);
+      at constructor (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:6616:19)
+      at JSXParserMixin.checkReservedWord (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12241:12)
+      at JSXParserMixin.parseIdentifierName (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12228:12)
+      at JSXParserMixin.parseIdentifier (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12198:23)
+      at JSXParserMixin.parseImportSpecifierLocal (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14279:28)
+      at JSXParserMixin.maybeParseDefaultImportSpecifier (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14383:12)
+      at JSXParserMixin.parseImportSpecifiersAndAfter (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14256:29)
+      at JSXParserMixin.parseImport (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14252:17)
+      at JSXParserMixin.parseStatementContent (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12893:27)
+      at JSXParserMixin.parseStatementLike (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12784:17)
+      at JSXParserMixin.parseModuleItem (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12761:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13333:36)
+      at JSXParserMixin.parseBlockBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13326:10)
+      at JSXParserMixin.parseProgram (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12639:10)
+      at JSXParserMixin.parseTopLevel (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12629:25)
+      at JSXParserMixin.parse (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14505:25)
+      at parse (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:14539:38)
+      at parser (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:51:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:261:32)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:189:28
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:113:33
+      at step (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:287:14)
+      at /home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/gensync/index.js:223:11)
+12:23:58 PM [vite] hmr update /src/pages/Dashboard.jsx
+12:24:01 PM [vite] hmr update /src/pages/Dashboard.jsx
+12:24:03 PM [vite] hmr update /src/pages/Dashboard.jsx
