@@ -121,36 +121,106 @@ function LandingPage() {
 
           {/* Stats Grid */}
           <div className="row g-4 mt-2">
+            
+            {/* Stat Card 1 */}
             <div className="col-12 col-md-4">
-              <div className="feature-card d-flex flex-column justify-content-center">
+              <div className="feature-card hover-lift-card d-flex flex-column justify-content-center p-5 position-relative overflow-hidden" style={{
+                background: 'rgba(15, 15, 20, 0.75)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '16px',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                minHeight: '220px',
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}>
+                <div className="position-absolute top-0 start-0 w-100" style={{
+                  height: '3px',
+                  background: 'linear-gradient(90deg, var(--palette-9), var(--palette-7))',
+                  opacity: 0.8
+                }}></div>
                 <div className="stat-block">
-                  <h2>97<span className="text-white">%</span></h2>
+                  <h2 className="display-1 fw-bold mb-0" style={{
+                    fontFamily: 'var(--font-title)',
+                    background: 'linear-gradient(135deg, var(--palette-9) 0%, var(--palette-7) 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    letterSpacing: '-2px',
+                    lineHeight: '1'
+                  }}>
+                    97<span className="fw-light" style={{ WebkitTextFillColor: '#ffffff', color: '#ffffff', opacity: 0.8 }}>%</span>
+                  </h2>
                 </div>
-                <p className="text-muted mt-3 mb-0 d-flex align-items-center gap-2">
-                  <i className="bi bi-circle-fill text-mint" style={{ fontSize: '0.5rem' }}></i> Task success in tool chains
+                <p className="text-light opacity-75 mt-3 mb-0 d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-body)', fontSize: '1.05rem', letterSpacing: '0.5px' }}>
+                  <i className="bi bi-cpu-fill text-mint fs-5"></i> Task success in tool chains
                 </p>
               </div>
             </div>
+            
+            {/* Stat Card 2 */}
             <div className="col-12 col-md-4">
-              <div className="feature-card d-flex flex-column justify-content-center">
+              <div className="feature-card hover-lift-card d-flex flex-column justify-content-center p-5 position-relative overflow-hidden" style={{
+                background: 'rgba(15, 15, 20, 0.75)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '16px',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                minHeight: '220px',
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}>
+                <div className="position-absolute top-0 start-0 w-100" style={{
+                  height: '3px',
+                  background: 'linear-gradient(90deg, var(--palette-7), var(--palette-5))',
+                  opacity: 0.8
+                }}></div>
                 <div className="stat-block">
-                  <h2>88<span className="text-white">%</span></h2>
+                  <h2 className="display-1 fw-bold mb-0" style={{
+                    fontFamily: 'var(--font-title)',
+                    background: 'linear-gradient(135deg, var(--palette-7) 0%, var(--palette-5) 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    letterSpacing: '-2px',
+                    lineHeight: '1'
+                  }}>
+                    88<span className="fw-light" style={{ WebkitTextFillColor: '#ffffff', color: '#ffffff', opacity: 0.8 }}>%</span>
+                  </h2>
                 </div>
-                <p className="text-muted mt-3 mb-0 d-flex align-items-center gap-2">
-                  <i className="bi bi-circle-fill text-mint" style={{ fontSize: '0.5rem' }}></i> Reasoning accuracy over time
+                <p className="text-light opacity-75 mt-3 mb-0 d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-body)', fontSize: '1.05rem', letterSpacing: '0.5px' }}>
+                  <i className="bi bi-brain-fill text-mint fs-5"></i> Reasoning accuracy over time
                 </p>
               </div>
             </div>
+            
+            {/* Stat Card 3 */}
             <div className="col-12 col-md-4">
-              <div className="feature-card d-flex flex-column justify-content-center">
+              <div className="feature-card hover-lift-card d-flex flex-column justify-content-center p-5 position-relative overflow-hidden" style={{
+                background: 'rgba(15, 15, 20, 0.75)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '16px',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                minHeight: '220px',
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}>
+                <div className="position-absolute top-0 start-0 w-100" style={{
+                  height: '3px',
+                  background: 'linear-gradient(90deg, var(--palette-5), var(--palette-9))',
+                  opacity: 0.8
+                }}></div>
                 <div className="stat-block">
-                  <h2>3<span className="text-white">x</span></h2>
+                  <h2 className="display-1 fw-bold mb-0" style={{
+                    fontFamily: 'var(--font-title)',
+                    background: 'linear-gradient(135deg, var(--palette-5) 0%, var(--palette-9) 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    letterSpacing: '-2px',
+                    lineHeight: '1'
+                  }}>
+                    3<span className="fw-light" style={{ WebkitTextFillColor: '#ffffff', color: '#ffffff', opacity: 0.8 }}>x</span>
+                  </h2>
                 </div>
-                <p className="text-muted mt-3 mb-0 d-flex align-items-center gap-2">
-                  <i className="bi bi-circle-fill text-mint" style={{ fontSize: '0.5rem' }}></i> Faster domain adaptation
+                <p className="text-light opacity-75 mt-3 mb-0 d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-body)', fontSize: '1.05rem', letterSpacing: '0.5px' }}>
+                  <i className="bi bi-lightning-charge-fill text-mint fs-5"></i> Faster domain adaptation
                 </p>
               </div>
             </div>
+            
           </div>
         </div>
       </section>
