@@ -153,7 +153,24 @@ case $command in
     logs)
         logs
         ;;
+    docker-start)
+        echo "Starting Docker Compose deployment..."
+        docker compose up --build -d
+        ;;
+    docker-stop)
+        echo "Stopping Docker Compose deployment..."
+        docker compose down
+        ;;
+    docker-logs)
+        echo "Tailing Docker logs..."
+        docker compose logs -f
+        ;;
+    docker-restart)
+        $0 docker-stop
+        sleep 2
+        $0 docker-start
+        ;;
     *)
-        echo "Usage: ./deploy.sh {deploy|start|stop|restart|logs [service]}"
+        echo "Usage: ./deploy.sh {deploy|start|stop|restart|logs [service]|docker-start|docker-stop|docker-logs|docker-restart}"
         exit 1
 esac
