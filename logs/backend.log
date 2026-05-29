@@ -84,3 +84,7 @@ INFO:     127.0.0.1:33286 - "POST /api/preview HTTP/1.1" 200 OK
 INFO:     127.0.0.1:33286 - "POST /api/preview HTTP/1.1" 200 OK
 INFO:     127.0.0.1:33286 - "POST /api/preview HTTP/1.1" 200 OK
 INFO:     127.0.0.1:34608 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "OPTIONS /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "POST /api/preview HTTP/1.1" 200 OK
