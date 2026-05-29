@@ -2,3 +2,27 @@ INFO:     Started server process [10804]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:47168 - "POST /api/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47168 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47180 - "OPTIONS /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47186 - "OPTIONS /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47168 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47180 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47186 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56882 - "POST /api/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56882 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56888 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56888 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33606 - "OPTIONS /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33606 - "POST /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33606 - "OPTIONS /api/workspaces/6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33612 - "OPTIONS /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33612 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33606 - "GET /api/workspaces/6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33606 - "GET /api/workspaces/6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33606 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50432 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50432 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50432 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36666 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36666 - "GET /api/workspaces/ HTTP/1.1" 200 OK

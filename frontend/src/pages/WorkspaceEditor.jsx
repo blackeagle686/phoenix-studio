@@ -409,7 +409,7 @@ function WorkspaceEditor() {
     setRunLogs('Running...\n');
     setRunResponse('');
     try {
-      const response = await fetch('http://localhost:8000/api/run', {
+      const response = await fetch(baseurl + '/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
