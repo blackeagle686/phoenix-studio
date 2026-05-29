@@ -113,7 +113,7 @@ function LandingPage() {
               </p>
               <div>
                 <button className="btn btn-light rounded-1 px-4 py-2 fw-bold" style={{ fontSize: '0.8rem', letterSpacing: '1px' }} onClick={() => navigate('/login')}>
-                  Login <i className="bi bi-arrow-up-right ms-2"></i>
+                  Build it now <i className="bi bi-arrow-up-right ms-2"></i>
                 </button>
               </div>
             </div>
