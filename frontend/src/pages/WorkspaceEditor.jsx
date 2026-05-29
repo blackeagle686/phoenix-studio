@@ -439,77 +439,124 @@ function WorkspaceEditor() {
 
       {/* Top Navbar / Controls */}
       <nav
-        className="navbar navbar-expand-lg navbar-dark glass-panel py-2 px-3 position-absolute"
+        className="navbar navbar-expand-lg position-absolute w-100"
         style={{
           top: '15px',
-          left: '15px',
-          right: '15px',
-          width: 'calc(100% - 30px)',
+          left: '0',
+          padding: '0 15px',
           zIndex: 100,
-          borderRadius: '12px',
         }}
       >
-        <div className="container-fluid d-flex justify-content-between align-items-center">
+        <div className="container-fluid d-flex justify-content-between align-items-center px-4 py-2" 
+             style={{
+               background: 'rgba(10, 10, 15, 0.75)',
+               backdropFilter: 'blur(24px)',
+               WebkitBackdropFilter: 'blur(24px)',
+               border: '1px solid rgba(255,255,255,0.08)',
+               borderRadius: '16px',
+               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+             }}>
           
           {/* Left Brand Area */}
           <div className="d-flex align-items-center flex-grow-1 flex-lg-grow-0 overflow-hidden me-3">
-            <button className="btn btn-link text-mint p-0 me-2" onClick={() => navigate('/dashboard')} title="Back to Dashboard">
-              <i className="bi bi-arrow-left fs-4"></i>
-            </button>
-            <i className="bi bi-circle-fill text-mint me-2 fs-6 d-none d-sm-inline"></i>
-            <span
-              className="d-none d-md-inline"
-              style={{
-                fontFamily: 'var(--font-title)',
-                fontWeight: 700,
-                fontSize: '1.2rem',
-                letterSpacing: '1px',
-                color: 'white',
-              }}
+            <button 
+              className="btn text-white p-0 me-3 d-flex align-items-center justify-content-center" 
+              style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', transition: 'all 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+              onClick={() => navigate('/dashboard')} title="Back to Dashboard"
             >
-              PHOENIX-AI <span className="text-mint d-none d-lg-inline">STUDIO</span>
-            </span>
-            <span className="ms-2 ms-md-3 text-secondary d-none d-md-inline">|</span>
-            <span className="ms-2 ms-md-3 text-light fw-semibold text-truncate" style={{ maxWidth: '150px' }}>{workspaceName}</span>
+              <i className="bi bi-chevron-left fs-6"></i>
+            </button>
+            <div className="d-flex align-items-center gap-2">
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--palette-9)', boxShadow: '0 0 10px var(--palette-9)' }}></div>
+              <span
+                className="d-none d-md-inline"
+                style={{
+                  fontFamily: 'var(--font-title)',
+                  fontWeight: 800,
+                  fontSize: '1.2rem',
+                  letterSpacing: '0.5px',
+                  color: 'white',
+                }}
+              >
+                PHOENIX <span style={{ color: 'var(--palette-9)' }}>STUDIO</span>
+              </span>
+            </div>
+            <span className="ms-3 text-secondary d-none d-md-inline" style={{ opacity: 0.5 }}>|</span>
+            <span className="ms-3 text-light fw-medium text-truncate" style={{ maxWidth: '200px', fontSize: '0.95rem' }}>{workspaceName}</span>
           </div>
 
           {/* Mobile Toggler */}
           <button className="navbar-toggler shadow-none border-0 ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#workspaceNavbar">
-            <span className="navbar-toggler-icon" style={{ width: '1.2em', height: '1.2em' }}></span>
+            <span className="navbar-toggler-icon" style={{ width: '1.2em', height: '1.2em', filter: 'invert(1)' }}></span>
           </button>
 
           {/* Collapsible Right Controls */}
           <div className="collapse navbar-collapse justify-content-end" id="workspaceNavbar">
             <div className="d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0">
               
-              {/* Mode Toggle */}
-              <div className="btn-group me-lg-3" role="group">
-                <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked={workspaceMode === 'chatbot'} onChange={() => setWorkspaceMode('chatbot')} />
-                <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio1"><i className="bi bi-chat-left-dots-fill me-1"></i> ChatBot</label>
-
-                <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked={workspaceMode === 'agent'} onChange={() => setWorkspaceMode('agent')} />
-                <label className="btn btn-sm btn-outline-mint" htmlFor="btnradio2"><i className="bi bi-cpu-fill me-1"></i> Agent</label>
+              {/* Custom Segmented Control for Mode */}
+              <div className="d-flex p-1 me-lg-2" style={{ background: 'rgba(0,0,0,0.4)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <button 
+                  className="btn btn-sm border-0 fw-semibold d-flex align-items-center gap-2 px-3"
+                  style={{
+                    borderRadius: '8px',
+                    color: workspaceMode === 'chatbot' ? '#000' : 'rgba(255,255,255,0.6)',
+                    background: workspaceMode === 'chatbot' ? 'var(--palette-9)' : 'transparent',
+                    transition: 'all 0.2s',
+                    boxShadow: workspaceMode === 'chatbot' ? '0 0 15px rgba(114,239,221,0.4)' : 'none'
+                  }}
+                  onClick={() => setWorkspaceMode('chatbot')}
+                >
+                  <i className="bi bi-chat-fill"></i> ChatBot
+                </button>
+                <button 
+                  className="btn btn-sm border-0 fw-semibold d-flex align-items-center gap-2 px-3"
+                  style={{
+                    borderRadius: '8px',
+                    color: workspaceMode === 'agent' ? '#000' : 'rgba(255,255,255,0.6)',
+                    background: workspaceMode === 'agent' ? 'var(--palette-6)' : 'transparent',
+                    transition: 'all 0.2s',
+                    boxShadow: workspaceMode === 'agent' ? '0 0 15px rgba(72,191,227,0.4)' : 'none'
+                  }}
+                  onClick={() => setWorkspaceMode('agent')}
+                >
+                  <i className="bi bi-cpu-fill"></i> Agent
+                </button>
               </div>
 
               {/* Action Buttons */}
               <div className="d-flex flex-wrap gap-2">
                 <button
-                  className="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
-                  style={{ borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.2)' }}
+                  className="btn btn-sm d-flex align-items-center gap-2 px-3 fw-medium"
+                  style={{ 
+                    borderRadius: '10px', 
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    color: 'white',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
                   onClick={handleSave}
                   disabled={isSaving}
                 >
-                  {isSaving ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-cloud-arrow-up text-primary"></i>}
+                  {isSaving ? <span className="spinner-border spinner-border-sm"></span> : <i className="bi bi-cloud-check-fill" style={{ color: 'var(--palette-9)' }}></i>}
                   Save
                 </button>
                 
                 <button
-                  className={`btn btn-sm ${showCodeDrawer && drawerTab === 'code' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
+                  className="btn btn-sm d-flex align-items-center gap-2 px-3 fw-medium"
                   style={{
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    background: showCodeDrawer && drawerTab === 'code' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: '10px',
+                    border: showCodeDrawer && drawerTab === 'code' ? '1px solid var(--palette-9)' : '1px solid rgba(255, 255, 255, 0.08)',
+                    background: showCodeDrawer && drawerTab === 'code' ? 'rgba(114,239,221,0.1)' : 'rgba(255, 255, 255, 0.03)',
+                    color: showCodeDrawer && drawerTab === 'code' ? 'var(--palette-9)' : 'white',
+                    transition: 'all 0.2s'
                   }}
+                  onMouseEnter={e => { if (!(showCodeDrawer && drawerTab === 'code')) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; }}
+                  onMouseLeave={e => { if (!(showCodeDrawer && drawerTab === 'code')) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'; }}
                   onClick={() => {
                     if (showCodeDrawer && drawerTab === 'code') setShowCodeDrawer(false);
                     else {
@@ -518,16 +565,20 @@ function WorkspaceEditor() {
                     }
                   }}
                 >
-                  <i className="bi bi-code-square"></i> Show Code
+                  <i className="bi bi-code-slash"></i> Code
                 </button>
 
                 <button
-                  className={`btn btn-sm ${showCodeDrawer && drawerTab === 'run' ? 'btn-light text-dark' : 'btn-outline-light'} d-flex align-items-center gap-1`}
+                  className="btn btn-sm d-flex align-items-center gap-2 px-3 fw-medium"
                   style={{
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    background: showCodeDrawer && drawerTab === 'run' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: '10px',
+                    border: showCodeDrawer && drawerTab === 'run' ? '1px solid var(--palette-6)' : '1px solid rgba(255, 255, 255, 0.08)',
+                    background: showCodeDrawer && drawerTab === 'run' ? 'rgba(72,191,227,0.1)' : 'rgba(255, 255, 255, 0.03)',
+                    color: showCodeDrawer && drawerTab === 'run' ? 'var(--palette-6)' : 'white',
+                    transition: 'all 0.2s'
                   }}
+                  onMouseEnter={e => { if (!(showCodeDrawer && drawerTab === 'run')) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; }}
+                  onMouseLeave={e => { if (!(showCodeDrawer && drawerTab === 'run')) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'; }}
                   onClick={() => {
                     if (showCodeDrawer && drawerTab === 'run') setShowCodeDrawer(false);
                     else {
@@ -536,24 +587,29 @@ function WorkspaceEditor() {
                     }
                   }}
                 >
-                  <i className="bi bi-play-fill text-success"></i> Run Flow
+                  <i className="bi bi-play-fill fs-6" style={{ margin: '-2px 0' }}></i> Run
                 </button>
               </div>
 
               <button
-                className="btn btn-mint d-flex align-items-center justify-content-center gap-2 mt-2 mt-lg-0"
+                className="btn d-flex align-items-center justify-content-center gap-2 fw-bold ms-lg-2 px-4"
                 style={{
-                  fontFamily: 'var(--font-body)',
-                  padding: '6px 16px',
-                  borderRadius: '8px'
+                  borderRadius: '10px',
+                  background: 'white',
+                  color: '#000',
+                  border: 'none',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 4px 15px rgba(255,255,255,0.2)'
                 }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(255,255,255,0.2)'; }}
                 onClick={() => setShowExportModal(true)}
                 disabled={isGenerating}
               >
                 {isGenerating ? (
-                  <><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Building...</>
+                  <><span className="spinner-border spinner-border-sm text-dark" role="status" aria-hidden="true"></span></>
                 ) : (
-                  <><i className="bi bi-download"></i> Export</>
+                  <><i className="bi bi-rocket-fill" style={{ color: 'var(--palette-6)' }}></i> Deploy</>
                 )}
               </button>
             </div>
