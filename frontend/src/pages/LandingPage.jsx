@@ -240,7 +240,7 @@ function LandingPage() {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent'
               }}>
-                We're not building flashy demos. We're building <br/>
+                We're not building flashy demos. We're building <br />
                 engineering agents that think like humans,<br />
                 and work better with them.
               </h2>

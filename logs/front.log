@@ -318,3 +318,4 @@
       at JSXParserMixin.parseBlock (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
       at JSXParserMixin.parseFunctionBody (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:12117:24)
 1:50:14 PM [vite] hmr update /src/pages/LandingPage.jsx
+1:50:16 PM [vite] hmr update /src/pages/LandingPage.jsx
