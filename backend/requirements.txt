@@ -15,3 +15,5 @@ sentence-transformers
 phx-ashborn
 chromadb
 pyngrok
+gunicorn
+psycopg2-binary
