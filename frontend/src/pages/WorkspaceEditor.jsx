@@ -171,7 +171,7 @@ function WorkspaceEditor() {
   useEffect(() => {
     const loadWorkspace = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/workspaces/${id}`, {
+        const response = await fetch(baseurl + `/workspaces/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.ok) {
