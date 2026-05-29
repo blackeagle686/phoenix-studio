@@ -2,11 +2,3 @@
 > frontend@0.0.0 dev
 > vite
 
-
-  VITE v5.4.21  ready in 3549 ms
-
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
-4:23:32 PM [vite] hmr update /src/context/AuthContext.jsx
-4:23:32 PM [vite] hmr invalidate /src/context/AuthContext.jsx Could not Fast Refresh ("AuthContext" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
-4:23:32 PM [vite] hmr update /src/App.jsx, /src/pages/Dashboard.jsx, /src/pages/ProfileSettings.jsx, /src/pages/Login.jsx, /src/pages/WorkspaceEditor.jsx, /src/pages/Register.jsx
