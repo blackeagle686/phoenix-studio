@@ -207,7 +207,7 @@ function WorkspaceEditor() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/workspaces/${id}`, {
+      const response = await fetch(baseurl + `/workspaces/${id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
