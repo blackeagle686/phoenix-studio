@@ -474,9 +474,9 @@ function WorkspaceEditor() {
           </div>
 
           {/* Mobile Toggler */}
-          <button className="navbar-toggler shadow-none border-0 ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#workspaceNavbar">
+          {/* <button className="navbar-toggler shadow-none border-0 ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#workspaceNavbar">
             <span className="navbar-toggler-icon" style={{ width: '1.2em', height: '1.2em' }}></span>
-          </button>
+          </button> */}
 
           {/* Collapsible Right Controls */}
           <div className="collapse navbar-collapse justify-content-end" id="workspaceNavbar">

@@ -55,3 +55,7 @@ INFO:     127.0.0.1:43020 - "GET /api/workspaces/5 HTTP/1.1" 200 OK
 INFO:     127.0.0.1:43020 - "POST /api/preview HTTP/1.1" 200 OK
 INFO:     127.0.0.1:53514 - "GET /api/workspaces/5 HTTP/1.1" 200 OK
 INFO:     127.0.0.1:53514 - "POST /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56608 - "OPTIONS /api/workspaces/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56608 - "GET /api/workspaces/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56608 - "OPTIONS /api/preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56608 - "POST /api/preview HTTP/1.1" 200 OK
