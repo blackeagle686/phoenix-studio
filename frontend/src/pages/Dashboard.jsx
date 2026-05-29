@@ -68,7 +68,7 @@ function Dashboard() {
     if (!confirm("Are you sure you want to delete this workspace?")) return;
     
     try {
-      const response = await fetch(`http://localhost:8000/api/workspaces/${id}`, {
+      const response = await fetch(baseurl + `/workspaces/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
