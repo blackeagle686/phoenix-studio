@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
-export const baseurl = ""
+export const baseurl = "http://localhost:8000/api"
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [user, setUser] = useState(null);
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async (authToken) => {
     try {
-      const response = await fetch('/auth/me', {
+      const response = await fetch(baseurl + '/auth/me', {
         headers: { Authorization: `Bearer ${authToken}` }
       });
       if (response.ok) {
