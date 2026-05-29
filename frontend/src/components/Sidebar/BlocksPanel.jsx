@@ -217,11 +217,11 @@ export const BlocksPanel = ({ onAddNode, workspaceMode = 'chatbot' }) => {
         backdropFilter: 'blur(20px)'
       }}
     >
-      <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.05) !important', backgroundColor: 'rgba(255,255,255,0.02)' }}>
-        <h5 className="m-0 text-white fw-bold d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', letterSpacing: '0.5px' }}>
-          <i className="bi bi-box-seam text-mint fs-4"></i> Block Library
+      <div className="p-3 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.05) !important', backgroundColor: 'rgba(255,255,255,0.02)' }}>
+        <h5 className="m-0 text-white fw-bold d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-title)', letterSpacing: '0.5px', fontSize: '1.1rem' }}>
+          <i className="bi bi-box-seam text-mint fs-5"></i> Block Library
         </h5>
-        <p className="text-muted small m-0 mt-2">Click to add logic nodes to canvas.</p>
+        <p className="text-muted m-0 mt-1" style={{ fontSize: '0.8rem' }}>Click to add logic nodes to canvas.</p>
       </div>
       
       <div className="p-3 pe-4 flex-grow-1 overflow-auto" style={{ paddingBottom: '100px' }}>
