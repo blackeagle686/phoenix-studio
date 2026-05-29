@@ -529,3 +529,4 @@
       at JSXParserMixin.parseExprSubscripts (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11098:23)
       at JSXParserMixin.parseUpdate (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11083:21)
       at JSXParserMixin.parseMaybeUnary (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11063:23)
+1:58:06 PM [vite] hmr update /src/pages/LandingPage.jsx
