@@ -1,6 +1,6 @@
 import React from 'react';
 
-// create_node this will used in the near future that 
+// create_node this will used in the near future that we will add an agent that hanlde with users prompts to create custome nodes or 
 
 const blockCategories = [
   {
