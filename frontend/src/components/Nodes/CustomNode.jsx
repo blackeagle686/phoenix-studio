@@ -12,12 +12,12 @@ export const CustomNode = ({ data, type, selected }) => {
 
   switch (type) {
     case 'agent':
-      title = 'Phoenix Core';
+      title = 'Phoenix Basic';
       icon = 'bi-cpu-fill';
       colorVar = '--accent-cyan';
       showInputHandle = true; // Inputs from LLM, Memory, Tools
       showOutputHandle = false;
-      desc = data.name ? `Name: ${data.name}` : 'Phoenix Agent core loop';
+      desc = data.name ? `Name: ${data.name}` : 'Phoenix Agent Basic';
       break;
     case 'openai_llm':
       title = 'OpenAI LLM';
