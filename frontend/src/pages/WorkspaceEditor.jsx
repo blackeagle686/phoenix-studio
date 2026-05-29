@@ -376,7 +376,7 @@ function WorkspaceEditor() {
         theme_mode: exportTheme
       };
       
-      const response = await fetch('http://localhost:8000/api/generate', {
+      const response = await fetch(baseurl + '/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
