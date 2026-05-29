@@ -531,3 +531,4 @@
       at JSXParserMixin.parseMaybeUnary (/home/tlk/Documents/Projects/my_AItools/phoenix-studio/frontend/node_modules/@babel/parser/lib/index.js:11063:23)
 1:58:06 PM [vite] hmr update /src/pages/LandingPage.jsx
 1:58:36 PM [vite] hmr update /src/pages/LandingPage.jsx
+1:58:52 PM [vite] hmr update /src/pages/LandingPage.jsx
