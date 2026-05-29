@@ -12,7 +12,7 @@ export const CustomNode = ({ data, type, selected }) => {
 
   switch (type) {
     case 'agent':
-      title = 'Phoenix Basic';
+      title = 'Phoenix Agent Basic';
       icon = 'bi-cpu-fill';
       colorVar = '--accent-cyan';
       showInputHandle = true; // Inputs from LLM, Memory, Tools
