@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import NetworkCanvas from '../components/UI/NetworkCanvas';
 import Footer from '../components/UI/Footer';
-import { baseurl } from '../context/AuthContext';
+import { baseurl } from '../context/AuthContext'; 
 
 function ProfileSettings() {
   const { token, user, logout } = useContext(AuthContext);
