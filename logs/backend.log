@@ -8,3 +8,5 @@ INFO:     127.0.0.1:46322 - "OPTIONS /api/workspaces/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:46306 - "GET /api/auth/me HTTP/1.1" 200 OK
 INFO:     127.0.0.1:46322 - "GET /api/workspaces/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:46322 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60424 - "GET /api/workspaces/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60424 - "GET /api/workspaces/ HTTP/1.1" 200 OK
