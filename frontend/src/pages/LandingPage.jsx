@@ -232,17 +232,17 @@ function LandingPage() {
             <div className="col-12 col-lg-10">
               <h2 className="manifesto-text mb-5" style={{
                 fontFamily: 'var(--font-title)',
-                fontWeight: '800',
-                fontSize: 'clamp(2.2rem, 4.5vw, 4.2rem)',
-                lineHeight: '1.15',
-                letterSpacing: '-0.04em',
+                fontWeight: '700',
+                fontSize: 'clamp(1.8rem, 3vw, 3rem)',
+                lineHeight: '1.3',
+                letterSpacing: '-0.02em',
                 background: 'linear-gradient(135deg, #ffffff 30%, var(--palette-9) 70%, var(--palette-6) 100%)',
                 WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
+                WebkitTextFillColor: 'transparent',
+                textWrap: 'balance',
+                maxWidth: '950px'
               }}>
-                We're not building flashy demos. We're building <br />
-                engineering agents that think like humans,
-                and work better with them.
+                We're not building flashy demos. We're building engineering agents that think like humans, and work better with them.
               </h2>
             </div>
           </div>
