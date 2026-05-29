@@ -230,20 +230,26 @@ function LandingPage() {
         <div className="container-fluid px-5" style={{ maxWidth: '1400px' }}>
           <div className="row">
             <div className="col-12 col-lg-10">
-              <h2 className="manifesto-text mb-5" style={{
-                fontFamily: 'var(--font-title)',
-                fontWeight: '700',
-                fontSize: 'clamp(1.8rem, 3vw, 3rem)',
-                lineHeight: '1.3',
-                letterSpacing: '-0.02em',
-                background: 'linear-gradient(135deg, #ffffff 30%, var(--palette-9) 70%, var(--palette-6) 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textWrap: 'balance',
-                maxWidth: '950px'
-              }}>
-                We're not building flashy demos. We're building engineering agents that think like humans, and work better with them.
-              </h2>
+              <div className="mb-5" style={{ maxWidth: '1000px' }}>
+                <h2 style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: '300',
+                  fontSize: 'clamp(2rem, 3.8vw, 3.4rem)',
+                  lineHeight: '1.4',
+                  letterSpacing: '-0.01em',
+                  color: '#e2e8f0',
+                  textWrap: 'balance'
+                }}>
+                  We're not building flashy demos. <br className="d-none d-md-block" />
+                  We're building <strong style={{
+                    fontWeight: '700',
+                    background: 'linear-gradient(135deg, var(--palette-9) 0%, var(--palette-6) 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textShadow: '0 0 30px rgba(114, 239, 221, 0.2)'
+                  }}>engineering agents</strong> that think like humans, and work better with them.
+                </h2>
+              </div>
             </div>
           </div>
           <div className="row mt-5 align-items-center">
